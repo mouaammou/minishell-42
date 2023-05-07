@@ -1,0 +1,48 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
+#    Updated: 2023/05/07 21:30:40 by mouaammo         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+NAME = minishell
+RM = rm -f
+CC = cc
+# FLAGS = -Wall -Wextra -Werror
+SRCS = $(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
+	   ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) minishell.c \
+	   $(addprefix utils/, join.c)
+
+OBJS = $(SRCS:.c=.o)
+
+HEADER = minishell.h
+
+RED = \033[1;31m
+GREEN = \033[1;32m
+YELLOW = \033[1;33m
+BLUE = \033[1;34m
+RESET = \033[0m
+
+all: $(NAME)
+
+$(NAME) : $(OBJS) $(HEADER)
+	@$(MAKE) -C libft
+	$(CC) $(FLAGS) $(OBJS) libft/libft.a -o $(NAME)
+%.o: %.c $(HEADER)
+	@$(CC) $(FLAGS) -c $< -o $@
+
+clean:
+	@$(MAKE) -C libft clean
+	@$(RM) $(OBJS)
+fclean: clean
+	@$(MAKE) -C libft fclean
+	@$(RM) $(NAME)
+re: fclean all
+
+.PHONY: all clean fclean re
+
