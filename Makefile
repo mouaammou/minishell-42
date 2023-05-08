@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/05/07 21:30:40 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/05/08 20:06:03 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ all: $(NAME)
 
 $(NAME) : $(OBJS) $(HEADER)
 	@$(MAKE) -C libft
-	$(CC) $(FLAGS) $(OBJS) libft/libft.a -o $(NAME)
+	@$(CC) $(FLAGS) -lreadline $(OBJS) libft/libft.a -o $(NAME)
+	@echo "====> $(NAME) is compiled"
 %.o: %.c $(HEADER)
 	@$(CC) $(FLAGS) -c $< -o $@
 
