@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/08 21:48:17 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/10 15:13:37 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,58 +19,163 @@ void	display_tokens (t_list *head)
 	while (head)
 	{
 		t_token *ftoken = (t_token *) head->content;
-		printf("%s\n", ftoken->str);
-		printf("%d\n", ftoken->token);
+		if (ftoken->token  == WORD)
+			puts("word");
+		if (ftoken->token  == PIPE)
+			puts("PIPE");
+		if (ftoken->token  == RE_OUT)
+			puts("RE OUTPUT");
+		if (ftoken->token  == RE_IN)
+			puts("RE INPUT");
+		if (ftoken->token  == HERE_DOC)
+			puts("HERE_DOC");
+		if (ftoken->token  == RE_OUT_A)
+			puts("RE_OUT_A");
 		head = head->next;
 	}
 }
 
-char	**join_args(int ac, char **av)
+int	is_str(char mychar)
 {
-	char	*str;
-	char	**split;
-	str = readline("minishell >>: ");
-	split = ft_split(str, ' ');
-	return (split);
+	if (mychar != '|' && mychar != '<' && mychar != '>'
+		&& mychar != '\'' && mychar != '\"' && mychar != ' ')
+		return (1);
+	return (0);
 }
 
-void	analyse_tokens(t_token *mytoken)
+int	search_index (char *str, char a)
 {
-	char	*str;
-	int		i;
+	int	i;
 
 	i = 0;
-	str = mytoken->str;
+	while (str[i])
+	{
+		if (str[i] == a)
+			return (i);
+		i++;
+	}
+	return (i);
 }
 
-void	give_tokens(t_list *head)
+void	token_word(t_list **mylist, char *str, int *i)
+{
+	int		j;
+	int		start;
+	t_token	*mytoken;
+
+	j = 0;
+	start = *i;
+	mytoken = malloc (sizeof (t_token));
+	if (!mytoken)
+		return ;
+	while (str[*i] && is_str(str[*i]))
+	{
+		(*i)++;
+		j++;
+	}
+	mytoken->str = ft_substr(str, start, j);
+	mytoken->token = WORD;
+	ft_lstadd_back(mylist, ft_lstnew(mytoken));
+}
+
+void	token_quotes(t_list **mylist, char *str, int *i, char qts)
+{
+	int		j;
+	int		start;
+
+	(*i)++;
+	j = 0;
+	start = *i;
+	t_token	*mytoken;
+	mytoken = malloc (sizeof (t_token));
+	while (str[*i] && str[*i] != qts)
+	{
+		(*i)++;
+		j++;
+	}
+
+	mytoken->str = ft_substr(str, start, j);
+	mytoken->token = QUOTE;
+	ft_lstadd_back(mylist, ft_lstnew(mytoken));
+}
+
+void	tokeni_mychar(t_token *mytoken, int *i, int value)
+{
+	mytoken->token = value;
+	(*i)++;
+}
+
+void	token_spechars(t_list **mylist, char *str, int *i)
 {
 	t_token	*mytoken;
 
-	while (head)
+	mytoken = malloc (sizeof (t_token));
+	if (!mytoken)
+		return ;
+	mytoken->str = NULL;
+	if (str[*i] == '|')
+		tokeni_mychar(mytoken, i, PIPE);
+	else if (str[*i] == ' ')
+		tokeni_mychar(mytoken, i, ESP);
+	else if (str[*i] == '<' && str[(*i) + 1] == '<')
 	{
-		mytoken = (t_token *) head->content;
-		analyse_tokens(mytoken);
-		head = head->next;
+		(*i)++;
+		tokeni_mychar(mytoken, i, HERE_DOC);
 	}
+	else if (str[*i] == '>' && str[(*i) + 1] == '>')
+	{
+		(*i)++;
+		tokeni_mychar(mytoken, i, RE_OUT_A);
+	}
+	else if (str[*i] == '<' && str[(*i) + 1] != '<')
+		tokeni_mychar(mytoken, i, RE_IN);
+	else if (str[*i] == '>' && str[(*i) + 1] != '>')
+		tokeni_mychar(mytoken, i, RE_OUT);
+	ft_lstadd_back(mylist, ft_lstnew(mytoken));
+}
+
+
+void	give_tokens(t_list **tokenizer, char *str)
+{
+	int		i;
+	int		j;
+	char	*word;
+
+	i = 0;
+	while (str[i])
+	{
+		if (is_str(str[i]))
+			token_word(tokenizer, str, &i);
+		if (str[i] == '\'')
+			token_quotes(tokenizer, str, &i, '\'');
+		if (str[i] == '\"')
+			token_quotes(tokenizer, str, &i, '\"');
+		if (!is_str(str[i]))
+			token_spechars(tokenizer, str, &i);
+	}
+}
+
+void	analyse_str(t_list **tokenizer, char *str)
+{
+	char	*one_space;
+	char	*trimed_str;
+
+	trimed_str = ft_strtrim(str, " ");
+	give_tokens(tokenizer, trimed_str);
 }
 
 int main (int ac, char **av)
 {
-	int i = 0;
-	t_list *head = NULL;
-	char **split = join_args(ac, av);
-	while (split[i])
-	{
-		t_token *data = malloc (sizeof (t_token));
-		if (!data)
-			return (1);
-		data->str = split[i];
-		data->token = i + 1;
-		ft_lstadd_back(&head, ft_lstnew(data));
-		i++;
-	}
-	give_tokens(head);
+	int		i;
+	t_list	*head;
+	char	*str;
+
+	head = NULL;
+	str = readline("minishell>> :");
+	if (!str)
+		return (0);
+	analyse_str(&head, str);
 	display_tokens(head);
+	free(str);
 	return (0);
 }

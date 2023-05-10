@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/08 20:10:18 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/10 14:21:55 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@ typedef struct token
 
 enum	tokens
 {
-	t_quotes = 1,
-	t_single_quotes = 2,
-	t_word = 3,
-	t_pipe = 4
+	QUOTE = 1,
+	S_QUOTE = 2,
+	WORD = 3,
+	PIPE = 4,
+	RE_OUT = 5,
+	RE_IN = 6,
+	RE_OUT_A = 7,
+	HERE_DOC = 8,
+	ESP = 9,
 };
 
 char	*join_sep(int size, char **strs, char *sep);
