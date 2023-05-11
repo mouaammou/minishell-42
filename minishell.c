@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/11 16:51:45 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/11 23:35:06 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ void	display_tokens (t_list *head)
 	{
 		t_token *ftoken = (t_token *) head->content;
 		if (ftoken->token  == WORD)
+		{
 			puts("word");
+			printf("[%s]\n", ftoken->str);
+		}
 		if (ftoken->token  == PIPE)
 			puts("PIPE");
 		if (ftoken->token  == RE_OUT)
@@ -49,20 +52,6 @@ int	is_str(char mychar)
 	return (0);
 }
 
-int	search_index (char *str, char a)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		if (str[i] == a)
-			return (i);
-		i++;
-	}
-	return (i);
-}
-
 void	token_word(t_list **mylist, char *str, int *i)
 {
 	int		j;
@@ -74,7 +63,6 @@ void	token_word(t_list **mylist, char *str, int *i)
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
 		return ;
-	mytoken->token = -1;
 	while (str[(*i)] && is_str(str[(*i)]))
 	{
 		(*i)++;
@@ -94,7 +82,7 @@ void	msg_error(char *str)
 	exit (1);
 }
 
-void	token_quotes(t_list **mylist, char *str, int *i, char qts)
+t_token	*get_quotes_content(char *str, int *i, char qts)
 {
 	int		j;
 	int		start;
@@ -105,8 +93,7 @@ void	token_quotes(t_list **mylist, char *str, int *i, char qts)
 	start = *i;
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
-		return ;
-	mytoken->token = -1;
+		return (NULL);
 	while (str[*i] && str[*i] != qts)
 	{
 		(*i)++;
@@ -117,6 +104,14 @@ void	token_quotes(t_list **mylist, char *str, int *i, char qts)
 	else
 		msg_error("quotes open");
 	mytoken->str = ft_substr(str, start, j);
+	return (mytoken);
+}
+
+void	token_quotes(t_list **mylist, char *str, int *i, char qts)
+{
+	t_token	*mytoken;
+
+	mytoken = get_quotes_content(str, i, qts);
 	if (mytoken->str)
 	{
 		mytoken->token = QUOTE;
@@ -124,13 +119,7 @@ void	token_quotes(t_list **mylist, char *str, int *i, char qts)
 	}
 }
 
-void	tokeni_mychar(t_token *mytoken, int *i, int value)
-{
-	mytoken->token = value;
-	(*i)++;
-}
-
-void	token_spechars(t_list **mylist, char *str, int *i)
+void	tokeni_mychar(t_list **mylist, int *i, int value)
 {
 	t_token	*mytoken;
 
@@ -138,26 +127,31 @@ void	token_spechars(t_list **mylist, char *str, int *i)
 	if (!mytoken)
 		return ;
 	mytoken->str = NULL;
-	mytoken->token = -1;
+	mytoken->token = value;
+	(*i)++;
+	ft_lstadd_back(mylist, ft_lstnew(mytoken));
+}
+
+void	token_spechars(t_list **mylist, char *str, int *i)
+{
 	if (str[*i] == '|')
-		tokeni_mychar(mytoken, i, PIPE);
+		tokeni_mychar(mylist,i, PIPE);
 	else if (str[*i] == ' ')
-		tokeni_mychar(mytoken, i, ESP);
+		tokeni_mychar(mylist, i, ESP);
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
 	{
 		(*i)++;
-		tokeni_mychar(mytoken, i, HERE_DOC);
+		tokeni_mychar(mylist, i, HERE_DOC);
 	}
 	else if (str[*i] == '>' && str[(*i) + 1] == '>')
 	{
 		(*i)++;
-		tokeni_mychar(mytoken, i, RE_OUT_A);
+		tokeni_mychar(mylist, i, RE_OUT_A);
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] != '<')
-		tokeni_mychar(mytoken, i, RE_IN);
+		tokeni_mychar(mylist, i, RE_IN);
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
-		tokeni_mychar(mytoken, i, RE_OUT);
-	ft_lstadd_back(mylist, ft_lstnew(mytoken));
+		tokeni_mychar(mylist, i, RE_OUT);
 }
 
 void	give_tokens(t_list **tokenizer, char *str)

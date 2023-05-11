@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/05/09 16:34:15 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/05/11 18:47:17 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,6 @@ $(NAME) : $(OBJS) $(HEADER)
 	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	@$(MAKE) -C libft clean
 	@$(RM) $(OBJS)
 fclean: clean
 	@$(MAKE) -C libft fclean
