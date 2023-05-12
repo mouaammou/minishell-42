@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/05/12 14:55:35 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/05/12 17:08:14 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CC = cc
 FLAGS = -Wall -Wextra -Werror #-fsanitize=address
 SRCS = $(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 	   ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) minishell.c \
-	   $(addprefix utils/, join.c)
+	   $(addprefix utils/, give_tokens.c token_spechars.c token_word.c utils.c)
 
 OBJS = $(SRCS:.c=.o)
 
