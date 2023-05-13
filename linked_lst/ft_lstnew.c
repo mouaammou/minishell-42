@@ -6,13 +6,13 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/17 23:10:03 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/07 19:14:46 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/13 15:54:29 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../tokenizer.h"
 
-t_list	*ft_lstnew(void *content)
+t_list	*ft_lstnew(t_token *mytoken)
 {
 	t_list	*node;
 
@@ -20,7 +20,8 @@ t_list	*ft_lstnew(void *content)
 	node = (t_list *) malloc(sizeof(t_list));
 	if (!node)
 		return (NULL);
-	node->content = content;
+	node->content = mytoken;
 	node->next = NULL;
+	node->prev = NULL;
 	return (node);
 }

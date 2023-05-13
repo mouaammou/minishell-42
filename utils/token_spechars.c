@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/12 17:05:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/13 21:21:16 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../tokenizer.h"
 
 t_token	*get_quotes_content(char *str, int *i, char qts)
 {
@@ -52,14 +52,17 @@ int	token_quotes(t_list **mylist, char *str, int *i, char qts)
 	return (1);
 }
 
-void	tokeni_mychar(t_list **mylist, int *i, int value)
+void	tokeni_mychar(t_list **mylist,char *str, int *i, int value)
 {
 	t_token	*mytoken;
 
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
 		return ;
-	mytoken->str = NULL;
+	if (value == HERE_DOC || value == RE_APPEND)
+		mytoken->str = ft_substr(str, *i, 2);
+	else
+		mytoken->str = ft_substr(str, *i, 1);
 	mytoken->token = value;
 	(*i)++;
 	ft_lstadd_back(mylist, ft_lstnew(mytoken));
@@ -68,21 +71,21 @@ void	tokeni_mychar(t_list **mylist, int *i, int value)
 void	token_spechars(t_list **mylist, char *str, int *i)
 {
 	if (str[*i] == '|')
-		tokeni_mychar(mylist, i, PIPE);
+		tokeni_mychar(mylist,str, i, PIPE);
 	else if (str[*i] == ' ')
-		tokeni_mychar(mylist, i, ESP);
+		tokeni_mychar(mylist,str, i, ESP);
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
 	{
 		(*i)++;
-		tokeni_mychar(mylist, i, HERE_DOC);
+		tokeni_mychar(mylist,str, i, HERE_DOC);
 	}
 	else if (str[*i] == '>' && str[(*i) + 1] == '>')
 	{
 		(*i)++;
-		tokeni_mychar(mylist, i, RE_OUT_A);
+		tokeni_mychar(mylist,str, i, RE_APPEND);
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] != '<')
-		tokeni_mychar(mylist, i, RE_IN);
+		tokeni_mychar(mylist,str, i, RE_IN);
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
-		tokeni_mychar(mylist, i, RE_OUT);
+		tokeni_mychar(mylist,str, i, RE_OUT);
 }

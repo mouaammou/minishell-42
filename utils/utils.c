@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 16:59:46 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/12 17:07:02 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/12 17:39:59 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../tokenizer.h"
 
 void	*msg_error(char *str)
 {

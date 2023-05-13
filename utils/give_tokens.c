@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:05:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/12 17:06:13 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/12 17:39:59 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../tokenizer.h"
 
 int	give_tokens(t_list **tokenizer, char *str)
 {

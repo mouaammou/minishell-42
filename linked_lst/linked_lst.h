@@ -6,20 +6,41 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 17:50:13 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/12 17:17:30 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:14:48 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LINKED_LST_H
 # define LINKED_LST_H
 
+typedef enum tokens
+{
+	TOKEN_ERROR = 0,
+	QUOTE = 1,
+	S_QUOTE = 2,
+	WORD = 3,
+	PIPE = 4,
+	RE_OUT = 5,
+	RE_IN = 6,
+	RE_APPEND = 7,
+	HERE_DOC = 8,
+	ESP = 9,
+}	t_etoken;
+
+typedef struct token
+{
+	char		*str;
+	t_etoken	token;
+}t_token;
+
 typedef struct s_list
 {
-	void			*content;
+	t_token			*content;
 	struct s_list	*next;
+	struct s_list	*prev;
 }	t_list;
 
-t_list	*ft_lstnew(void *content);
+t_list	*ft_lstnew(t_token *content);
 void	ft_lstadd_front(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
 t_list	*ft_lstlast(t_list *lst);

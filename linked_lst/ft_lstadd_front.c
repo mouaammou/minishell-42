@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 15:27:09 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/07 20:19:35 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/13 15:44:06 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "../tokenizer.h"
 
 void	ft_lstadd_front(t_list **lst, t_list *new)
 {
@@ -19,8 +19,9 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 	if (*lst)
 	{
 		new->next = *lst;
-		*lst = new;
+		new->prev = NULL;
+		(*lst)->prev = new;
 	}
-	else
-		*lst = new;
+	*lst = new;
 }
+
