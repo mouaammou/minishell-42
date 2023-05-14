@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 16:59:46 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/14 16:02:28 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:07:35 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	free_linked_list(t_list *head)
 		head = tmp;
 	}
 }
+
 void	free_nodes(t_list *head)
 {
 	t_list	*tmp;

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/13 22:12:39 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:07:19 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	token_quotes(t_list **mylist, char *str, int *i, char qts)
 	return (1);
 }
 
-void	tokeni_mychar(t_list **mylist,char *str, int *i, int value)
+void	tokeni_mychar(t_list **mylist, char *str, int *i, int value)
 {
 	t_token	*mytoken;
 
@@ -71,21 +71,21 @@ void	tokeni_mychar(t_list **mylist,char *str, int *i, int value)
 void	token_spechars(t_list **mylist, char *str, int *i)
 {
 	if (str[*i] == '|')
-		tokeni_mychar(mylist,str, i, PIPE);
+		tokeni_mychar(mylist, str, i, PIPE);
 	else if (str[*i] == ' ')
-		tokeni_mychar(mylist,str, i, ESP);
+		tokeni_mychar(mylist, str, i, ESP);
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
 	{
-		tokeni_mychar(mylist,str, i, HERE_DOC);
+		tokeni_mychar(mylist, str, i, HERE_DOC);
 		(*i)++;
 	}
 	else if (str[*i] == '>' && str[(*i) + 1] == '>')
 	{
-		tokeni_mychar(mylist,str, i, RE_APPEND);
+		tokeni_mychar(mylist, str, i, RE_APPEND);
 		(*i)++;
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] != '<')
-		tokeni_mychar(mylist,str, i, RE_IN);
+		tokeni_mychar(mylist, str, i, RE_IN);
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
-		tokeni_mychar(mylist,str, i, RE_OUT);
+		tokeni_mychar(mylist, str, i, RE_OUT);
 }

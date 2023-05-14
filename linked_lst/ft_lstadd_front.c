@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 15:27:09 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/13 15:44:06 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:04:43 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,3 @@ void	ft_lstadd_front(t_list **lst, t_list *new)
 	}
 	*lst = new;
 }
-
