@@ -5,6 +5,7 @@
 		"linked_lst.h": "c",
 		"libft.h": "c",
 		"readline.h": "c",
-		"history.h": "c"
+		"history.h": "c",
+		"__config": "c"
 	}
 }

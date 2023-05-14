@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/13 21:18:01 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 16:03:05 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+# define PREV 0
+# define NEXT 1
+# define BOTH 2
+
+void	free_nodes(t_list *head);
 int		give_tokens(t_list **tokenizer, char *str);
 t_token	*get_quotes_content(char *str, int *i, char qts);
 int		token_quotes(t_list **mylist, char *str, int *i, char qts);

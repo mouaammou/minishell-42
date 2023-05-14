@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/13 21:21:49 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 15:54:28 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,10 @@ void	display_tokens_back(t_list *head)
 	}
 }
 
-void	leaks()
-{
-	system ("leaks minishell");
-}
+// void	leaks()
+// {
+// 	system ("leaks minishell");
+// }
 
 // int	main ()
 // {

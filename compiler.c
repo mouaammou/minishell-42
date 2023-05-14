@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/13 22:02:49 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 16:15:22 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 */
 #include "tokenizer.h"
 
-int	check_token(t_list *node, int mytoken1, int mytoken2)
+int	check_token(t_list *node, int mytoken1, int mytoken2, int flag)
 {
 	int	next;
 	int	prev;
@@ -29,13 +29,17 @@ int	check_token(t_list *node, int mytoken1, int mytoken2)
 	if (node->next)
 		next = node->next->content->token;
 	else
-		next = TOKEN_ERROR;
+		next = WHATEVER;
 	if (node->prev)
 		prev = node->prev->content->token;
 	else
-		prev = TOKEN_ERROR;
-	if (!(prev == mytoken1 && next == mytoken2))
-		return (0);
+		prev = WHATEVER;
+	if (flag != 0)
+		if (prev == mytoken1)
+			return (0);
+	if (flag != 1)
+		if (next == mytoken2)
+			return (0);
 	return (1);
 }
 
@@ -45,46 +49,58 @@ int	syntax_error(char *str, char *token_value)
 	return (0);
 }
 
-int	check_syntax(t_list *head)
+int	check_syntax(t_list *newlist)
 {
 	int		token_var;
 	char	*token_str;
 
-	while (head)
+	while (newlist)
 	{
-		token_var = head->content->token;
-		token_str = head->content->str;
-		if (token_var == PIPE && !check_token(head, WORD, WORD))
-			return (syntax_error("Syntax error near: ", token_str));
-		else if (token_var == RE_OUT && !check_token(head, WORD, WORD))
-			return (syntax_error("Syntax error near: ", token_str));
-		else if (token_var == RE_IN && !check_token(head, TOKEN_ERROR, WORD))
-			return (syntax_error("Syntax error near: ", token_str));
-		else if (token_var == HERE_DOC && !check_token(head, WORD, WORD))
-			return (syntax_error("Syntax error near: ", token_str));
-		head = head->next;
+		token_var = newlist->content->token;
+		token_str = newlist->content->str;
+		if (token_var == PIPE && !check_token(newlist, WHATEVER, WHATEVER, BOTH))
+			return (syntax_error("Syntax Error near: ", token_str));
+		if (token_var == RE_OUT && !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			return (syntax_error("Syntax Error near: ", token_str));
+		if (token_var == RE_IN && !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			return (syntax_error("Syntax Error near: ", token_str));
+		if (token_var == HERE_DOC && !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			return (syntax_error("Syntax Error near: ", token_str));
+		if (token_var == RE_APPEND && !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			return (syntax_error("Syntax Error near: ", token_str));
+		newlist = newlist->next;
 	}
 	return (1);
 }
 
-void	ighnore_space(t_list *head)
+t_list	*ighnore_space(t_list *head)
 {
+	t_list	*new_lst;
+
+	new_lst = NULL;
+	if (!head)
+		return (NULL);
 	while (head)
 	{
-		if (head->content->token == ESP)
-			head->content->token = WORD;
+		if (head->content->token != ESP)
+			ft_lstadd_back(&new_lst, ft_lstnew(head->content));
 		head = head->next;
 	}
+	return (new_lst);
 }
 
-int	compiler(t_list *head)
+void	compiler(t_list *head)
 {
-	int	checked_token;
+	t_list	*new_lst;
 
-	ighnore_space(head);
-	if (!check_syntax(head))
-		return (0);
-	return (1);
+	new_lst = ighnore_space(head);
+	check_syntax(new_lst);
+	free_nodes(new_lst);
+}
+
+void	leaks(void)
+{
+	system ("leaks minishell");
 }
 
 int main()
@@ -92,7 +108,7 @@ int main()
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
-
+	// atexit (leaks);
 	head = NULL;
 	str = readline("minishell>> :");
 	if (!str)

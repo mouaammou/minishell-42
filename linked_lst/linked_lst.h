@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 17:50:13 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/13 20:14:48 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 14:58:24 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 typedef enum tokens
 {
-	TOKEN_ERROR = 0,
+	WHATEVER = 0,
 	QUOTE = 1,
 	S_QUOTE = 2,
 	WORD = 3,
