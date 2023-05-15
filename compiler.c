@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/14 17:09:13 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/14 17:12:41 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,4 @@ void	compiler(t_list *head)
 	new_lst = ighnore_space(head);
 	check_syntax(new_lst);
 	free_nodes(new_lst);
-}
-
-int	main(void)
-{
-	t_list	*head;
-	char	*str;
-	char	*trimed_str;
-
-	head = NULL;
-	str = readline("minishell>> :");
-	if (!str)
-		return (0);
-	trimed_str = ft_strtrim(str, " ");
-	if (!give_tokens(&head, trimed_str))
-		return (myfree_func(head, trimed_str, str), 1);
-	compiler(head);
-	return (myfree_func(head, trimed_str, str));
 }

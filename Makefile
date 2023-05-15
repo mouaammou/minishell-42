@@ -6,17 +6,17 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/05/14 17:03:35 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/05/14 20:19:36 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 RM = rm -f
 CC = cc
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
+FLAGS = -Wall -Wextra -Werror #-fsanitize=address
 SRCS = $(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 	   ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) tokenizer.c\
-	   $(addprefix utils/, token_spechars.c token_word.c utils.c check_syntax.c) compiler.c
+	   $(addprefix utils/, token_spechars.c token_word.c utils.c check_syntax.c) compiler.c parser_cmds.c
 
 OBJS = $(SRCS:.c=.o)
 
