@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 17:12:11 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/15 18:54:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/16 17:06:14 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,30 +32,36 @@ t_cmds	*bash_parser(t_list *head)
 {
 	t_cmds	*cmds;
 	int		nb_pipes;
-	// t_list	*mylist;
 
 	nb_pipes = count_pipes(head);
 	if (!nb_pipes)
 		return (NULL);
-	cmds = malloc(sizeof(t_cmds) * (nb_pipes + 1));
+	cmds = malloc((nb_pipes + 1) * sizeof(t_cmds));
 	if (!cmds)
 		return (NULL);
-
+	cmds->nb_cmds = nb_pipes;
 	int i = 0;
+	cmds[i].commands = NULL;
+	cmds[i].redirects = NULL;
 	while (head)
 	{
-		cmds[i].commands = NULL;
-		while (head && head->content->token != PIPE)
+		while (head && head->content->token != PIPE)// ls -la cat file
 		{
-			ft_lstadd_back(&cmds[i].commands, ft_lstnew(head->content));
+			if (head->content->token == WORD || head->content->token == QUOTE || head->content->token == S_QUOTE)
+				ft_lstadd_back(&cmds[i].commands, ft_lstnew(head->content));
+			else if (head->content->token != WORD && head->content->token != ESP)
+				ft_lstadd_back(&cmds[i].redirects, ft_lstnew(head->content));
 			head = head->next;
 		}
-		printf("%s\n", cmds[i++].commands->content->str);
 		if (!head)
 			break ;
-		head = head->next;
+		i++;
+		cmds[i].commands = NULL;
+		cmds[i].redirects = NULL;
+		if (head->content->token == PIPE)
+			head = head->next;
 	}
-	return (NULL);
+	return (cmds);
 }
 
 int	main(void)
@@ -70,18 +76,22 @@ int	main(void)
 		return (0);
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str))
-		return (myfree_func(head, trimed_str, str), 1);
+		return (0);
 	compiler(head);
-	bash_parser(head);
-	// t_list *varlist;
-	// varlist = cmds->commands;
-	// int i = 0;
-	// while (cmds[i].commands)
-	// {
-	// 	printf("[%s]\n", cmds[i].commands->content->str);
-	// 	// varlist = varlist->next;
-	// 	i++;
-	// }
+	t_cmds *cmds = bash_parser(head);
+	t_list *varlist;
+	int i = 0;
 
-	return (myfree_func(head, trimed_str, str));
+	while (cmds && i < cmds->nb_cmds)
+	{
+		varlist = cmds[i].commands;
+		printf("command: %d\n", i+1);
+		while (varlist)
+		{
+			printf("[%s]\n", varlist->content->str);
+			varlist = varlist->next;
+		}
+		i++;
+	}
+	return (0);
 }

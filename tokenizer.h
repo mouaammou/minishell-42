@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/15 17:40:48 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/16 15:45:17 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@
 
 typedef struct cmds
 {
-	t_list *commands;
-	t_list *redirects;
+	t_list	*commands;
+	t_list	*redirects;
+	int		nb_cmds;
 }t_cmds;
 
 void	compiler(t_list *head);
