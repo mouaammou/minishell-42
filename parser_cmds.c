@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 17:12:11 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/17 21:40:38 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:36:29 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	count_pipes(t_list *head)
 	return (count);
 }
 
-void	handle_cmds(t_cmds *cmds, t_list **head, int *i)
+void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 {
-	while ((*head) && (*head)->content->token != PIPE)//cat > file | ls -la
+	while ((*head) && (*head)->content->token != PIPE)
 	{
 		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
 		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
@@ -51,15 +51,13 @@ void	handle_cmds(t_cmds *cmds, t_list **head, int *i)
 t_cmds	*fill_cmds_redirs(t_cmds *cmds, t_list *head)
 {
 	int	i;
-	int	flag;
 
 	i = 0;
-	flag = 0;
 	cmds[i].commands = NULL;
 	cmds[i].redirects = NULL;
 	while (head)
 	{
-		handle_cmds(cmds, &head, &i);
+		handle_cmd(cmds, &head, &i);
 		i++;
 		cmds[i].commands = NULL;
 		cmds[i].redirects = NULL;
@@ -75,13 +73,11 @@ t_cmds	*bash_parser(t_list *head)
 {
 	t_cmds	*cmds;
 	int		nb_pipes;
-	t_list	*newlist;
 
-	newlist = NULL;
 	nb_pipes = count_pipes(head);
 	if (!nb_pipes)
 		return (NULL);
-	cmds = malloc((nb_pipes + 1) * sizeof(t_cmds));
+	cmds = malloc(sizeof(t_cmds) * (nb_pipes + 1));
 	if (!cmds)
 		return (NULL);
 	cmds->nb_cmds = nb_pipes;
@@ -117,7 +113,6 @@ int	main(void)
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
-	t_list	*newlist;
 
 	head = NULL;
 	str = readline("minishell>> :");
@@ -126,7 +121,7 @@ int	main(void)
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str))
 		return (0);
-	newlist = compiler(head);
+	compiler(head);
 	head = esc_sp_after_spechar(head);
 	t_cmds *cmds = bash_parser(head);
 	t_list *varlist;
