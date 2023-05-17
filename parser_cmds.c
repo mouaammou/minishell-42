@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 17:12:11 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/16 17:06:14 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/17 21:40:38 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,56 @@ int	count_pipes(t_list *head)
 	return (count);
 }
 
+void	handle_cmds(t_cmds *cmds, t_list **head, int *i)
+{
+	while ((*head) && (*head)->content->token != PIPE)//cat > file | ls -la
+	{
+		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
+		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
+			ft_lstadd_back(&cmds[*i].commands, ft_lstnew((*head)->content));
+		else
+		{
+			if ((*head)->next)
+			{
+				(*head)->content->str = (*head)->next->content->str;
+				ft_lstadd_back(&cmds[*i].redirects, ft_lstnew((*head)->content));
+				(*head) = (*head)->next;
+			}
+		}
+		(*head) = (*head)->next;
+	}
+}
+
+t_cmds	*fill_cmds_redirs(t_cmds *cmds, t_list *head)
+{
+	int	i;
+	int	flag;
+
+	i = 0;
+	flag = 0;
+	cmds[i].commands = NULL;
+	cmds[i].redirects = NULL;
+	while (head)
+	{
+		handle_cmds(cmds, &head, &i);
+		i++;
+		cmds[i].commands = NULL;
+		cmds[i].redirects = NULL;
+		if (!head)
+			break ;
+		if (head->content->token == PIPE)
+			head = head->next;
+	}
+	return (cmds);
+}
+
 t_cmds	*bash_parser(t_list *head)
 {
 	t_cmds	*cmds;
 	int		nb_pipes;
+	t_list	*newlist;
 
+	newlist = NULL;
 	nb_pipes = count_pipes(head);
 	if (!nb_pipes)
 		return (NULL);
@@ -40,28 +85,31 @@ t_cmds	*bash_parser(t_list *head)
 	if (!cmds)
 		return (NULL);
 	cmds->nb_cmds = nb_pipes;
-	int i = 0;
-	cmds[i].commands = NULL;
-	cmds[i].redirects = NULL;
+	cmds = fill_cmds_redirs(cmds, head);
+	return (cmds);
+}
+
+t_list *esc_sp_after_spechar(t_list *head)
+{
+	t_list	*newlist;
+
+	newlist = NULL;
 	while (head)
 	{
-		while (head && head->content->token != PIPE)// ls -la cat file
+		if (head->content->token == ESP)
 		{
-			if (head->content->token == WORD || head->content->token == QUOTE || head->content->token == S_QUOTE)
-				ft_lstadd_back(&cmds[i].commands, ft_lstnew(head->content));
-			else if (head->content->token != WORD && head->content->token != ESP)
-				ft_lstadd_back(&cmds[i].redirects, ft_lstnew(head->content));
+			if (head->prev && (head->prev->content->token == WORD || head->prev->content->token == QUOTE
+			|| head->prev->content->token == S_QUOTE))
+			{
+				ft_lstadd_back(&newlist, ft_lstnew(head->content));
+			}
 			head = head->next;
+			continue;
 		}
-		if (!head)
-			break ;
-		i++;
-		cmds[i].commands = NULL;
-		cmds[i].redirects = NULL;
-		if (head->content->token == PIPE)
-			head = head->next;
+		ft_lstadd_back(&newlist, ft_lstnew(head->content));
+		head = head->next;
 	}
-	return (cmds);
+	return (newlist);
 }
 
 int	main(void)
@@ -69,6 +117,7 @@ int	main(void)
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
+	t_list	*newlist;
 
 	head = NULL;
 	str = readline("minishell>> :");
@@ -77,7 +126,8 @@ int	main(void)
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str))
 		return (0);
-	compiler(head);
+	newlist = compiler(head);
+	head = esc_sp_after_spechar(head);
 	t_cmds *cmds = bash_parser(head);
 	t_list *varlist;
 	int i = 0;
@@ -85,12 +135,27 @@ int	main(void)
 	while (cmds && i < cmds->nb_cmds)
 	{
 		varlist = cmds[i].commands;
-		printf("command: %d\n", i+1);
+		printf("command: %d\n", i + 1);
 		while (varlist)
 		{
-			printf("[%s]\n", varlist->content->str);
+			printf("[%s]", varlist->content->str);
 			varlist = varlist->next;
 		}
+		printf("\n");
+		i++;
+	}
+	i = 0;
+	while (cmds && i < cmds->nb_cmds)
+	{
+		varlist = cmds[i].redirects;
+		printf("redirect: %d\n", i + 1);
+		while (varlist)
+		{
+			printf("[%s]\t", varlist->content->str);
+			printf("token [%d]\t", varlist->content->token);
+			varlist = varlist->next;
+		}
+		printf("\n");
 		i++;
 	}
 	return (0);
