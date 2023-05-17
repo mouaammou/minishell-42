@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/16 17:24:44 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:39:09 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,11 @@ t_list	*ighnore_space(t_list *head)
 	return (new_lst);
 }
 
-t_list	*compiler(t_list *head)
+void	compiler(t_list *head)
 {
 	t_list	*new_lst;
 
 	new_lst = ighnore_space(head);
 	check_syntax(new_lst);
-	// free_nodes(new_lst);
-	return (new_lst);
+	free_nodes(new_lst);
 }

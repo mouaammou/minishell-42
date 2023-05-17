@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/16 17:24:53 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/17 22:38:55 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct cmds
 	int		nb_cmds;
 }t_cmds;
 
-t_list	*compiler(t_list *head);
+void	compiler(t_list *head);
 int		check_token(t_list *node, int mytoken1, int mytoken2, int flag);
 int		syntax_error(char *str, char *token_value);
 int		check_syntax(t_list *newlist);
