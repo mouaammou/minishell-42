@@ -6,6 +6,7 @@
 		"libft.h": "c",
 		"readline.h": "c",
 		"history.h": "c",
-		"__config": "c"
+		"__config": "c",
+		"get_next_line.h": "c"
 	}
 }

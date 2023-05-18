@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:45:51 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/14 17:06:28 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/18 15:29:28 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,14 @@ int	check_token(t_list *node, int mytoken1, int mytoken2, int flag)
 		prev = node->prev->content->token;
 	else
 		prev = WHATEVER;
-	if (flag != 0)
-		if (prev == mytoken1)
+	if (flag == PREV)
+		if (prev == WHATEVER)
 			return (0);
-	if (flag != 1)
-		if (next == mytoken2)
+	if (flag == NEXT)
+		if (next == WHATEVER)
+			return (0);
+	if (flag == BOTH)
+		if (prev != mytoken1 || next != mytoken2)
 			return (0);
 	return (1);
 }
@@ -50,19 +53,19 @@ int	check_syntax(t_list *newlist)
 		token_var = newlist->content->token;
 		token_str = newlist->content->str;
 		if (token_var == PIPE
-			&& !check_token(newlist, WHATEVER, WHATEVER, BOTH))
+			&& !check_token(newlist, WORD, WORD, BOTH))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == RE_OUT
-			&& !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == RE_IN
-			&& !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == HERE_DOC
-			&& !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == RE_APPEND
-			&& !check_token(newlist, WHATEVER, WHATEVER, PREV))
+			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		newlist = newlist->next;
 	}

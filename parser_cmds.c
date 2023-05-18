@@ -6,11 +6,23 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 17:12:11 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/17 22:41:41 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/18 21:38:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tokenizer.h"
+
+int	str_cmp(const char *s1, const char *s2)
+{
+	if (!s1 || !s2)
+		return (0);
+	while (*s1 == *s2 && *s1 && *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
+}
 
 int	count_pipes(t_list *head)
 {
@@ -28,6 +40,28 @@ int	count_pipes(t_list *head)
 	return (count);
 }
 
+void	handle_heredoc(t_list **head, int *i)
+{
+	char	*str;
+	char	*line;
+
+	*i = 0;
+	str = ft_strjoin("/tmp/", (*head)->next->content->str);
+	int	fd = open(str, O_CREAT | O_RDWR, 777);
+	if (fd < 0)
+	{
+		msg_error("bad file descriptro\n");
+		return ;
+	}
+	// printf("[%s]\n", ft_strjoin((*head)->next->content->str, "\n"));
+	// exit (0);
+	while ((line = get_next_line(0)))
+	{
+		write(fd, line, ft_strlen(line));
+	}
+	// exit (0);
+}
+
 void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 {
 	while ((*head) && (*head)->content->token != PIPE)
@@ -39,6 +73,8 @@ void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 		{
 			if ((*head)->next)
 			{
+				if ((*head)->content->token == HERE_DOC)
+					handle_heredoc(head, i);
 				(*head)->content->str = (*head)->next->content->str;
 				ft_lstadd_back(&cmds[*i].redirects, ft_lstnew((*head)->content));
 				(*head) = (*head)->next;
@@ -106,6 +142,15 @@ t_list *esc_sp_after_spechar(t_list *head)
 		head = head->next;
 	}
 	return (newlist);
+}
+
+void	display(t_list *head)
+{
+	while (head)
+	{
+		printf("[%s]\n", head->content->str);
+		head = head->next;
+	}
 }
 
 int	main(void)

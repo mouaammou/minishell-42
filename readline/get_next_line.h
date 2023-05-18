@@ -1,38 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   compiler.c                                         :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/18 15:30:41 by mouaammo         ###   ########.fr       */
+/*   Created: 2022/11/02 13:59:12 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/05/18 16:06:33 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-t_list	*ighnore_space(t_list *head)
-{
-	t_list	*new_lst;
+# include<unistd.h>
+# include<stdlib.h>
+# include "../libft/libft.h"
 
-	new_lst = NULL;
-	if (!head)
-		return (NULL);
-	while (head)
-	{
-		if (head->content->token != ESP)
-			ft_lstadd_back(&new_lst, ft_lstnew(head->content));
-		head = head->next;
-	}
-	return (new_lst);
-}
+char	*get_next_line(int fd);
+int		check_new_line(char *str);
+char	*str_join(char *s1, char *s2);
+char	*get_reminder(char **str, int len);
+char	*get_my_line(char **temp, char *line, int ln);
 
-void	compiler(t_list *head)
-{
-	t_list	*new_lst;
-
-	new_lst = ighnore_space(head);
-	check_syntax(new_lst);
-	free_nodes(new_lst);
-}
+#endif
