@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/21 18:12:59 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/21 22:33:28 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,13 @@ typedef struct mylist
 	t_voidlst	*redirects;
 }t_collecter;
 
+/******** END TYPEDEF STRUCT */
+// typedef struct mylist
+// {
+// 	char		**args;
+// 	t_voidlst	*redirects;
+// }t_collecter;
+
 void	compiler(t_list *head);
 int		check_token(t_list *node, int mytoken1, int mytoken2, int flag);
 int		syntax_error(char *str, char *token_value);
@@ -57,8 +64,7 @@ void	free_linked_list(t_list *head);
 /* start collecter functions */
 int		count_pipes(t_list *head);
 void	handle_heredoc(t_list **head);
-// void	handle_cmd(t_cmds *cmds, t_list **head, int *i);
-void	collect_cmds_redirs(t_voidlst **col_head, t_list *head);
+void	handle_cmd(t_collecter **tmp_list, t_list **head);
 t_voidlst	*bash_collecter(t_list *head);
 t_list *esc_sp_after_spechar(t_list *head);
 void	free_all(char **tab);

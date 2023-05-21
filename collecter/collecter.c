@@ -77,9 +77,7 @@ void	handle_cmd(t_collecter **tmp_list, t_list **head)
 	{
 		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
 		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
-			{
 				add_back(&((*tmp_list)->commands), new_node((*head)->content));
-			}
 		else
 		{
 			if ((*head)->next)
@@ -111,25 +109,19 @@ t_collecter *node_collecter(t_collecter args)
 	return (new_collecter);
 }
 
-void	collect_cmds_redirs(t_voidlst **col_head, t_list *head)
+t_voidlst	*bash_collecter(t_list *head)
 {
+	t_voidlst	*collecter;
 	t_collecter	*tmp_list;
 
+	collecter = NULL;
 	while (head)
 	{
 		handle_cmd(&tmp_list, &head);
-		add_back(col_head, new_node(tmp_list));
+		add_back(&collecter, new_node(tmp_list));
 		if (head && head->content->token == PIPE)
 			head = head->next;
 	}
-}
-
-t_voidlst	*bash_collecter(t_list *head)
-{
-	t_voidlst *collecter;
-
-	collecter = NULL;
-	collect_cmds_redirs(&collecter, head);
 	return (collecter);
 }
 
@@ -192,7 +184,7 @@ int	main(void)
 	char	*trimed_str;
 
 	head = NULL;
-	str = readline("minishell>> :");
+	str = readline("minishell>>: ");
 	if (!str)
 		return (0);
 	trimed_str = ft_strtrim(str, " ");
