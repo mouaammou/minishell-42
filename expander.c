@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:48:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/21 01:34:31 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/21 17:53:40 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void	free_all(char **tab)
 	free(tab);
 }
 
-t_mylist	*take_env(char **env)
+t_voidlst	*take_env(char **env)
 {
 	t_env		*myenv;
-	t_mylist	*head;
+	t_voidlst	*head;
 	int			i;
 
 	head = NULL;
@@ -57,7 +57,7 @@ t_mylist	*take_env(char **env)
 	return (head);
 }
 
-void	search_for_key(char *str, t_mylist *myenv, t_list **head)
+void	search_for_key(char *str, t_voidlst *myenv, t_list **head)
 {
 	t_env	*keyval_env;
 
@@ -68,44 +68,62 @@ void	search_for_key(char *str, t_mylist *myenv, t_list **head)
 		{
 			(*head)->content->str = keyval_env->value;
 		}
+		else
+			(*head)->content->str = ft_strdup("");
 		myenv = myenv->next;
 	}
 }
 
-void	expander(t_list *head, t_mylist *myenv)
+void	expander(t_list *head, t_voidlst *myenv)
 {
+	myenv = NULL;
 	while (head)
 	{
 		if (ft_strchr(head->content->str, '$'))
-			if (head->content->token == WORD || head->content->token == QUOTE)
+		{
+			if (head->content->token == WORD)
 			{
 				//search for the string in the linked list
+				// search_for_key(head->content->str, myenv, &head);
+				//CREATE SUB LINKED LIST
 				search_for_key(head->content->str, myenv, &head);
 			}
+			else if (head->content->token == QUOTE)
+			{
+				//search for the string in the linked list
+				// printf("quote: [%s]\n", head->content->str);
+				//CREATE A NODE
+				// search_for_key(head->content->str, myenv, &head);
+			}
+		}
 		head = head->next;
 	}
 }
 
-int	main(int ac, char **av, char **env)
-{
-	t_list	*head;
-	char	*str;
-	char	*trimed_str;
-	t_mylist	*my_env;
+// int	main(int ac, char **av, char **env)
+// {
+// 	t_list	*head;
+// 	char	*str;
+// 	char	*trimed_str;
+// 	t_voidlst	*my_env;
 
-	(void)(ac);
-	(void)(av);
-	head = NULL;
-	str = readline("minishell>> :");
-	if (!str)
-		return (0);
-	trimed_str = ft_strtrim(str, " ");
-	if (!give_tokens(&head, trimed_str))
-		return (0);
-	compiler(head);
-	head = esc_sp_after_spechar(head);
-	my_env = take_env(env);
-	expander(head, my_env);
-	display(head);
-	return (0);
-}
+// 	(void)(ac);
+// 	(void)(av);
+// 	head = NULL;
+// 	str = readline("minishell>> :");
+// 	if (!str)
+// 		return (0);
+// 	trimed_str = ft_strtrim(str, " ");
+// 	if (!give_tokens(&head, trimed_str))
+// 		return (0);
+// 	compiler(head);
+// 	head = esc_sp_after_spechar(head);
+// 	my_env = take_env(env);
+// 	// expander(head, my_env);
+// 	bash_collecter(head);
+// 	// display_args(cmds);
+// 	printf("====\n");
+// 	// display_redires(cmds);
+// 	// display(head);
+// 	return (0);
+// }

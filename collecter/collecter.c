@@ -70,13 +70,16 @@ void	handle_heredoc(t_list **head)
 	close (fd);
 }
 
-void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
+void	handle_cmd(t_collecter **tmp_list, t_list **head)
 {
+	*tmp_list = node_collecter((t_collecter){NULL, NULL});
 	while ((*head) && (*head)->content->token != PIPE)
 	{
 		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
 		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
-			ft_lstadd_back(&cmds[*i].commands, ft_lstnew((*head)->content));
+			{
+				add_back(&((*tmp_list)->commands), new_node((*head)->content));
+			}
 		else
 		{
 			if ((*head)->next)
@@ -85,7 +88,7 @@ void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 					handle_heredoc(head);
 				else
 					(*head)->content->str = (*head)->next->content->str;
-				ft_lstadd_back(&cmds[*i].redirects, ft_lstnew((*head)->content));
+				add_back(&((*tmp_list)->redirects), new_node((*head)->content));
 				(*head) = (*head)->next;
 			}
 		}
@@ -93,41 +96,41 @@ void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 	}
 }
 
-t_cmds	*collect_cmds_redirs(t_cmds *cmds, t_list *head)
+t_collecter *node_collecter(t_collecter args)
 {
-	int	i;
+	t_collecter *new_collecter;
 
-	i = 0;
-	cmds[i].commands = NULL;
-	cmds[i].redirects = NULL;
-	while (head)
+	new_collecter = malloc (sizeof (t_collecter));
+	if (!new_collecter)
 	{
-		handle_cmd(cmds, &head, &i);
-		i++;
-		cmds[i].commands = NULL;
-		cmds[i].redirects = NULL;
-		if (!head)
-			break ;
-		if (head->content->token == PIPE)
-			head = head->next;
+		perror("");
+		exit(EXIT_FAILURE);
 	}
-	return (cmds);
+	new_collecter->commands = args.commands;
+	new_collecter->redirects = args.redirects;
+	return (new_collecter);
 }
 
-t_cmds	*bash_collecter(t_list *head)
+void	collect_cmds_redirs(t_voidlst **col_head, t_list *head)
 {
-	t_cmds	*cmds;
-	int		nb_pipes;
+	t_collecter	*tmp_list;
 
-	nb_pipes = count_pipes(head);
-	if (!nb_pipes)
-		return (NULL);
-	cmds = malloc(sizeof(t_cmds) * (nb_pipes + 1));
-	if (!cmds)
-		return (NULL);
-	cmds->nb_cmds = nb_pipes;
-	cmds = collect_cmds_redirs(cmds, head);
-	return (cmds);
+	while (head)
+	{
+		handle_cmd(&tmp_list, &head);
+		add_back(col_head, new_node(tmp_list));
+		if (head && head->content->token == PIPE)
+			head = head->next;
+	}
+}
+
+t_voidlst	*bash_collecter(t_list *head)
+{
+	t_voidlst *collecter;
+
+	collecter = NULL;
+	collect_cmds_redirs(&collecter, head);
+	return (collecter);
 }
 
 t_list *esc_sp_after_spechar(t_list *head)
@@ -153,65 +156,53 @@ t_list *esc_sp_after_spechar(t_list *head)
 	return (newlist);
 }
 
-void	display(t_list *head)
+void	display_collecter(t_voidlst *h_list)
 {
-	while (head)
+	int i = 1;
+	while (h_list)
 	{
-		printf("[%s] ==> [%d]\n", head->content->str, head->content->token);
-		head = head->next;
-	}
-}
 
-void	display_args(t_cmds *cmds)
-{
-	int i = 0;
-	t_list *varlist;
-
-	while (cmds && i < cmds->nb_cmds)
-	{
-		varlist = cmds[i].commands;
-		printf("command: %d\n", i + 1);
-		display(varlist);
-		i++;
-	}
-}
-
-void	display_redires(t_cmds *cmds)
-{
-	int i = 0;
-	t_list *varlist;
-
-	while (cmds && i < cmds->nb_cmds)
-	{
-		varlist = cmds[i].redirects;
-		printf("redirect: %d\n", i + 1);
-		while (varlist)
+		t_collecter *tmp = h_list->content;
+		t_voidlst	*cmds = tmp->commands;
+		t_voidlst	*redirs = tmp->redirects;
+		printf("command: %d\n", i);
+		while (cmds)
 		{
-			printf("[%s]\ttoken [%d]\n", varlist->content->str, varlist->content->token);
-			varlist = varlist->next;
+			t_token *mytoken = cmds->content;
+			printf("\t[%s]\n", mytoken->str);
+			cmds = cmds->next;
 		}
+		printf("\nredirects\n");
+		while (redirs)
+		{
+			t_token *mytoken1 = redirs->content;
+			printf("\t[%s]  token: [%d]\n", mytoken1->str, mytoken1->token);
+			redirs = redirs->next;
+		}
+		printf("\n");
 		i++;
+		h_list = h_list->next;
 	}
 }
 
-// int	main(void)
-// {
-// 	t_list	*head;
-// 	char	*str;
-// 	char	*trimed_str;
+int	main(void)
+{
+	t_list	*head;
+	char	*str;
+	char	*trimed_str;
 
-// 	head = NULL;
-// 	str = readline("minishell>> :");
-// 	if (!str)
-// 		return (0);
-// 	trimed_str = ft_strtrim(str, " ");
-// 	if (!give_tokens(&head, trimed_str))
-// 		return (0);
-// 	compiler(head);
-// 	head = esc_sp_after_spechar(head);
-// 	t_cmds *cmds = bash_collecter(head);
-// 	display_args(cmds);
-// 	printf("------------\n");
-// 	display_redires(cmds);
-// 	return (0);
-// }
+	head = NULL;
+	str = readline("minishell>> :");
+	if (!str)
+		return (0);
+	trimed_str = ft_strtrim(str, " ");
+	if (!give_tokens(&head, trimed_str))
+		return (0);
+	compiler(head);
+	head = esc_sp_after_spechar(head);
+	//test the collecter of all tokens
+	t_voidlst *mylista = bash_collecter(head);
+	display_collecter(mylista);
+	//test the collecter of all tokens
+	return (0);
+}

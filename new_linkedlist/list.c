@@ -6,15 +6,15 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 16:17:30 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/20 16:23:47 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/21 14:17:16 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 
-void	add_back(t_mylist **lst, t_mylist *new)
+void	add_back(t_voidlst **lst, t_voidlst *new)
 {
-	t_mylist	*head;
+	t_voidlst	*head;
 
 	if (!lst || !new)
 		return ;
@@ -30,7 +30,7 @@ void	add_back(t_mylist **lst, t_mylist *new)
 		*lst = new;
 }
 
-void	add_front(t_mylist **lst, t_mylist *new)
+void	add_front(t_voidlst **lst, t_voidlst *new)
 {
 	if (!lst || !new)
 		return ;
@@ -43,12 +43,12 @@ void	add_front(t_mylist **lst, t_mylist *new)
 	*lst = new;
 }
 
-t_mylist	*new_node(void *content)
+t_voidlst	*new_node(void *content)
 {
-	t_mylist	*node;
+	t_voidlst	*node;
 
 	node = NULL;
-	node = (t_mylist *) malloc(sizeof(t_mylist));
+	node = (t_voidlst *) malloc(sizeof(t_voidlst));
 	if (!node)
 		return (NULL);
 	node->content = content;
@@ -57,7 +57,7 @@ t_mylist	*new_node(void *content)
 	return (node);
 }
 
-t_mylist	*last_node(t_mylist *lst)
+t_voidlst	*last_node(t_voidlst *lst)
 {
 	while (lst)
 	{
@@ -68,7 +68,7 @@ t_mylist	*last_node(t_mylist *lst)
 	return (lst);
 }
 
-int	last_size(t_mylist *lst)
+int	last_size(t_voidlst *lst)
 {
 	int	count;
 
