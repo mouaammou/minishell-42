@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:45:51 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/18 15:29:28 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/20 14:49:27 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tokenizer.h"
+#include "../parsing.h"
 
 int	check_token(t_list *node, int mytoken1, int mytoken2, int flag)
 {

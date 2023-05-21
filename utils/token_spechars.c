@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/14 17:07:19 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/20 15:30:17 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tokenizer.h"
+#include "../parsing.h"
 
 t_token	*get_quotes_content(char *str, int *i, char qts)
 {
@@ -46,7 +46,10 @@ int	token_quotes(t_list **mylist, char *str, int *i, char qts)
 		return (0);
 	if (mytoken->str)
 	{
-		mytoken->token = QUOTE;
+		if (qts == '\'')
+			mytoken->token = S_QUOTE;
+		else if (qts == '\"')
+			mytoken->token = QUOTE;
 		ft_lstadd_back(mylist, ft_lstnew(mytoken));
 	}
 	return (1);

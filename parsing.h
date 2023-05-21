@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.h                                        :+:      :+:    :+:   */
+/*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/18 16:30:43 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/20 17:02:36 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TOKENIZER_H
-# define  TOKENIZER_H
+#ifndef PARSING_H
+# define  PARSING_H
 
 # include "libft/libft.h"
 # include <stdio.h>
@@ -19,11 +19,18 @@
 # include "linked_lst/linked_lst.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-#include "readline/get_next_line.h"
+# include "readline/get_next_line.h"
+# include "new_linkedlist/list_header.h"
 
 # define PREV 0
 # define NEXT 1
 # define BOTH 2
+
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+}t_env;
 
 typedef struct cmds
 {
@@ -47,4 +54,17 @@ void	token_word(t_list **mylist, char *str, int *i);
 void	*msg_error(char *str);
 int		myfree_func(t_list *head, char *trimed_str, char *str);
 void	free_linked_list(t_list *head);
+
+/* start collecter functions */
+int		count_pipes(t_list *head);
+void	handle_heredoc(t_list **head);
+void	handle_cmd(t_cmds *cmds, t_list **head, int *i);
+t_cmds	*collect_cmds_redirs(t_cmds *cmds, t_list *head);
+t_cmds	*bash_collecter(t_list *head);
+t_list *esc_sp_after_spechar(t_list *head);
+void	display(t_list *head);
+void	display_args(t_cmds *cmds);
+void	display_redires(t_cmds *cmds);
+void	free_all(char **tab);
+/* end collecter */
 #endif

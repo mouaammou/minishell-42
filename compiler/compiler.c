@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/18 15:30:41 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/20 16:09:51 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#include "../parsing.h"
 
 t_list	*ighnore_space(t_list *head)
 {

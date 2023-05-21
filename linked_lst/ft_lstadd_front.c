@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/21 15:27:09 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/14 17:04:43 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/20 14:49:27 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../tokenizer.h"
+#include "../parsing.h"
 
 void	ft_lstadd_front(t_list **lst, t_list *new)
 {

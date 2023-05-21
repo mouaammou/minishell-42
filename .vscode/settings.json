@@ -1,6 +1,6 @@
 {
 	"files.associations": {
-		"tokenizer.h": "c",
+		"parsing.h": "c",
 		"username": "mouad ouaammou",
 		"linked_lst.h": "c",
 		"libft.h": "c",

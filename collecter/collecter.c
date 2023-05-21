@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_cmds.c                                      :+:      :+:    :+:   */
+/*   collecter.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 17:12:11 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/18 21:38:07 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/19 18:36:25 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#include "../parsing.h"
 
 int	str_cmp(const char *s1, const char *s2)
 {
@@ -40,26 +40,34 @@ int	count_pipes(t_list *head)
 	return (count);
 }
 
-void	handle_heredoc(t_list **head, int *i)
+void	handle_heredoc(t_list **head)
 {
 	char	*str;
 	char	*line;
+	int		file_permissions;
+	int		fd;
 
-	*i = 0;
 	str = ft_strjoin("/tmp/", (*head)->next->content->str);
-	int	fd = open(str, O_CREAT | O_RDWR, 777);
-	if (fd < 0)
+	file_permissions = S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
+	fd = open(str, O_RDWR | O_CREAT | O_TRUNC, file_permissions);
+	if (fd == -1)
 	{
-		msg_error("bad file descriptro\n");
-		return ;
+		perror("");
+		exit(EXIT_FAILURE);
 	}
-	// printf("[%s]\n", ft_strjoin((*head)->next->content->str, "\n"));
-	// exit (0);
-	while ((line = get_next_line(0)))
+	while (1)
 	{
+		ft_putstr_fd("heredoc> ", 1);
+		line = get_next_line(0);
+		if (!line || !ft_strncmp(line, (*head)->next->content->str, ft_strlen(line) - 1))
+		{
+			ft_putstr_fd("\n", 1);
+			break;
+		}
 		write(fd, line, ft_strlen(line));
 	}
-	// exit (0);
+	(*head)->content->str = str;
+	close (fd);
 }
 
 void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
@@ -74,8 +82,9 @@ void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 			if ((*head)->next)
 			{
 				if ((*head)->content->token == HERE_DOC)
-					handle_heredoc(head, i);
-				(*head)->content->str = (*head)->next->content->str;
+					handle_heredoc(head);
+				else
+					(*head)->content->str = (*head)->next->content->str;
 				ft_lstadd_back(&cmds[*i].redirects, ft_lstnew((*head)->content));
 				(*head) = (*head)->next;
 			}
@@ -84,7 +93,7 @@ void	handle_cmd(t_cmds *cmds, t_list **head, int *i)
 	}
 }
 
-t_cmds	*fill_cmds_redirs(t_cmds *cmds, t_list *head)
+t_cmds	*collect_cmds_redirs(t_cmds *cmds, t_list *head)
 {
 	int	i;
 
@@ -105,7 +114,7 @@ t_cmds	*fill_cmds_redirs(t_cmds *cmds, t_list *head)
 	return (cmds);
 }
 
-t_cmds	*bash_parser(t_list *head)
+t_cmds	*bash_collecter(t_list *head)
 {
 	t_cmds	*cmds;
 	int		nb_pipes;
@@ -117,7 +126,7 @@ t_cmds	*bash_parser(t_list *head)
 	if (!cmds)
 		return (NULL);
 	cmds->nb_cmds = nb_pipes;
-	cmds = fill_cmds_redirs(cmds, head);
+	cmds = collect_cmds_redirs(cmds, head);
 	return (cmds);
 }
 
@@ -148,55 +157,61 @@ void	display(t_list *head)
 {
 	while (head)
 	{
-		printf("[%s]\n", head->content->str);
+		printf("[%s] ==> [%d]\n", head->content->str, head->content->token);
 		head = head->next;
 	}
 }
 
-int	main(void)
+void	display_args(t_cmds *cmds)
 {
-	t_list	*head;
-	char	*str;
-	char	*trimed_str;
-
-	head = NULL;
-	str = readline("minishell>> :");
-	if (!str)
-		return (0);
-	trimed_str = ft_strtrim(str, " ");
-	if (!give_tokens(&head, trimed_str))
-		return (0);
-	compiler(head);
-	head = esc_sp_after_spechar(head);
-	t_cmds *cmds = bash_parser(head);
-	t_list *varlist;
 	int i = 0;
+	t_list *varlist;
 
 	while (cmds && i < cmds->nb_cmds)
 	{
 		varlist = cmds[i].commands;
 		printf("command: %d\n", i + 1);
-		while (varlist)
-		{
-			printf("[%s]", varlist->content->str);
-			varlist = varlist->next;
-		}
-		printf("\n");
+		display(varlist);
 		i++;
 	}
-	i = 0;
+}
+
+void	display_redires(t_cmds *cmds)
+{
+	int i = 0;
+	t_list *varlist;
+
 	while (cmds && i < cmds->nb_cmds)
 	{
 		varlist = cmds[i].redirects;
 		printf("redirect: %d\n", i + 1);
 		while (varlist)
 		{
-			printf("[%s]\t", varlist->content->str);
-			printf("token [%d]\t", varlist->content->token);
+			printf("[%s]\ttoken [%d]\n", varlist->content->str, varlist->content->token);
 			varlist = varlist->next;
 		}
-		printf("\n");
 		i++;
 	}
-	return (0);
 }
+
+// int	main(void)
+// {
+// 	t_list	*head;
+// 	char	*str;
+// 	char	*trimed_str;
+
+// 	head = NULL;
+// 	str = readline("minishell>> :");
+// 	if (!str)
+// 		return (0);
+// 	trimed_str = ft_strtrim(str, " ");
+// 	if (!give_tokens(&head, trimed_str))
+// 		return (0);
+// 	compiler(head);
+// 	head = esc_sp_after_spechar(head);
+// 	t_cmds *cmds = bash_collecter(head);
+// 	display_args(cmds);
+// 	printf("------------\n");
+// 	display_redires(cmds);
+// 	return (0);
+// }

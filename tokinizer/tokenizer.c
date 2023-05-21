@@ -6,11 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/14 17:03:13 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/20 14:53:19 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#include "../parsing.h"
 
 int	give_tokens(t_list **tokenizer, char *str)
 {

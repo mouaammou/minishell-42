@@ -1,27 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   list_header.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/17 23:10:03 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/20 16:09:03 by mouaammo         ###   ########.fr       */
+/*   Created: 2023/05/20 16:17:16 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/05/20 16:19:11 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parsing.h"
+#ifndef LIST_H
+# define LIST_H
 
-t_list	*ft_lstnew(t_token *mytoken)
+typedef struct list
 {
-	t_list	*node;
+	void			*content;
+	struct list		*next;
+	struct list		*prev;
+}	t_mylist;
 
-	node = NULL;
-	node = (t_list *) malloc(sizeof(t_list));
-	if (!node)
-		return (NULL);
-	node->content = mytoken;
-	node->next = NULL;
-	node->prev = NULL;
-	return (node);
-}
+void		add_back(t_mylist **lst, t_mylist *new);
+void		add_front(t_mylist **lst, t_mylist *new);
+t_mylist	*new_node(void *content);
+t_mylist	*last_node(t_mylist *lst);
+int			last_size(t_mylist *lst);
+
+#endif
