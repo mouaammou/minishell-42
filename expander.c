@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:48:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/21 17:53:40 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/22 22:28:00 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_voidlst	*take_env(char **env)
 	return (head);
 }
 
-void	search_for_key(char *str, t_voidlst *myenv, t_list **head)
+char	*search_for_key(char *str, t_voidlst *myenv)
 {
 	t_env	*keyval_env;
 
@@ -66,38 +66,77 @@ void	search_for_key(char *str, t_voidlst *myenv, t_list **head)
 		keyval_env = myenv->content;
 		if (ft_strnstr(str, keyval_env->key, ft_strlen(str)))
 		{
-			(*head)->content->str = keyval_env->value;
+			return (keyval_env->value);
 		}
-		else
-			(*head)->content->str = ft_strdup("");
 		myenv = myenv->next;
 	}
+	return (NULL);
 }
 
-void	expander(t_list *head, t_voidlst *myenv)
+int	count_size(char **split)
 {
-	myenv = NULL;
-	while (head)
+	int	i;
+
+	i = 0;
+	while (split && split[i])
+		i++;
+	return (i);
+}
+
+t_voidlst	*new_sublist(char **split)
+{
+	t_voidlst	*head;
+	int			i;
+	t_token		*mytoken;
+
+	i = 0;
+	head = NULL;
+	while (split && split[i])
 	{
-		if (ft_strchr(head->content->str, '$'))
+		mytoken = malloc(sizeof (t_token));
+		if (!mytoken)
 		{
-			if (head->content->token == WORD)
-			{
-				//search for the string in the linked list
-				// search_for_key(head->content->str, myenv, &head);
-				//CREATE SUB LINKED LIST
-				search_for_key(head->content->str, myenv, &head);
-			}
-			else if (head->content->token == QUOTE)
-			{
-				//search for the string in the linked list
-				// printf("quote: [%s]\n", head->content->str);
-				//CREATE A NODE
-				// search_for_key(head->content->str, myenv, &head);
-			}
+			perror("");
+			exit (0);
 		}
-		head = head->next;
+		mytoken->token = WORD;
+		mytoken->str = split[i];
+		add_back(&head, new_node(mytoken));
+		i++;
 	}
+	return (head);
+}
+
+t_voidlst	*expander(t_list *head, t_voidlst *myenv)
+{
+	char		**split;
+	int			size;
+	char		*searched_str;
+	t_voidlst	*sub_lst;
+	t_token		*mytoken;
+
+	sub_lst = NULL;
+	mytoken = NULL;
+	searched_str = search_for_key(head->content->str, myenv);
+	if (searched_str && head->content->token == WORD)
+	{
+		split = ft_split(searched_str, ' ');
+		size = count_size(split);
+		sub_lst = new_sublist (split);
+	}
+	else if (searched_str && head->content->token == QUOTE)
+	{
+		mytoken = malloc(sizeof (t_token));
+		if (!mytoken)
+		{
+			perror("");
+			exit (0);
+		}
+		mytoken->token = QUOTE;
+		mytoken->str = searched_str;
+		sub_lst = new_node (mytoken);
+	}
+	return (sub_lst);
 }
 
 // int	main(int ac, char **av, char **env)

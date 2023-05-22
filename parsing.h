@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/21 22:33:28 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/22 17:57:46 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,18 @@ typedef struct s_env
 	char	*value;
 }t_env;
 
-typedef struct mylist
+typedef struct cmd
 {
 	t_voidlst	*commands;
 	t_voidlst	*redirects;
-}t_collecter;
+}t_cmds;
 
 /******** END TYPEDEF STRUCT */
 // typedef struct mylist
 // {
 // 	char		**args;
 // 	t_voidlst	*redirects;
-// }t_collecter;
+// }t_cmds;
 
 void	compiler(t_list *head);
 int		check_token(t_list *node, int mytoken1, int mytoken2, int flag);
@@ -64,10 +64,17 @@ void	free_linked_list(t_list *head);
 /* start collecter functions */
 int		count_pipes(t_list *head);
 void	handle_heredoc(t_list **head);
-void	handle_cmd(t_collecter **tmp_list, t_list **head);
-t_voidlst	*bash_collecter(t_list *head);
+void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv);
+t_voidlst	*bash_collecter(t_list *head, t_voidlst *myenv);
 t_list *esc_sp_after_spechar(t_list *head);
 void	free_all(char **tab);
-t_collecter *node_collecter(t_collecter args);
+t_cmds *node_collecter(t_cmds args);
 /* end collecter */
+
+/** expander functions */
+t_env		*split_key_value(char *env);
+t_voidlst	*take_env(char **env);
+// int			search_for_key(char *str, t_voidlst *myenv);
+t_voidlst	*expander(t_list *head, t_voidlst *myenv);
+// end expander
 #endif

@@ -70,35 +70,72 @@ void	handle_heredoc(t_list **head)
 	close (fd);
 }
 
-void	handle_cmd(t_collecter **tmp_list, t_list **head)
+void	display_list(t_voidlst *list)
 {
-	*tmp_list = node_collecter((t_collecter){NULL, NULL});
+	t_token *mytoken;
+	while (list)
+	{
+		mytoken = list->content;
+		printf("--> [%s]", mytoken->str);
+		list = list->next;
+	}
+	printf("\n");
+}
+
+void	backadd_list(t_voidlst **origin, t_voidlst *newlist)
+{
+	t_voidlst	*tmp;
+	while (newlist)
+	{
+		tmp = newlist->next;
+		add_back(origin, new_node(newlist->content));
+		newlist = tmp;
+	}
+}
+
+void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+{
+	t_voidlst	*sublst;
+
+	*tmp_list = node_collecter((t_cmds){NULL, NULL});
+	sublst = NULL;
 	while ((*head) && (*head)->content->token != PIPE)
 	{
 		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
 		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
-				add_back(&((*tmp_list)->commands), new_node((*head)->content));
+		{
+
+				if (ft_strchr((*head)->content->str, '$'))
+				{
+					sublst = expander(*head, myenv);
+					if (sublst)
+					{
+						backadd_list(&((*tmp_list)->commands), sublst);
+					}
+				}
+				else
+					add_back(&((*tmp_list)->commands), new_node((*head)->content));
+				// display_list((*tmp_list)->commands);
+		}
 		else
 		{
 			if ((*head)->next)
 			{
-				if ((*head)->content->token == HERE_DOC)
-					handle_heredoc(head);
-				else
-					(*head)->content->str = (*head)->next->content->str;
+				(*head)->content->str = (*head)->next->content->str;
 				add_back(&((*tmp_list)->redirects), new_node((*head)->content));
 				(*head) = (*head)->next;
 			}
 		}
 		(*head) = (*head)->next;
 	}
+				// exit (0);
 }
 
-t_collecter *node_collecter(t_collecter args)
+t_cmds *node_collecter(t_cmds args)
 {
-	t_collecter *new_collecter;
+	t_cmds *new_collecter;
 
-	new_collecter = malloc (sizeof (t_collecter));
+	new_collecter = malloc (sizeof (t_cmds));
 	if (!new_collecter)
 	{
 		perror("");
@@ -109,15 +146,15 @@ t_collecter *node_collecter(t_collecter args)
 	return (new_collecter);
 }
 
-t_voidlst	*bash_collecter(t_list *head)
+t_voidlst	*bash_collecter(t_list *head, t_voidlst *myenv)
 {
 	t_voidlst	*collecter;
-	t_collecter	*tmp_list;
+	t_cmds	*tmp_list;
 
 	collecter = NULL;
 	while (head)
 	{
-		handle_cmd(&tmp_list, &head);
+		handle_cmd(&tmp_list, &head, myenv);
 		add_back(&collecter, new_node(tmp_list));
 		if (head && head->content->token == PIPE)
 			head = head->next;
@@ -154,7 +191,7 @@ void	display_collecter(t_voidlst *h_list)
 	while (h_list)
 	{
 
-		t_collecter *tmp = h_list->content;
+		t_cmds *tmp = h_list->content;
 		t_voidlst	*cmds = tmp->commands;
 		t_voidlst	*redirs = tmp->redirects;
 		printf("command: %d\n", i);
@@ -177,13 +214,15 @@ void	display_collecter(t_voidlst *h_list)
 	}
 }
 
-int	main(void)
+int	main(int ac, char **av, char **env)
 {
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
 
 	head = NULL;
+	(void)ac;
+	(void)av;
 	str = readline("minishell>>: ");
 	if (!str)
 		return (0);
@@ -193,7 +232,7 @@ int	main(void)
 	compiler(head);
 	head = esc_sp_after_spechar(head);
 	//test the collecter of all tokens
-	t_voidlst *mylista = bash_collecter(head);
+	t_voidlst *mylista = bash_collecter(head, take_env(env));
 	display_collecter(mylista);
 	//test the collecter of all tokens
 	return (0);
