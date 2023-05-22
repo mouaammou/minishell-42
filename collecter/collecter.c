@@ -93,42 +93,50 @@ void	backadd_list(t_voidlst **origin, t_voidlst *newlist)
 	}
 }
 
-void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+void	check_commands(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
 	t_voidlst	*sublst;
 
-	*tmp_list = node_collecter((t_cmds){NULL, NULL});
 	sublst = NULL;
+	if (ft_strchr((*head)->content->str, '$'))
+	{
+		sublst = expander(*head, myenv);
+		if (sublst)
+			backadd_list(&((*tmp_list)->commands), sublst);
+	}
+	else
+		add_back(&((*tmp_list)->commands), new_node((*head)->content));
+}
+
+void	check_redirections(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+{
+	if ((*head)->next)
+	{
+		if (ft_strchr((*head)->next->content->str, '$'))
+			(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
+		else
+			(*head)->content->str = (*head)->next->content->str;
+		add_back(&((*tmp_list)->redirects), new_node((*head)->content));
+		(*head) = (*head)->next;
+	}
+}
+
+void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+{
+	*tmp_list = node_collecter((t_cmds){NULL, NULL});
 	while ((*head) && (*head)->content->token != PIPE)
 	{
 		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
 		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
 		{
-
-				if (ft_strchr((*head)->content->str, '$'))
-				{
-					sublst = expander(*head, myenv);
-					if (sublst)
-					{
-						backadd_list(&((*tmp_list)->commands), sublst);
-					}
-				}
-				else
-					add_back(&((*tmp_list)->commands), new_node((*head)->content));
-				// display_list((*tmp_list)->commands);
+			check_commands(tmp_list, head, myenv);
 		}
 		else
 		{
-			if ((*head)->next)
-			{
-				(*head)->content->str = (*head)->next->content->str;
-				add_back(&((*tmp_list)->redirects), new_node((*head)->content));
-				(*head) = (*head)->next;
-			}
+			check_redirections(tmp_list, head, myenv);
 		}
 		(*head) = (*head)->next;
 	}
-				// exit (0);
 }
 
 t_cmds *node_collecter(t_cmds args)

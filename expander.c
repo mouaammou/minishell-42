@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:48:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/22 22:28:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/22 22:44:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,25 +83,34 @@ int	count_size(char **split)
 	return (i);
 }
 
+void	ft_error(char *error, int error_val)
+{
+	ft_putstr_fd(error, 1);
+	exit (error_val);
+}
+
+t_token	*new_token(char *str, int token)
+{
+	t_token	*mytoken;
+
+	mytoken = malloc(sizeof (t_token));
+	if (!mytoken)
+		ft_error("malloc failed\n", 1);
+	mytoken->str = str;
+	mytoken->token = token;
+	return (mytoken);
+}
+
 t_voidlst	*new_sublist(char **split)
 {
 	t_voidlst	*head;
 	int			i;
-	t_token		*mytoken;
 
 	i = 0;
 	head = NULL;
 	while (split && split[i])
 	{
-		mytoken = malloc(sizeof (t_token));
-		if (!mytoken)
-		{
-			perror("");
-			exit (0);
-		}
-		mytoken->token = WORD;
-		mytoken->str = split[i];
-		add_back(&head, new_node(mytoken));
+		add_back(&head, new_node(new_token(split[i], WORD)));
 		i++;
 	}
 	return (head);
@@ -113,29 +122,17 @@ t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 	int			size;
 	char		*searched_str;
 	t_voidlst	*sub_lst;
-	t_token		*mytoken;
 
 	sub_lst = NULL;
-	mytoken = NULL;
 	searched_str = search_for_key(head->content->str, myenv);
 	if (searched_str && head->content->token == WORD)
 	{
 		split = ft_split(searched_str, ' ');
 		size = count_size(split);
-		sub_lst = new_sublist (split);
+		sub_lst = new_sublist(split);
 	}
 	else if (searched_str && head->content->token == QUOTE)
-	{
-		mytoken = malloc(sizeof (t_token));
-		if (!mytoken)
-		{
-			perror("");
-			exit (0);
-		}
-		mytoken->token = QUOTE;
-		mytoken->str = searched_str;
-		sub_lst = new_node (mytoken);
-	}
+		sub_lst = new_node(new_token(searched_str, QUOTE));
 	return (sub_lst);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/22 17:57:46 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/22 23:10:59 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_cmds *node_collecter(t_cmds args);
 /** expander functions */
 t_env		*split_key_value(char *env);
 t_voidlst	*take_env(char **env);
-// int			search_for_key(char *str, t_voidlst *myenv);
+char		*search_for_key(char *str, t_voidlst *myenv);
 t_voidlst	*expander(t_list *head, t_voidlst *myenv);
 // end expander
 #endif
