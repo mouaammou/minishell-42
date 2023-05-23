@@ -40,32 +40,37 @@ int	count_pipes(t_list *head)
 	return (count);
 }
 
-void	handle_heredoc(t_list **head)
+void	manage_heredoc(t_list **head, int *fd)
 {
-	char	*str;
+	char	*tmp;
 	char	*line;
-	int		file_permissions;
-	int		fd;
 
-	str = ft_strjoin("/tmp/", (*head)->next->content->str);
-	file_permissions = S_IRUSR | S_IWUSR | S_IXUSR | S_IRGRP | S_IWGRP | S_IXGRP | S_IROTH | S_IWOTH | S_IXOTH;
-	fd = open(str, O_RDWR | O_CREAT | O_TRUNC, file_permissions);
-	if (fd == -1)
-	{
-		perror("");
-		exit(EXIT_FAILURE);
-	}
 	while (1)
 	{
 		ft_putstr_fd("heredoc> ", 1);
 		line = get_next_line(0);
-		if (!line || !ft_strncmp(line, (*head)->next->content->str, ft_strlen(line) - 1))
+		tmp = ft_strjoin( (*head)->next->content->str, "\n");
+		if (!line || !str_cmp(line, tmp))
 		{
 			ft_putstr_fd("\n", 1);
 			break;
 		}
-		write(fd, line, ft_strlen(line));
+		free(tmp);
+		write(*fd, line, ft_strlen(line));
 	}
+}
+
+void	handle_heredoc(t_list **head)
+{
+	char	*str;
+	int		fd;
+
+	str = ft_strjoin("/tmp/", (*head)->next->content->str);
+	fd = open(str, O_RDWR | O_CREAT | O_TRUNC, 0777);
+	if (fd == -1)
+		ft_error("bad file descriptor\n", 3);
+	manage_heredoc(head, &fd);
+	(*head)->content->token = RE_IN;
 	(*head)->content->str = str;
 	close (fd);
 }
@@ -114,6 +119,8 @@ void	check_redirections(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 	{
 		if (ft_strchr((*head)->next->content->str, '$'))
 			(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
+		if ((*head)->content->token == HERE_DOC)
+			handle_heredoc(head);
 		else
 			(*head)->content->str = (*head)->next->content->str;
 		add_back(&((*tmp_list)->redirects), new_node((*head)->content));
@@ -222,12 +229,18 @@ void	display_collecter(t_voidlst *h_list)
 	}
 }
 
+void	leaks (void)
+{
+	system("leaks minishell");
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
 
+	atexit(leaks);
 	head = NULL;
 	(void)ac;
 	(void)av;

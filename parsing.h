@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/22 23:10:59 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 18:41:28 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ int		myfree_func(t_list *head, char *trimed_str, char *str);
 void	free_linked_list(t_list *head);
 
 /* start collecter functions */
+int		str_cmp(const char *s1, const char *s2);
 int		count_pipes(t_list *head);
 void	handle_heredoc(t_list **head);
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv);
@@ -72,6 +73,7 @@ t_cmds *node_collecter(t_cmds args);
 /* end collecter */
 
 /** expander functions */
+void		ft_error(char *error, int error_val);
 t_env		*split_key_value(char *env);
 t_voidlst	*take_env(char **env);
 char		*search_for_key(char *str, t_voidlst *myenv);

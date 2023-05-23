@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:48:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/22 22:44:07 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 16:22:23 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*search_for_key(char *str, t_voidlst *myenv)
 	while (myenv)
 	{
 		keyval_env = myenv->content;
-		if (ft_strnstr(str, keyval_env->key, ft_strlen(str)))
+		if (str_cmp(str + 1, keyval_env->key) == 0)
 		{
 			return (keyval_env->value);
 		}
@@ -111,6 +111,7 @@ t_voidlst	*new_sublist(char **split)
 	while (split && split[i])
 	{
 		add_back(&head, new_node(new_token(split[i], WORD)));
+		add_back(&head, new_node(new_token(ft_strdup(" "), ESP)));
 		i++;
 	}
 	return (head);
@@ -136,30 +137,3 @@ t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 	return (sub_lst);
 }
 
-// int	main(int ac, char **av, char **env)
-// {
-// 	t_list	*head;
-// 	char	*str;
-// 	char	*trimed_str;
-// 	t_voidlst	*my_env;
-
-// 	(void)(ac);
-// 	(void)(av);
-// 	head = NULL;
-// 	str = readline("minishell>> :");
-// 	if (!str)
-// 		return (0);
-// 	trimed_str = ft_strtrim(str, " ");
-// 	if (!give_tokens(&head, trimed_str))
-// 		return (0);
-// 	compiler(head);
-// 	head = esc_sp_after_spechar(head);
-// 	my_env = take_env(env);
-// 	// expander(head, my_env);
-// 	bash_collecter(head);
-// 	// display_args(cmds);
-// 	printf("====\n");
-// 	// display_redires(cmds);
-// 	// display(head);
-// 	return (0);
-// }
