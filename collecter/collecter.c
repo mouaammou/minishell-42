@@ -89,12 +89,10 @@ void	display_list(t_voidlst *list)
 
 void	backadd_list(t_voidlst **origin, t_voidlst *newlist)
 {
-	t_voidlst	*tmp;
 	while (newlist)
 	{
-		tmp = newlist->next;
 		add_back(origin, new_node(newlist->content));
-		newlist = tmp;
+		newlist = newlist->next;
 	}
 }
 
@@ -161,18 +159,18 @@ t_cmds *node_collecter(t_cmds args)
 	return (new_collecter);
 }
 
-t_voidlst	*bash_collecter(t_list *head, t_voidlst *myenv)
+t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
 {
 	t_voidlst	*collecter;
 	t_cmds	*tmp_list;
 
 	collecter = NULL;
-	while (head)
+	while (tokenizer)
 	{
-		handle_cmd(&tmp_list, &head, myenv);
+		handle_cmd(&tmp_list, &tokenizer, myenv);
 		add_back(&collecter, new_node(tmp_list));
-		if (head && head->content->token == PIPE)
-			head = head->next;
+		if (tokenizer && tokenizer->content->token == PIPE)
+			tokenizer = tokenizer->next;
 	}
 	return (collecter);
 }
@@ -187,7 +185,7 @@ t_list *esc_sp_after_spechar(t_list *head)
 		if (head->content->token == ESP)
 		{
 			if (head->prev && (head->prev->content->token == WORD || head->prev->content->token == QUOTE
-			|| head->prev->content->token == S_QUOTE))
+			|| head->prev->content->token == S_QUOTE || head->prev->content->token == DLR))
 			{
 				ft_lstadd_back(&newlist, ft_lstnew(head->content));
 			}
@@ -234,13 +232,22 @@ void	leaks (void)
 	system("leaks minishell");
 }
 
+void	affiche(t_list *head)
+{
+	while (head)
+	{
+		printf("[%s] == token [%d]\n", head->content->str, head->content->token);
+		head = head->next;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
 
-	atexit(leaks);
+	// atexit(leaks);
 	head = NULL;
 	(void)ac;
 	(void)av;
@@ -252,9 +259,9 @@ int	main(int ac, char **av, char **env)
 		return (0);
 	compiler(head);
 	head = esc_sp_after_spechar(head);
-	//test the collecter of all tokens
+	// //test the collecter of all tokens
 	t_voidlst *mylista = bash_collecter(head, take_env(env));
-	display_collecter(mylista);
-	//test the collecter of all tokens
+	// display_collecter(mylista);
+	// test the collecter of all tokens
 	return (0);
 }

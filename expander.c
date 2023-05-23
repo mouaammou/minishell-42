@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:48:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/23 16:22:23 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:46:39 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,33 @@ t_voidlst	*new_sublist(char **split)
 	while (split && split[i])
 	{
 		add_back(&head, new_node(new_token(split[i], WORD)));
-		add_back(&head, new_node(new_token(ft_strdup(" "), ESP)));
+		if (split[i + 1])
+			add_back(&head, new_node(new_token(ft_strdup(" "), ESP)));
 		i++;
 	}
 	return (head);
 }
+
+int	index_of_char(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str && str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	return (i);
+}
+
+/***** new algorith
+ * 1- token everything include dollar
+ * 2- check grammar
+ * 3- expande the variables
+ * 4- concate no white space
+*/
 
 t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 {
@@ -123,9 +145,11 @@ t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 	int			size;
 	char		*searched_str;
 	t_voidlst	*sub_lst;
+	int			index;
 
 	sub_lst = NULL;
-	searched_str = search_for_key(head->content->str, myenv);
+	index = index_of_char(head->content->str, '$');
+	searched_str = search_for_key(head->content->str + index, myenv);
 	if (searched_str && head->content->token == WORD)
 	{
 		split = ft_split(searched_str, ' ');

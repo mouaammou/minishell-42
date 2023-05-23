@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 17:50:13 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/20 16:08:58 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 21:24:15 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef enum tokens
 	RE_APPEND = 7,
 	HERE_DOC = 8,
 	ESP = 9,
+	DLR = 10
 }	t_etoken;
 
 typedef struct token

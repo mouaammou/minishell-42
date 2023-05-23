@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/20 15:30:17 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 21:29:50 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ void	token_spechars(t_list **mylist, char *str, int *i)
 		tokeni_mychar(mylist, str, i, PIPE);
 	else if (str[*i] == ' ')
 		tokeni_mychar(mylist, str, i, ESP);
+	else if (str[*i] == '$')
+		tokeni_mychar(mylist, str, i, DLR);
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
 	{
 		tokeni_mychar(mylist, str, i, HERE_DOC);

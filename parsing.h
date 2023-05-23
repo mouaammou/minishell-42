@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/23 18:41:28 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:38:24 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct cmd
 // 	t_voidlst	*redirects;
 // }t_cmds;
 
+void	affiche(t_list *head);
+t_token	*new_token(char *str, int token);
 void	compiler(t_list *head);
 int		check_token(t_list *node, int mytoken1, int mytoken2, int flag);
 int		syntax_error(char *str, char *token_value);
@@ -57,6 +59,7 @@ void	tokeni_mychar(t_list **mylist, char *str, int *i, int value);
 void	token_spechars(t_list **mylist, char *str, int *i);
 int		is_str(char mychar);
 void	token_word(t_list **mylist, char *str, int *i);
+void	token_var(t_list **mylist, char *str, int *i);
 void	*msg_error(char *str);
 int		myfree_func(t_list *head, char *trimed_str, char *str);
 void	free_linked_list(t_list *head);

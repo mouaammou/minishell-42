@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/20 14:53:19 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/23 21:37:16 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ int	give_tokens(t_list **tokenizer, char *str)
 	{
 		if (is_str(str[i]))
 			token_word(tokenizer, str, &i);
+		else if (str[i] == '$')
+			token_var(tokenizer, str, &i);
 		else if (str[i] == '\'')
 		{
 			if (!token_quotes(tokenizer, str, &i, '\''))
