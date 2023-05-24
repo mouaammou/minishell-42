@@ -45,6 +45,7 @@ typedef struct cmd
 // 	t_voidlst	*redirects;
 // }t_cmds;
 
+char	*what_str_take(t_token *mytoken, char **searched_str, t_voidlst *myenv);
 void	affiche(t_list *head);
 t_token	*new_token(char *str, int token);
 void	compiler(t_list *head);

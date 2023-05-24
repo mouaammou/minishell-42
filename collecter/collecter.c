@@ -121,17 +121,37 @@ void	check_commands(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 
 void	check_redirections(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
-	if ((*head)->next)
+	// if ((*head)->next)
+	// {
+	// 	if (ft_strchr((*head)->next->content->str, '$'))
+	// 		(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
+	// 	if ((*head)->content->token == HERE_DOC)
+	// 		handle_heredoc(head);
+	// 	else
+	// 		(*head)->content->str = (*head)->next->content->str;
+	// 	add_back(&((*tmp_list)->redirects), new_node((*head)->content));
+	// 	(*head) = (*head)->next;
+	// }
+	t_voidlst	*sublst;
+	t_token		*mytoken;
+
+	sublst = NULL;
+	mytoken = (*head)->next->content;
+	if (mytoken->token == DLR)
 	{
-		if (ft_strchr((*head)->next->content->str, '$'))
-			(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
-		if ((*head)->content->token == HERE_DOC)
-			handle_heredoc(head);
-		else
-			(*head)->content->str = (*head)->next->content->str;
-		add_back(&((*tmp_list)->redirects), new_node((*head)->content));
-		(*head) = (*head)->next;
+		sublst = expander((*head)->next, myenv);
+		if (sublst)
+			add_multi_nodes(&((*tmp_list)->redirects), sublst);
 	}
+	else if (ft_strchr(mytoken->str, '$') && mytoken->token == QUOTE)
+	{
+		sublst = expander((*head)->next, myenv);
+		if (sublst)
+			add_multi_nodes(&((*tmp_list)->redirects), sublst);
+	}
+	else
+		add_back(&((*tmp_list)->redirects), new_node(mytoken));
+	(*head) = (*head)->next;
 }
 
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
@@ -161,10 +181,7 @@ t_cmds *node_collecter(t_cmds args)
 
 	new_collecter = malloc (sizeof (t_cmds));
 	if (!new_collecter)
-	{
-		perror("");
-		exit(EXIT_FAILURE);
-	}
+		ft_error("malloc failed\n", 3);
 	new_collecter->commands = args.commands;
 	new_collecter->redirects = args.redirects;
 	return (new_collecter);
@@ -176,6 +193,7 @@ t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
 	t_cmds	*tmp_list;
 
 	collecter = NULL;
+	tmp_list = NULL;
 	while (tokenizer)
 	{
 		handle_cmd(&tmp_list, &tokenizer, myenv);
@@ -265,6 +283,7 @@ int	main(int ac, char **av, char **env)
 	str = readline("minishell>>: ");
 	if (!str)
 		return (0);
+	add_history(str);
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str))
 		return (0);
