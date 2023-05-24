@@ -127,35 +127,38 @@ int	index_of_char(char *str, char c)
  * 4- concate no white space
 */
 
+//what searched str will append
+char	*what_str_take(t_token *mytoken, char **searched_str, t_voidlst *myenv)
+{
+	char		*rightstr;
+	int			index;
+
+	rightstr = NULL;
+	*searched_str = NULL;
+	index = 0;
+	if (mytoken->token == QUOTE)
+	{
+		index = index_of_char(mytoken->str, '$');
+		*searched_str = search_for_key(mytoken->str + index, myenv);
+	}
+	else
+		*searched_str = search_for_key(mytoken->str, myenv);
+	if (index > 0)
+		rightstr = ft_substr(mytoken->str, 0, ft_strlen(mytoken->str) - ft_strlen(mytoken->str + index));
+	return (rightstr);
+}
+
 t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 {
 	char		**split;
 	char		*searched_str;
 	t_voidlst	*sub_lst;
-	int			index;
 	t_token		*mytoken;
 	char		*rightstr;
 
-
 	sub_lst = NULL;
 	mytoken = (t_token *)head->content;
-	index = 0;
-	rightstr = NULL;
-	if (mytoken->token == QUOTE)
-	{
-		index = index_of_char(mytoken->str, '$');
-		searched_str = search_for_key(mytoken->str + index, myenv);
-	}
-	else
-		searched_str = search_for_key(mytoken->str, myenv);
-	// printf("[%s]\n", searched_str);
-	// printf("[%s]\n", mytoken->str);
-	// printf("index  : %d\n", index);
-	// exit (0);
-	if (index > 0)
-		rightstr = ft_substr(mytoken->str, 0, ft_strlen(mytoken->str) - ft_strlen(mytoken->str + index));
-	// printf("right str: [%s]\n", rightstr);
-	// exit (0);
+	rightstr = what_str_take(mytoken, &searched_str, myenv);
 	if (searched_str && mytoken->token == DLR)
 	{
 		split = ft_split(searched_str, ' ');
@@ -165,8 +168,6 @@ t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 	{
 		if (rightstr)
 			searched_str = ft_strjoin(rightstr, searched_str);
-		printf("searched str: [%s]\n", searched_str);
-		exit (0);
 		sub_lst = new_node(new_token(searched_str, QUOTE));
 	}
 	return (sub_lst);
