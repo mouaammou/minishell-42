@@ -121,37 +121,37 @@ void	check_commands(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 
 void	check_redirections(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
-	// if ((*head)->next)
-	// {
-	// 	if (ft_strchr((*head)->next->content->str, '$'))
-	// 		(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
-	// 	if ((*head)->content->token == HERE_DOC)
-	// 		handle_heredoc(head);
-	// 	else
-	// 		(*head)->content->str = (*head)->next->content->str;
-	// 	add_back(&((*tmp_list)->redirects), new_node((*head)->content));
-	// 	(*head) = (*head)->next;
-	// }
-	t_voidlst	*sublst;
-	t_token		*mytoken;
+	if ((*head)->next)
+	{
+		if (ft_strchr((*head)->next->content->str, '$'))
+			(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
+		// if ((*head)->content->token == HERE_DOC)
+		// 	handle_heredoc(head);
+		else
+			(*head)->content->str = (*head)->next->content->str;
+		add_back(&((*tmp_list)->redirects), new_node((*head)->content));
+		(*head) = (*head)->next;
+	}
+	// t_voidlst	*sublst;
+	// t_token		*mytoken;
 
-	sublst = NULL;
-	mytoken = (*head)->next->content;
-	if (mytoken->token == DLR)
-	{
-		sublst = expander((*head)->next, myenv);
-		if (sublst)
-			add_multi_nodes(&((*tmp_list)->redirects), sublst);
-	}
-	else if (ft_strchr(mytoken->str, '$') && mytoken->token == QUOTE)
-	{
-		sublst = expander((*head)->next, myenv);
-		if (sublst)
-			add_multi_nodes(&((*tmp_list)->redirects), sublst);
-	}
-	else
-		add_back(&((*tmp_list)->redirects), new_node(mytoken));
-	(*head) = (*head)->next;
+	// sublst = NULL;
+	// mytoken = (*head)->next->content;
+	// if (mytoken->token == DLR)
+	// {
+	// 	sublst = expander((*head)->next, myenv);
+	// 	if (sublst)
+	// 		add_multi_nodes(&((*tmp_list)->redirects), sublst);
+	// }
+	// else if (ft_strchr(mytoken->str, '$') && mytoken->token == QUOTE)
+	// {
+	// 	sublst = expander((*head)->next, myenv);
+	// 	if (sublst)
+	// 		add_multi_nodes(&((*tmp_list)->redirects), sublst);
+	// }
+	// else
+	// 	add_back(&((*tmp_list)->redirects), new_node(mytoken));
+	// (*head) = (*head)->next;
 }
 
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
