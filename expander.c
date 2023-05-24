@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 14:48:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/23 22:46:39 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:09:30 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,22 +65,10 @@ char	*search_for_key(char *str, t_voidlst *myenv)
 	{
 		keyval_env = myenv->content;
 		if (str_cmp(str + 1, keyval_env->key) == 0)
-		{
 			return (keyval_env->value);
-		}
 		myenv = myenv->next;
 	}
 	return (NULL);
-}
-
-int	count_size(char **split)
-{
-	int	i;
-
-	i = 0;
-	while (split && split[i])
-		i++;
-	return (i);
 }
 
 void	ft_error(char *error, int error_val)
@@ -142,22 +130,45 @@ int	index_of_char(char *str, char c)
 t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 {
 	char		**split;
-	int			size;
 	char		*searched_str;
 	t_voidlst	*sub_lst;
 	int			index;
+	t_token		*mytoken;
+	char		*rightstr;
+
 
 	sub_lst = NULL;
-	index = index_of_char(head->content->str, '$');
-	searched_str = search_for_key(head->content->str + index, myenv);
-	if (searched_str && head->content->token == WORD)
+	mytoken = (t_token *)head->content;
+	index = 0;
+	rightstr = NULL;
+	if (mytoken->token == QUOTE)
+	{
+		index = index_of_char(mytoken->str, '$');
+		searched_str = search_for_key(mytoken->str + index, myenv);
+	}
+	else
+		searched_str = search_for_key(mytoken->str, myenv);
+	// printf("[%s]\n", searched_str);
+	// printf("[%s]\n", mytoken->str);
+	// printf("index  : %d\n", index);
+	// exit (0);
+	if (index > 0)
+		rightstr = ft_substr(mytoken->str, 0, ft_strlen(mytoken->str) - ft_strlen(mytoken->str + index));
+	// printf("right str: [%s]\n", rightstr);
+	// exit (0);
+	if (searched_str && mytoken->token == DLR)
 	{
 		split = ft_split(searched_str, ' ');
-		size = count_size(split);
 		sub_lst = new_sublist(split);
 	}
-	else if (searched_str && head->content->token == QUOTE)
+	else if (searched_str && mytoken->token == QUOTE)
+	{
+		if (rightstr)
+			searched_str = ft_strjoin(rightstr, searched_str);
+		printf("searched str: [%s]\n", searched_str);
+		exit (0);
 		sub_lst = new_node(new_token(searched_str, QUOTE));
+	}
 	return (sub_lst);
 }
 

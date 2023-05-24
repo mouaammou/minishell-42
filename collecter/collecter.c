@@ -87,7 +87,7 @@ void	display_list(t_voidlst *list)
 	printf("\n");
 }
 
-void	backadd_list(t_voidlst **origin, t_voidlst *newlist)
+void	add_multi_nodes(t_voidlst **origin, t_voidlst *newlist)
 {
 	while (newlist)
 	{
@@ -99,13 +99,21 @@ void	backadd_list(t_voidlst **origin, t_voidlst *newlist)
 void	check_commands(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
 	t_voidlst	*sublst;
+	int			mytoken;
 
 	sublst = NULL;
-	if (ft_strchr((*head)->content->str, '$'))
+	mytoken = (*head)->content->token;
+	if (mytoken == DLR)
 	{
 		sublst = expander(*head, myenv);
 		if (sublst)
-			backadd_list(&((*tmp_list)->commands), sublst);
+			add_multi_nodes(&((*tmp_list)->commands), sublst);
+	}
+	else if (ft_strchr((*head)->content->str, '$') && mytoken == QUOTE)
+	{
+		sublst = expander(*head, myenv);
+		if (sublst)
+			add_multi_nodes(&((*tmp_list)->commands), sublst);
 	}
 	else
 		add_back(&((*tmp_list)->commands), new_node((*head)->content));
@@ -128,11 +136,14 @@ void	check_redirections(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
+	int	mytoken;
+
 	*tmp_list = node_collecter((t_cmds){NULL, NULL});
 	while ((*head) && (*head)->content->token != PIPE)
 	{
-		if ((*head)->content->token == WORD || (*head)->content->token == QUOTE
-		|| (*head)->content->token == S_QUOTE || (*head)->content->token == ESP)
+		mytoken = (*head)->content->token;
+		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR
+		|| mytoken == S_QUOTE || mytoken == ESP)
 		{
 			check_commands(tmp_list, head, myenv);
 		}
@@ -259,9 +270,10 @@ int	main(int ac, char **av, char **env)
 		return (0);
 	compiler(head);
 	head = esc_sp_after_spechar(head);
+	// affiche(head);
 	// //test the collecter of all tokens
 	t_voidlst *mylista = bash_collecter(head, take_env(env));
-	// display_collecter(mylista);
+	display_collecter(mylista);
 	// test the collecter of all tokens
 	return (0);
 }
