@@ -38,3 +38,14 @@ int	give_tokens(t_list **tokenizer, char *str)
 	}
 	return (1);
 }
+
+// void	var_in_quotes(t_list *tokenizer)
+// {
+// 	while (tokenizer)
+// 	{
+// 		if (tokenizer->content->token == QUOTE)
+// 		{
+
+// 		}
+// 	}
+// }

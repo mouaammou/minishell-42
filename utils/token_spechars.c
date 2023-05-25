@@ -12,6 +12,24 @@
 
 #include "../parsing.h"
 
+int	is_quote_close(char *str, int i, int qts)
+{
+	int	flag;
+	
+	flag = 0;
+	while (str[i] && str[i] != qts)
+	{
+		if (str[i] == '$')
+			flag = 1;
+		i++;
+	}
+	if (str[i] == qts)
+		i++;
+	else
+		ft_error("ERR: quotes open\n", 111);
+	return (flag);
+}
+
 t_token	*get_quotes_content(char *str, int *i, char qts)
 {
 	int		j;
@@ -21,6 +39,7 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	(*i)++;
 	j = 0;
 	start = *i;
+	is_quote_close(str, *i, qts);
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
 		return (NULL);
@@ -31,8 +50,6 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	}
 	if (str[*i] == qts)
 		(*i)++;
-	else
-		return (free(mytoken), msg_error("quotes open"));
 	mytoken->str = ft_substr(str, start, j);
 	return (mytoken);
 }

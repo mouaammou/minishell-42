@@ -25,7 +25,8 @@ typedef enum tokens
 	RE_APPEND = 7,
 	HERE_DOC = 8,
 	ESP = 9,
-	DLR = 10
+	DLR = 10,
+	QST_MARK = 11	
 }	t_etoken;
 
 typedef struct token

@@ -45,6 +45,9 @@ typedef struct cmd
 // 	t_voidlst	*redirects;
 // }t_cmds;
 
+int 	scape_char(char mychar);
+int		index_of_char(char *str, char c);
+int		is_quote_close(char *str, int i, int qts);
 char	*what_str_take(t_token *mytoken, char **searched_str, t_voidlst *myenv);
 void	affiche(t_list *head);
 t_token	*new_token(char *str, int token);

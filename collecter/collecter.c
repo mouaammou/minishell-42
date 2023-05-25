@@ -96,62 +96,65 @@ void	add_multi_nodes(t_voidlst **origin, t_voidlst *newlist)
 	}
 }
 
-void	check_commands(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+// void	check_commands(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+// {
+// 	t_voidlst	*sublst;
+// 	int			mytoken;
+
+// 	sublst = NULL;
+// 	mytoken = (*head)->content->token;
+// 	if (mytoken == DLR)
+// 	{
+// 		sublst = expander(*head, myenv);
+// 		if (sublst)
+// 			add_multi_nodes(&((*tmp_list)->commands), sublst);
+// 	}
+// 	else if (ft_strchr((*head)->content->str, '$') && mytoken == QUOTE)
+// 	{
+// 		sublst = expander(*head, myenv);
+// 		if (sublst)
+// 			add_multi_nodes(&((*tmp_list)->commands), sublst);
+// 	}
+// 	else
+// 		add_back(&((*tmp_list)->commands), new_node((*head)->content));
+// }
+
+void	command_expansion(t_voidlst **origin, t_list **head, t_voidlst *myenv, int flag)
 {
 	t_voidlst	*sublst;
-	int			mytoken;
+	t_token		*mytoken;
 
 	sublst = NULL;
-	mytoken = (*head)->content->token;
-	if (mytoken == DLR)
+	mytoken = (*head)->content;
+	if (mytoken->token == DLR)
 	{
 		sublst = expander(*head, myenv);
 		if (sublst)
-			add_multi_nodes(&((*tmp_list)->commands), sublst);
+			add_multi_nodes(origin, sublst);
 	}
-	else if (ft_strchr((*head)->content->str, '$') && mytoken == QUOTE)
+	else if (ft_strchr(mytoken->str, '$') && mytoken->token == QUOTE)
 	{
 		sublst = expander(*head, myenv);
 		if (sublst)
-			add_multi_nodes(&((*tmp_list)->commands), sublst);
+			add_multi_nodes(origin, sublst);
 	}
 	else
-		add_back(&((*tmp_list)->commands), new_node((*head)->content));
+		add_back(origin, new_node(mytoken));
+	if (flag)
+		(*head) = (*head)->next;
 }
 
-void	check_redirections(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+void	expand_qts_mark(t_voidlst **origin, t_list **head)
 {
-	if ((*head)->next)
-	{
-		if (ft_strchr((*head)->next->content->str, '$'))
-			(*head)->content->str = search_for_key((*head)->next->content->str, myenv);
-		// if ((*head)->content->token == HERE_DOC)
-		// 	handle_heredoc(head);
-		else
-			(*head)->content->str = (*head)->next->content->str;
-		add_back(&((*tmp_list)->redirects), new_node((*head)->content));
-		(*head) = (*head)->next;
-	}
-	// t_voidlst	*sublst;
-	// t_token		*mytoken;
+	t_voidlst	*sublst;
+	t_token		*mytoken;
 
-	// sublst = NULL;
-	// mytoken = (*head)->next->content;
-	// if (mytoken->token == DLR)
-	// {
-	// 	sublst = expander((*head)->next, myenv);
-	// 	if (sublst)
-	// 		add_multi_nodes(&((*tmp_list)->redirects), sublst);
-	// }
-	// else if (ft_strchr(mytoken->str, '$') && mytoken->token == QUOTE)
-	// {
-	// 	sublst = expander((*head)->next, myenv);
-	// 	if (sublst)
-	// 		add_multi_nodes(&((*tmp_list)->redirects), sublst);
-	// }
-	// else
-	// 	add_back(&((*tmp_list)->redirects), new_node(mytoken));
-	// (*head) = (*head)->next;
+	sublst = NULL;
+	mytoken = (*head)->content;
+	free(mytoken->str);
+	mytoken->str = ft_itoa(1337);
+	if (mytoken->str)
+		add_back(origin, new_node(mytoken));
 }
 
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
@@ -163,14 +166,15 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 	{
 		mytoken = (*head)->content->token;
 		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR
-		|| mytoken == S_QUOTE || mytoken == ESP)
+		|| mytoken == S_QUOTE || mytoken == ESP || mytoken == QST_MARK)
 		{
-			check_commands(tmp_list, head, myenv);
+			if (mytoken == QST_MARK)
+				expand_qts_mark(&((*tmp_list)->commands), head);
+			else
+				command_expansion(&((*tmp_list)->commands), head, myenv, 0);
 		}
 		else
-		{
-			check_redirections(tmp_list, head, myenv);
-		}
+			command_expansion(&((*tmp_list)->redirects), &(*head)->next, myenv, 1);
 		(*head) = (*head)->next;
 	}
 }
@@ -240,7 +244,7 @@ void	display_collecter(t_voidlst *h_list)
 		while (cmds)
 		{
 			t_token *mytoken = cmds->content;
-			printf("\t[%s]\n", mytoken->str);
+			printf("\t[%s] -- token [%d]\n", mytoken->str, mytoken->token);
 			cmds = cmds->next;
 		}
 		printf("\nredirects\n");
@@ -270,6 +274,37 @@ void	affiche(t_list *head)
 	}
 }
 
+t_list	*token_dbquotes(t_list *tokenizer)
+{
+	t_list	*new_list;
+	int		index;
+	char	*mystr;
+	char	*tmpstr;
+	int		i;
+	char	**split;
+
+	new_list = NULL;
+	i = 0;
+	while (tokenizer)
+	{
+		if (tokenizer->content->token == QUOTE && ft_strchr(tokenizer->content->str, '$'))
+		{
+			// tmpstr = tokenizer->content->str;
+			// while (tmpstr[i])
+			// {
+			// 	index = index_of_char(tokenizer->content->str, '$');
+			// 	if (index > 0)
+			// 		mystr = ft_substr(tokenizer->content->str, 0, index + 1);
+			// 	mystr = get_value_of_str(tokenizer->content->str, index);
+			// }  
+		}
+		else
+			ft_lstadd_back(&new_list, ft_lstnew(tokenizer->content));
+		tokenizer = tokenizer->next;
+	}
+	return (new_list);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_list	*head;
@@ -281,15 +316,18 @@ int	main(int ac, char **av, char **env)
 	(void)ac;
 	(void)av;
 	str = readline("minishell>>: ");
+	add_history(str);
 	if (!str)
 		return (0);
-	add_history(str);
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str))
 		return (0);
 	compiler(head);
 	head = esc_sp_after_spechar(head);
+
+	token_dbquotes(head);
 	// affiche(head);
+	exit(0);
 	// //test the collecter of all tokens
 	t_voidlst *mylista = bash_collecter(head, take_env(env));
 	display_collecter(mylista);

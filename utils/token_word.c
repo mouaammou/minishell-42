@@ -23,7 +23,7 @@ int	is_str(char mychar)
 int scape_char(char mychar)
 {
 	if (mychar != '|' && mychar != '<' && mychar != '>'
-		&& mychar != '\'' && mychar != '\"' && mychar != ' ')
+		&& mychar != '\'' && mychar != '\"' && mychar != ' ' && mychar != '$')
 		return (1);
 	return (0);
 }
@@ -63,15 +63,14 @@ void	token_var(t_list **mylist, char *str, int *i)
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
 		return ;
+	(*i)++;
 	while (str[(*i)] && scape_char(str[(*i)]))
 	{
 		(*i)++;
 		j++;
 	}
-	mytoken->str = ft_substr(str, start, j);
+	mytoken->str = ft_substr(str, start, j + 1);
+	mytoken->token = DLR;
 	if (mytoken->str)
-	{
-		mytoken->token = DLR;
 		ft_lstadd_back(mylist, ft_lstnew(mytoken));
-	}
 }

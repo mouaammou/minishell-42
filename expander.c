@@ -117,7 +117,7 @@ int	index_of_char(char *str, char c)
 			return (i);
 		i++;
 	}
-	return (i);
+	return (-1);
 }
 
 /***** new algorith
@@ -138,6 +138,7 @@ char	*what_str_take(t_token *mytoken, char **searched_str, t_voidlst *myenv)
 	index = 0;
 	if (mytoken->token == QUOTE)
 	{
+		
 		index = index_of_char(mytoken->str, '$');
 		*searched_str = search_for_key(mytoken->str + index, myenv);
 	}
