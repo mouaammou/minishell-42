@@ -108,3 +108,4 @@ void	token_spechars(t_list **mylist, char *str, int *i)
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
 		tokeni_mychar(mylist, str, i, RE_OUT);
 }
+

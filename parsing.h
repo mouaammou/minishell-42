@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/23 23:38:24 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/26 17:47:06 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,11 @@
 # include <readline/history.h>
 # include "readline/get_next_line.h"
 # include "new_linkedlist/list_header.h"
+# include "collecter/collecter.h"
 
 # define PREV 0
 # define NEXT 1
 # define BOTH 2
-
-typedef struct s_env
-{
-	char	*key;
-	char	*value;
-}t_env;
-
-typedef struct cmd
-{
-	t_voidlst	*commands;
-	t_voidlst	*redirects;
-}t_cmds;
 
 /******** END TYPEDEF STRUCT */
 // typedef struct mylist

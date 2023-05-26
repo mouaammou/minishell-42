@@ -8,6 +8,7 @@
 		"history.h": "c",
 		"__config": "c",
 		"get_next_line.h": "c",
-		"sstream": "c"
+		"sstream": "c",
+		"collecter.h": "c"
 	}
 }

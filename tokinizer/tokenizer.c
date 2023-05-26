@@ -34,7 +34,7 @@ void	token_qts_mark(t_list **mylist, int *i, int token)
 	if (!mytoken)
 		return ;
 	(*i) += 2;
-	mytoken->str = ft_itoa(1337);
+	mytoken->str = ft_strdup("?");
 	mytoken->token = token;
 	if (mytoken->str)
 		ft_lstadd_back(mylist, ft_lstnew(mytoken));
