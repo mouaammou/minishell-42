@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/26 18:44:21 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/26 21:27:13 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ void	manage_heredoc(t_list **head, int *fd)
 {
 	char	*tmp;
 	char	*line;
+	char	*buffer;
 
+	buffer = NULL;
 	while (1)
 	{
 		ft_putstr_fd("heredoc> ", 1);
@@ -27,17 +29,23 @@ void	manage_heredoc(t_list **head, int *fd)
 			ft_putstr_fd("\n", 1);
 			break ;
 		}
+		buffer = ft_strjoin(buffer, line);
+		free(line);
 		free(tmp);
-		write(*fd, line, ft_strlen(line));
 	}
+	write(*fd, buffer, ft_strlen(buffer));
 }
 
 void	handle_heredoc(t_list **head)
 {
-	char	*str;
-	int		fd;
+	char		*str;
+	int			fd;
+	static		int	i;
+	char		*int_str;
 
-	str = ft_strjoin("/tmp/", (*head)->next->content->str);
+	int_str = ft_itoa(i++);
+	str = ft_strjoin("/tmp/file", int_str);
+	free(int_str);
 	fd = open(str, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 		ft_error("bad file descriptor\n", 3);
