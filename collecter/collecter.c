@@ -290,21 +290,23 @@ t_list	*token_dbquotes(t_list *tokenizer)
 			while (str[i])
 			{
 				if (is_str(str[i]))
-					token_word(&new_list, str, &i);
-				else if (str[i] == '$')
-					token_var(&new_list, str, &i);
+					token_word(&new_list, str, &i, QUOTE);
+				else if (str[i] == '$' && str[i + 1] != '$' && str[i + 1] != '?')
+					token_var(&new_list, str, &i, QUOTE);
+				else if (str[i] == '$' && str[i + 1] == '$') // token $$
+					token_db_dollar(&new_list, &i, QUOTE);
+				else if (str[i] == '$' && str[i + 1] == '?') // token $?
+					token_qts_mark(&new_list, &i, QUOTE);
 				else if (str[i] == '\'')
 				{
-					if (!token_quotes(&new_list, str, &i, '\''))
+					if (!token_quotes(&new_list, str, &i, QUOTE))
 						return (0);
 				}
 				else if (str[i] == '\"')
 				{
-					if (!token_quotes(&new_list, str, &i, '\"'))
+					if (!token_quotes(&new_list, str, &i, QUOTE))
 						return (0);
 				}
-				else if (!is_str(str[i]))
-					token_spechars(&new_list, str, &i);
 			}
 		}
 		else

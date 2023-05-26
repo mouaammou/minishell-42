@@ -54,19 +54,16 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	return (mytoken);
 }
 
-int	token_quotes(t_list **mylist, char *str, int *i, char qts)
+int	token_quotes(t_list **mylist, char *str, int *i, int token)
 {
 	t_token	*mytoken;
 
-	mytoken = get_quotes_content(str, i, qts);
+	mytoken = get_quotes_content(str, i, str[*i]);
 	if (!mytoken)
 		return (0);
 	if (mytoken->str)
 	{
-		if (qts == '\'')
-			mytoken->token = S_QUOTE;
-		else if (qts == '\"')
-			mytoken->token = QUOTE;
+		mytoken->token = token;
 		ft_lstadd_back(mylist, ft_lstnew(mytoken));
 	}
 	return (1);

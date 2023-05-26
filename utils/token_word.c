@@ -28,7 +28,7 @@ int scape_char(char mychar)
 	return (0);
 }
 
-void	token_word(t_list **mylist, char *str, int *i)
+void	token_word(t_list **mylist, char *str, int *i, int token)
 {
 	int		j;
 	int		start;
@@ -47,12 +47,12 @@ void	token_word(t_list **mylist, char *str, int *i)
 	mytoken->str = ft_substr(str, start, j);
 	if (mytoken->str)
 	{
-		mytoken->token = WORD;
+		mytoken->token = token;
 		ft_lstadd_back(mylist, ft_lstnew(mytoken));
 	}
 }
 
-void	token_var(t_list **mylist, char *str, int *i)
+void	token_var(t_list **mylist, char *str, int *i, int token)
 {
 	int		j;
 	int		start;
@@ -70,7 +70,7 @@ void	token_var(t_list **mylist, char *str, int *i)
 		j++;
 	}
 	mytoken->str = ft_substr(str, start, j + 1);
-	mytoken->token = DLR;
+	mytoken->token = token;
 	if (mytoken->str)
 		ft_lstadd_back(mylist, ft_lstnew(mytoken));
 }
