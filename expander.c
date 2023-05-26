@@ -159,6 +159,8 @@ t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 
 	sub_lst = NULL;
 	mytoken = (t_token *)head->content;
+	// printf("{%s} --\n", mytoken->str);
+	// exit (0);
 	rightstr = what_str_take(mytoken, &searched_str, myenv);
 	if (searched_str && mytoken->token == DLR)
 	{

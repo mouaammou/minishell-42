@@ -277,26 +277,35 @@ void	affiche(t_list *head)
 t_list	*token_dbquotes(t_list *tokenizer)
 {
 	t_list	*new_list;
-	int		index;
-	char	*mystr;
-	char	*tmpstr;
+	char	*str;
 	int		i;
-	char	**split;
 
 	new_list = NULL;
-	i = 0;
 	while (tokenizer)
 	{
-		if (tokenizer->content->token == QUOTE && ft_strchr(tokenizer->content->str, '$'))
+		if (tokenizer->content->token == QUOTE)
 		{
-			// tmpstr = tokenizer->content->str;
-			// while (tmpstr[i])
-			// {
-			// 	index = index_of_char(tokenizer->content->str, '$');
-			// 	if (index > 0)
-			// 		mystr = ft_substr(tokenizer->content->str, 0, index + 1);
-			// 	mystr = get_value_of_str(tokenizer->content->str, index);
-			// }  
+			str = tokenizer->content->str;
+			i = 0;
+			while (str[i])
+			{
+				if (is_str(str[i]))
+					token_word(&new_list, str, &i);
+				else if (str[i] == '$')
+					token_var(&new_list, str, &i);
+				else if (str[i] == '\'')
+				{
+					if (!token_quotes(&new_list, str, &i, '\''))
+						return (0);
+				}
+				else if (str[i] == '\"')
+				{
+					if (!token_quotes(&new_list, str, &i, '\"'))
+						return (0);
+				}
+				else if (!is_str(str[i]))
+					token_spechars(&new_list, str, &i);
+			}
 		}
 		else
 			ft_lstadd_back(&new_list, ft_lstnew(tokenizer->content));
@@ -325,9 +334,9 @@ int	main(int ac, char **av, char **env)
 	compiler(head);
 	head = esc_sp_after_spechar(head);
 
-	token_dbquotes(head);
+	head = token_dbquotes(head);
 	// affiche(head);
-	exit(0);
+	// exit(0);
 	// //test the collecter of all tokens
 	t_voidlst *mylista = bash_collecter(head, take_env(env));
 	display_collecter(mylista);
