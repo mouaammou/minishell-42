@@ -6,29 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/23 21:29:50 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 01:27:29 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
-
-int	is_quote_close(char *str, int i, int qts)
-{
-	int	flag;
-	
-	flag = 0;
-	while (str[i] && str[i] != qts)
-	{
-		if (str[i] == '$')
-			flag = 1;
-		i++;
-	}
-	if (str[i] == qts)
-		i++;
-	else
-		ft_error("ERR: quotes open\n", 111);
-	return (flag);
-}
 
 t_token	*get_quotes_content(char *str, int *i, char qts)
 {
@@ -39,7 +21,6 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	(*i)++;
 	j = 0;
 	start = *i;
-	is_quote_close(str, *i, qts);
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
 		return (NULL);
@@ -50,6 +31,8 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	}
 	if (str[*i] == qts)
 		(*i)++;
+	else
+		return (msg_error("Err: quotes not close"));
 	mytoken->str = ft_substr(str, start, j);
 	return (mytoken);
 }
@@ -61,51 +44,78 @@ int	token_quotes(t_list **mylist, char *str, int *i, int token)
 	mytoken = get_quotes_content(str, i, str[*i]);
 	if (!mytoken)
 		return (0);
+	mytoken->token = token;
 	if (mytoken->str)
-	{
-		mytoken->token = token;
-		ft_lstadd_back(mylist, ft_lstnew(mytoken));
-	}
-	return (1);
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)) , 1);
+	return (0);
 }
 
-void	tokeni_mychar(t_list **mylist, char *str, int *i, int value)
+int	tokeni_mychar(t_list **mylist, char *str, int *i, int value)
 {
 	t_token	*mytoken;
 
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
-		return ;
+		return (0);
 	if (value == HERE_DOC || value == RE_APPEND)
 		mytoken->str = ft_substr(str, *i, 2);
 	else
 		mytoken->str = ft_substr(str, *i, 1);
 	mytoken->token = value;
 	(*i)++;
-	ft_lstadd_back(mylist, ft_lstnew(mytoken));
+	if (mytoken->str)
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)) , 1);
+	return (0);
 }
 
-void	token_spechars(t_list **mylist, char *str, int *i)
+int	spechars_pase_1(t_list **mylist, char *str, int *i)
 {
 	if (str[*i] == '|')
-		tokeni_mychar(mylist, str, i, PIPE);
+	{
+		if (!tokeni_mychar(mylist, str, i, PIPE))
+			return (0);
+	}
 	else if (str[*i] == ' ')
-		tokeni_mychar(mylist, str, i, ESP);
-	else if (str[*i] == '$')
-		tokeni_mychar(mylist, str, i, DLR);
+	{
+		if (!tokeni_mychar(mylist, str, i, ESP))
+			return (0);
+	}
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
 	{
-		tokeni_mychar(mylist, str, i, HERE_DOC);
+		if (!tokeni_mychar(mylist, str, i, HERE_DOC))
+			return (0);
 		(*i)++;
 	}
-	else if (str[*i] == '>' && str[(*i) + 1] == '>')
+	return (1);
+}
+
+int	spechars_pase_2(t_list **mylist, char *str, int *i)
+{
+	if (str[*i] == '>' && str[(*i) + 1] == '>')
 	{
-		tokeni_mychar(mylist, str, i, RE_APPEND);
+		if (!tokeni_mychar(mylist, str, i, RE_APPEND))
+			return (0);
 		(*i)++;
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] != '<')
-		tokeni_mychar(mylist, str, i, RE_IN);
+	{
+		if (!tokeni_mychar(mylist, str, i, RE_IN))
+			return (0);
+	}
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
-		tokeni_mychar(mylist, str, i, RE_OUT);
+	{
+		if (!tokeni_mychar(mylist, str, i, RE_OUT))
+			return (0);
+	}
+	return (1);
+}
+
+int	token_spechars(t_list **mylist, char *str, int *i)
+{
+	if (!spechars_pase_1(mylist, str, i))
+		return (0);
+	else if (!spechars_pase_2(mylist, str, i))
+		return (0);
+	return (1);
 }
 

@@ -60,6 +60,16 @@ int	main(int ac, char **av, char **env)
 	char	*str;
 	char	*trimed_str;
 
+
+	// while ((str = readline("minishell>>: ")) != NULL)
+	// {
+	// 	if (str[0] != 0)
+	// 	{
+	// 		printf("%s\n", str);
+	// 	}
+	// 	add_history(str);
+	// }
+	// exit (0);
 	// atexit(leaks);
 	head = NULL;
 	(void)ac;
@@ -71,12 +81,12 @@ int	main(int ac, char **av, char **env)
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str))
 		return (0);
+	affiche(head);
+	exit(0);
 	compiler(head);
 	head = esc_sp_after_spechar(head);
 
-	head = token_dbquotes(head);
-	// affiche(head);
-	// exit(0);
+	// head = token_dbquotes(head);
 	// //test the collecter of all tokens
 	t_voidlst *mylista = bash_collecter(head, take_env(env));
 	display_collecter(mylista);

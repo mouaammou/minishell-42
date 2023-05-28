@@ -6,38 +6,92 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/23 21:37:16 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 01:23:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 
-void	token_db_dollar(t_list **mylist, int *i, int token)
+int	token_db_dollar(t_list **mylist, int *i, int token)
 {
 	t_token	*mytoken;
 
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
-		return ;
+		return (0);
 	(*i) += 2;
-	mytoken->str = ft_strdup("$");
+	mytoken->str = ft_strdup("$$");
 	mytoken->token = token;
 	if (mytoken->str)
-		ft_lstadd_back(mylist, ft_lstnew(mytoken));
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)) , 1);
+	return (0);
 }
 
-void	token_qts_mark(t_list **mylist, int *i, int token)
+int	token_qts_mark(t_list **mylist, int *i, int token)
 {
 	t_token	*mytoken;
 
 	mytoken = malloc (sizeof (t_token));
 	if (!mytoken)
-		return ;
+		return (0);
 	(*i) += 2;
-	mytoken->str = ft_strdup("?");
+	mytoken->str = ft_strdup("$?");
 	mytoken->token = token;
 	if (mytoken->str)
-		ft_lstadd_back(mylist, ft_lstnew(mytoken));
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)), 1);
+	return (0);
+}
+
+int	myspechars(char c)
+{
+	if (c == '|' || c == '<' || c == '>' || c == ' ' || c =='$')
+		return (1);
+	return (0);
+}
+
+int	tokens_part_1(t_list **tokenizer, char *str, int *i)
+{
+	if (ft_isalnum(str[*i]) || !myspechars(str[*i]))
+	{
+		if (!set_token(WORD, tokenizer, i, str))
+			return (0);
+	}
+	else if (str[*i] == '$' && str[*i + 1] != '$' && str[*i + 1] != '?')
+	{
+		if (!set_token(DLR, tokenizer, i, str))
+			return (0);
+	}
+	else if (str[*i] == '$' && str[*i + 1] == '$')
+	{
+		if (!token_db_dollar(tokenizer, i, DLR))
+			return (0);
+	}
+	else if (str[*i] == '$' && str[*i + 1] == '?')
+	{
+		if (!token_qts_mark(tokenizer, i, QST_MARK))
+			return (0);
+	}
+	return (1);
+}
+
+int	tokens_part_2(t_list **tokenizer, char *str, int *i)
+{
+	if (str[*i] == '\'')
+	{
+		if (!token_quotes(tokenizer, str, i, S_QUOTE))
+			return (0);
+	}
+	else if (str[*i] == '\"')
+	{
+		if (!token_quotes(tokenizer, str, i, QUOTE))
+			return (0);
+	}
+	else if (str[*i] != '$'  && myspechars(str[*i]))
+	{
+		if (!token_spechars(tokenizer, str, i))
+			return (0);
+	}
+	return (1);
 }
 
 int	give_tokens(t_list **tokenizer, char *str)
@@ -47,26 +101,10 @@ int	give_tokens(t_list **tokenizer, char *str)
 	i = 0;
 	while (str[i])
 	{
-		if (is_str(str[i]))
-			token_word(tokenizer, str, &i, WORD);
-		else if (str[i] == '$' && str[i + 1] != '$' && str[i + 1] != '?') // handle dollar sign
-			token_var(tokenizer, str, &i, DLR);
-		else if (str[i] == '$' && str[i + 1] == '$') // token $$
-			token_db_dollar(tokenizer, &i, DLR);
-		else if (str[i] == '$' && str[i + 1] == '?') // token $?
-			token_qts_mark(tokenizer, &i, QST_MARK);
-		else if (str[i] == '\'')
-		{
-			if (!token_quotes(tokenizer, str, &i, S_QUOTE))
-				return (0);
-		}
-		else if (str[i] == '\"')
-		{
-			if (!token_quotes(tokenizer, str, &i, QUOTE))
-				return (0);
-		}
-		else if (!is_str(str[i]))
-			token_spechars(tokenizer, str, &i);
+		if (!tokens_part_1(tokenizer,str, &i))
+			return (0);
+		else if (!tokens_part_2(tokenizer, str, &i))
+			return (0);
 	}
 	return (1);
 }
