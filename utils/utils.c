@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 16:59:46 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/27 23:52:48 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 15:48:16 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,9 @@ void	free_linked_list(t_list *head)
 void	free_nodes(t_list *head)
 {
 	t_list	*tmp;
-	t_token	*mytoken;
 
 	while (head)
 	{
-		mytoken = head->content;
 		tmp = head->next;
 		free(head);
 		head = tmp;

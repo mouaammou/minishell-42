@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 01:27:29 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 22:31:29 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	if (str[*i] == qts)
 		(*i)++;
 	else
-		return (msg_error("Err: quotes not close"));
+		return (free(mytoken), msg_error("Err: quotes not close"));
 	mytoken->str = ft_substr(str, start, j);
 	return (mytoken);
 }
@@ -68,16 +68,23 @@ int	tokeni_mychar(t_list **mylist, char *str, int *i, int value)
 	return (0);
 }
 
-int	spechars_pase_1(t_list **mylist, char *str, int *i)
+int	spechars_pase_1(t_list **mylist, char *str, int *i, int flag)
 {
+	int	mytoken;
+
+	mytoken = QUOTE;
 	if (str[*i] == '|')
 	{
-		if (!tokeni_mychar(mylist, str, i, PIPE))
+		if (!flag)
+			mytoken = PIPE;
+		if (!tokeni_mychar(mylist, str, i, mytoken))
 			return (0);
 	}
 	else if (str[*i] == ' ')
 	{
-		if (!tokeni_mychar(mylist, str, i, ESP))
+		if (!flag)
+			mytoken = ESP;
+		if (!tokeni_mychar(mylist, str, i, mytoken))
 			return (0);
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
@@ -89,8 +96,11 @@ int	spechars_pase_1(t_list **mylist, char *str, int *i)
 	return (1);
 }
 
-int	spechars_pase_2(t_list **mylist, char *str, int *i)
+int	spechars_pase_2(t_list **mylist, char *str, int *i, int flag)
 {
+	int	mytoken;
+
+	mytoken = QUOTE;
 	if (str[*i] == '>' && str[(*i) + 1] == '>')
 	{
 		if (!tokeni_mychar(mylist, str, i, RE_APPEND))
@@ -99,22 +109,26 @@ int	spechars_pase_2(t_list **mylist, char *str, int *i)
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] != '<')
 	{
-		if (!tokeni_mychar(mylist, str, i, RE_IN))
+		if (!flag)
+			mytoken = RE_IN;
+		if (!tokeni_mychar(mylist, str, i, mytoken))
 			return (0);
 	}
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
 	{
-		if (!tokeni_mychar(mylist, str, i, RE_OUT))
+		if (!flag)
+			mytoken = RE_OUT;
+		if (!tokeni_mychar(mylist, str, i, mytoken))
 			return (0);
 	}
 	return (1);
 }
 
-int	token_spechars(t_list **mylist, char *str, int *i)
+int	token_spechars(t_list **mylist, char *str, int *i, int flag)
 {
-	if (!spechars_pase_1(mylist, str, i))
+	if (!spechars_pase_1(mylist, str, i, flag))
 		return (0);
-	else if (!spechars_pase_2(mylist, str, i))
+	else if (!spechars_pase_2(mylist, str, i, flag))
 		return (0);
 	return (1);
 }

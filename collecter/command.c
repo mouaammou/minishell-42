@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/26 22:37:41 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 22:42:17 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,8 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 			if ((*head)->content->token == HERE_DOC && (*head)->next)
 				handle_heredoc(head);
 			else if ((*head)->next)
-			{
 				(*head)->content->str = (*head)->next->content->str;
-				command_expansion(&((*tmp_list)->redirects), head,
-					myenv, 1);
-			}
+			command_expansion(&((*tmp_list)->redirects), head, myenv, 1);
 		}
 		(*head) = (*head)->next;
 	}
@@ -60,7 +57,7 @@ t_cmds	*node_collecter(t_cmds args)
 
 	new_collecter = malloc (sizeof (t_cmds));
 	if (!new_collecter)
-		ft_error("malloc failed\n", 3);
+		return (NULL);
 	new_collecter->commands = args.commands;
 	new_collecter->redirects = args.redirects;
 	return (new_collecter);

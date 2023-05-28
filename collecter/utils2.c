@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/26 18:46:20 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 18:15:21 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ t_token	*new_token(char *str, int token)
 
 	mytoken = malloc(sizeof (t_token));
 	if (!mytoken)
-		ft_error("malloc failed\n", 1);
-	mytoken->str = str;
+		return (NULL);
+	mytoken->str =  ft_strdup(str);
 	mytoken->token = token;
 	return (mytoken);
 }
@@ -71,7 +71,9 @@ t_list	*esc_sp_after_spechar(t_list *head)
 {
 	t_list	*newlist;
 	int		token;
+	t_list	*old_head;
 
+	old_head  = head;
 	newlist = NULL;
 	while (head)
 	{
@@ -89,5 +91,5 @@ t_list	*esc_sp_after_spechar(t_list *head)
 		ft_lstadd_back(&newlist, ft_lstnew(head->content));
 		head = head->next;
 	}
-	return (newlist);
+	return (free_nodes(old_head), newlist);
 }

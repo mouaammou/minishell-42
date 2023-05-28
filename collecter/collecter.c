@@ -59,6 +59,7 @@ int	main(int ac, char **av, char **env)
 	t_list	*head;
 	char	*str;
 	char	*trimed_str;
+	t_list	*newhead;
 
 
 	// while ((str = readline("minishell>>: ")) != NULL)
@@ -79,16 +80,16 @@ int	main(int ac, char **av, char **env)
 	if (!str)
 		return (0);
 	trimed_str = ft_strtrim(str, " ");
-	if (!give_tokens(&head, trimed_str))
-		return (0);
-	affiche(head);
-	exit(0);
-	compiler(head);
-	head = esc_sp_after_spechar(head);
-
-	// head = token_dbquotes(head);
+	if (!give_tokens(&head, trimed_str, 0))
+		return (myfree_func(head, trimed_str, str), 11);
+	if (!compiler(head))
+		return (myfree_func(head, trimed_str, str), 12);
+	newhead = esc_sp_after_spechar(head);
+	newhead = token_dbquotes(newhead);
+	// affiche(newhead);
+	// exit (0);
 	// //test the collecter of all tokens
-	t_voidlst *mylista = bash_collecter(head, take_env(env));
+	t_voidlst *mylista = bash_collecter(newhead, take_env(env));
 	display_collecter(mylista);
 	// test the collecter of all tokens
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/27 23:59:37 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 22:01:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,20 @@ int		is_quote_close(char *str, int i, int qts);
 char	*what_str_take(t_token *mytoken, char **searched_str, t_voidlst *myenv);
 void	affiche(t_list *head);
 t_token	*new_token(char *str, int token);
-void	compiler(t_list *head);
+t_list	*compiler(t_list *head);
 int		check_token(t_list *node, int mytoken1, int mytoken2, int flag);
 int		syntax_error(char *str, char *token_value);
 int		check_syntax(t_list *newlist);
 void	free_nodes(t_list *head);
-int		give_tokens(t_list **tokenizer, char *str);
+int		give_tokens(t_list **tokenizer, char *str, int flag);
 t_token	*get_quotes_content(char *str, int *i, char qts);
 int		token_quotes(t_list **mylist, char *str, int *i, int token);
 int		tokeni_mychar(t_list **mylist, char *str, int *i, int value);
-int		token_spechars(t_list **mylist, char *str, int *i);
+int		token_spechars(t_list **mylist, char *str, int *i, int flag);
 char	*token_word(char *str, int *i, int start);
 char	*token_var(char *str, int *i, int start);
-int		set_token(int token, t_list **mylist, int *i, char *str);
+int		set_token_word(int token, t_list **mylist, int *i, char *str);
+int		set_token_var(int token, t_list **mylist, int *i, char *str);
 void	*msg_error(char *str);
 int		myfree_func(t_list *head, char *trimed_str, char *str);
 void	free_linked_list(t_list *head);

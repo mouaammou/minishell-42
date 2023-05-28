@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:45:51 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/20 14:49:27 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 15:40:34 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ int	check_token(t_list *node, int mytoken1, int mytoken2, int flag)
 	else
 		prev = WHATEVER;
 	if (flag == PREV)
-		if (prev == WHATEVER)
+		if (prev != mytoken1)
 			return (0);
 	if (flag == NEXT)
-		if (next == WHATEVER)
+		if (next != mytoken2)
 			return (0);
 	if (flag == BOTH)
 		if (prev != mytoken1 || next != mytoken2)
@@ -56,16 +56,16 @@ int	check_syntax(t_list *newlist)
 			&& !check_token(newlist, WORD, WORD, BOTH))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == RE_OUT
-			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
+			&& !check_token(newlist, WHATEVER, WORD, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == RE_IN
-			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
+			&& !check_token(newlist, WHATEVER, WORD, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == HERE_DOC
-			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
+			&& !check_token(newlist, WHATEVER, WORD, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		if (token_var == RE_APPEND
-			&& !check_token(newlist, WHATEVER, WHATEVER, NEXT))
+			&& !check_token(newlist, WHATEVER, WORD, NEXT))
 			return (syntax_error("Syntax Error near: ", token_str));
 		newlist = newlist->next;
 	}

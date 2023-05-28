@@ -9,6 +9,12 @@
 		"__config": "c",
 		"get_next_line.h": "c",
 		"sstream": "c",
-		"collecter.h": "c"
+		"collecter.h": "c",
+		"__hash_table": "c",
+		"cstddef": "c",
+		"new": "c",
+		"type_traits": "c",
+		"typeinfo": "c",
+		"algorithm": "c"
 	}
 }

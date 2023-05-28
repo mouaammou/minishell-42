@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 01:23:57 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 22:07:16 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,41 +44,57 @@ int	token_qts_mark(t_list **mylist, int *i, int token)
 
 int	myspechars(char c)
 {
-	if (c == '|' || c == '<' || c == '>' || c == ' ' || c =='$')
+	if (c == '|' || c == '<' || c == '>' || c == ' ' || c == '$' || c == '\"' || c == '\'')
 		return (1);
 	return (0);
 }
 
-int	tokens_part_1(t_list **tokenizer, char *str, int *i)
+int	tokens_part_1(t_list **tokenizer, char *str, int *i, int flag)
 {
-	if (ft_isalnum(str[*i]) || !myspechars(str[*i]))
+	int	mytoken;
+
+	mytoken = QUOTE;
+	if (ft_isalnum(str[*i]) && !myspechars(str[*i]))
 	{
-		if (!set_token(WORD, tokenizer, i, str))
+		if (!flag)
+			mytoken = WORD;
+		if (!set_token_word(mytoken, tokenizer, i, str))
 			return (0);
 	}
 	else if (str[*i] == '$' && str[*i + 1] != '$' && str[*i + 1] != '?')
 	{
-		if (!set_token(DLR, tokenizer, i, str))
+		if (!flag)
+			mytoken = DLR;
+		if (!set_token_var(mytoken, tokenizer, i, str))
 			return (0);
 	}
 	else if (str[*i] == '$' && str[*i + 1] == '$')
 	{
-		if (!token_db_dollar(tokenizer, i, DLR))
+		if (!flag)
+			mytoken = DLR;
+		if (!token_db_dollar(tokenizer, i, mytoken))
 			return (0);
 	}
 	else if (str[*i] == '$' && str[*i + 1] == '?')
 	{
-		if (!token_qts_mark(tokenizer, i, QST_MARK))
+		if (!flag)
+			mytoken = QST_MARK;
+		if (!token_qts_mark(tokenizer, i, mytoken))
 			return (0);
 	}
 	return (1);
 }
 
-int	tokens_part_2(t_list **tokenizer, char *str, int *i)
+int	tokens_part_2(t_list **tokenizer, char *str, int *i, int flag)
 {
+	int	mytoken;
+
+	mytoken = QUOTE;
 	if (str[*i] == '\'')
 	{
-		if (!token_quotes(tokenizer, str, i, S_QUOTE))
+		if (!flag)
+			mytoken = S_QUOTE;
+		if (!token_quotes(tokenizer, str, i, mytoken))
 			return (0);
 	}
 	else if (str[*i] == '\"')
@@ -88,22 +104,22 @@ int	tokens_part_2(t_list **tokenizer, char *str, int *i)
 	}
 	else if (str[*i] != '$'  && myspechars(str[*i]))
 	{
-		if (!token_spechars(tokenizer, str, i))
+		if (!token_spechars(tokenizer, str, i, flag))
 			return (0);
 	}
 	return (1);
 }
 
-int	give_tokens(t_list **tokenizer, char *str)
+int	give_tokens(t_list **tokenizer, char *str, int flag)
 {
 	int		i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (!tokens_part_1(tokenizer,str, &i))
+		if (!tokens_part_1(tokenizer,str, &i, flag))
 			return (0);
-		else if (!tokens_part_2(tokenizer, str, &i))
+		else if (!tokens_part_2(tokenizer, str, &i, flag))
 			return (0);
 	}
 	return (1);
