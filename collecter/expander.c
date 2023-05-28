@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 17:20:28 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:31:02 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,6 @@ t_voidlst	*expander(t_list *head, t_voidlst *myenv)
 	}
 	else if (searched_str && mytoken->token == QUOTE)
 		sub_lst = new_node(new_token(searched_str, QUOTE));
+	free(searched_str);
 	return (sub_lst);
 }

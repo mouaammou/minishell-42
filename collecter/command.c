@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 22:42:17 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/28 23:31:21 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 		}
 		else
 		{
-			
-			if ((*head)->content->token == HERE_DOC && (*head)->next)
-				handle_heredoc(head);
-			else if ((*head)->next)
+			if ((*head)->next)
+			{
+				free((*head)->content->str);
 				(*head)->content->str = (*head)->next->content->str;
+			}
 			command_expansion(&((*tmp_list)->redirects), head, myenv, 1);
 		}
 		(*head) = (*head)->next;
@@ -67,9 +67,11 @@ t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
 {
 	t_voidlst	*collecter;
 	t_cmds		*tmp_list;
+	t_list		*tmphead;
 
 	collecter = NULL;
 	tmp_list = NULL;
+	tmphead = tokenizer;
 	while (tokenizer)
 	{
 		handle_cmd(&tmp_list, &tokenizer, myenv);
@@ -77,5 +79,5 @@ t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
 		if (tokenizer && tokenizer->content->token == PIPE)
 			tokenizer = tokenizer->next;
 	}
-	return (collecter);
+	return (free_nodes(tmphead), collecter);
 }
