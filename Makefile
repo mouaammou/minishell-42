@@ -6,21 +6,22 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/05/28 22:46:45 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/05/29 17:12:46 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 RM = rm -f
 CC = cc
-# FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 SRCS = 	$(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) \
 		$(addprefix new_linkedlist/, list.c) \
 		$(addprefix tokinizer/, tokenizer.c) \
 		$(addprefix compiler/, compiler.c) \
 		$(addprefix utils/, token_spechars.c token_word.c utils.c check_syntax.c) \
-		$(addprefix collecter/, collecter.c command.c expander.c heredoc.c token_db_quotes.c utils1.c utils2.c)
+		$(addprefix collecter/, collecter.c command.c expander.c heredoc.c token_db_quotes.c utils1.c utils2.c) \
+		$(addprefix concate/, concatenation.c)
 
 READ_LINE = $(addprefix readline/, get_next_line.c get_next_line_utils.c)
 

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 23:31:02 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/29 14:45:08 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	command_expansion(t_voidlst **origin, t_list **head,
 
 	sublst = NULL;
 	mytoken = (*head)->content;
-	if ((mytoken->token == DLR  || mytoken->token == QUOTE) && str_cmp(mytoken->str, "$") == 0)
+	if ((mytoken->token == DLR  || mytoken->token == QUOTE)
+		&& (!str_cmp(mytoken->str, "$") || !str_cmp(mytoken->str, "$$")))
 		add_back(origin, new_node(mytoken));
 	else if ((ft_strchr(mytoken->str, '$') && mytoken->token == QUOTE) || mytoken->token == DLR)
 	{
