@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 22:01:57 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/29 21:11:12 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 // 	t_voidlst	*redirects;
 // }t_cmds;
 
+int		is_word(int token);
+t_list	*concatenate_strings(t_list *tokenizer);
 int		myspechars(char c);
 int		token_db_dollar(t_list **mylist, int *i, int token);
 int		token_qts_mark(t_list **mylist, int *i, int token);
