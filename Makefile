@@ -6,14 +6,14 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/05/30 19:18:45 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/05/30 22:54:18 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 RM = rm -f
 CC = cc
-# FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 SRCS = 	$(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) \
 		$(addprefix new_linkedlist/, list.c) \
