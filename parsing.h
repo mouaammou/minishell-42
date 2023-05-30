@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/29 21:11:12 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:49:28 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 // 	t_voidlst	*redirects;
 // }t_cmds;
 
+void	expand_multi_dollars(t_list *head, t_voidlst *myenv, t_voidlst **origin);
 int		is_word(int token);
 t_list	*concatenate_strings(t_list *tokenizer);
 int		myspechars(char c);
@@ -79,6 +80,7 @@ void		ft_error(char *error, int error_val);
 t_env		*split_key_value(char *env);
 t_voidlst	*take_env(char **env);
 char		*search_for_key(char *str, t_voidlst *myenv);
-t_voidlst	*expander(t_list *head, t_voidlst *myenv);
+t_voidlst	*expander_dbquote(t_list *head, t_voidlst *myenv);
+t_voidlst	*expander_dollar(t_list *head, t_voidlst *myenv);
 // end expander
 #endif

@@ -85,7 +85,7 @@ int	main(int ac, char **av, char **env)
 	if (!compiler(head))
 		return (myfree_func(head, trimed_str, str), 12);
 	newhead = esc_sp_after_spechar(head);
-	newhead = token_dbquotes(newhead);
+	// newhead = token_dbquotes(newhead);
 	newhead = concatenate_strings(newhead);
 	// affiche(newhead);
 	// exit (0);

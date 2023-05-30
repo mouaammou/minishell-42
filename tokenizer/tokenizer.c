@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 22:07:16 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/30 14:52:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	tokens_part_1(t_list **tokenizer, char *str, int *i, int flag)
 	int	mytoken;
 
 	mytoken = QUOTE;
-	if (ft_isalnum(str[*i]) && !myspechars(str[*i]))
+	if (ft_isalnum(str[*i]) || !myspechars(str[*i]))
 	{
 		if (!flag)
 			mytoken = WORD;
