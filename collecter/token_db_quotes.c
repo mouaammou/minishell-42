@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:26:02 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/30 20:43:41 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:15:59 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,5 +32,5 @@ t_list	*token_dbquotes(t_list *tokenizer)
 			ft_lstadd_back(&new_list, ft_lstnew(new_token(tokenizer->content->str, tokenizer->content->token)));;
 		tokenizer = tokenizer->next;
 	}
-	return (free_linked_list(old_tokenizer), new_list);
+	return (new_list);
 }

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 23:24:48 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 19:12:51 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_token	*new_token(char *str, int token)
 	return (mytoken);
 }
 
-t_voidlst	*new_sublist(char **split)
+t_voidlst	*new_sublist(char **split, int token)
 {
 	t_voidlst	*head;
 	int			i;
@@ -33,7 +33,7 @@ t_voidlst	*new_sublist(char **split)
 	head = NULL;
 	while (split && split[i])
 	{
-		add_back(&head, new_node(new_token(ft_strdup(split[i]), WORD)));
+		add_back(&head, new_node(new_token(ft_strdup(split[i]), token)));
 		if (split[i + 1])
 			add_back(&head, new_node(new_token(ft_strdup(" "), ESP)));
 		i++;

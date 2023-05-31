@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 01:11:18 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 21:02:22 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,14 @@ void	add_multi_nodes(t_voidlst **origin, t_voidlst *newlist)
 	}
 }
 
+int	is_redirect(int token)
+{
+	if (token == RE_APPEND || token == RE_IN || token == RE_OUT || token == HERE_DOC)
+		return (1);
+	return (0);
+}
+
+
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
 	int	mytoken;
@@ -31,21 +39,15 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 		mytoken = (*head)->content->token;
 		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR
 			|| mytoken == S_QUOTE || mytoken == ESP || mytoken == QST_MARK)
-		{
 				command_expansion(&((*tmp_list)->commands), head, myenv, 0);
-		}
-		else
+		else if (is_redirect((*head)->content->token))
 		{
-			if ((*head)->next)
-			{
-				free((*head)->content->str);
-				(*head)->content->str = (*head)->next->content->str;
-			}
-			command_expansion(&((*tmp_list)->redirects), head, myenv, 0);
+			if ((*head)->next && ((*head) = (*head)->next))
+				command_expansion(&((*tmp_list)->redirects), head, myenv, 1);
 		}
-		(*head) = (*head)->next;
+		if (*head)
+			(*head) = (*head)->next;
 	}
-
 }
 
 t_cmds	*node_collecter(t_cmds args)
