@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 19:12:51 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 22:36:59 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_voidlst	*new_sublist(char **split, int token)
 	{
 		add_back(&head, new_node(new_token(ft_strdup(split[i]), token)));
 		if (split[i + 1])
-			add_back(&head, new_node(new_token(ft_strdup(" "), ESP)));
+			add_back(&head, new_node(new_token(ft_strdup(" "), token)));
 		i++;
 	}
 	free_all(split);

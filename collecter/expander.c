@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 21:55:13 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 23:48:19 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,13 @@ t_voidlst	*expander_dbquote(t_list **head, t_voidlst *myenv, t_voidlst **origin,
 	t_list		*db_quote_list;
 	int			token;
 
-	db_quote_list = token_dbquotes(ft_lstnew((*head)->content));
+	if (ft_strchr((*head)->content->str, '$'))
+		db_quote_list = token_dbquotes(ft_lstnew((*head)->content));
+	else
+	{
+		add_back(origin, new_node((*head)->content));
+		return (NULL);
+	}
 	sub_lst = NULL;
 	join = NULL;
 	while (db_quote_list)
