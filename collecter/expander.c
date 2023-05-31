@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 00:46:01 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 01:23:29 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,9 @@ t_voidlst	*expander_dbquote(t_list *head, t_voidlst *myenv, t_voidlst **origin)
 	join = NULL;
 	while (db_quote_list)
 	{
-		searched_str = search_for_key(db_quote_list->content->str + 1, myenv);
+		searched_str = NULL;
+		if (ft_strchr(db_quote_list->content->str, '$'))
+			searched_str = search_for_key(db_quote_list->content->str + 1, myenv);
 		if (searched_str)
 			db_quote_list->content->str = searched_str;
 		else if (ft_strchr(db_quote_list->content->str, '$') 
@@ -100,7 +102,9 @@ t_voidlst	*expander_dollar(t_list *head, t_voidlst *myenv, t_voidlst **origin)
 	while (db_quote_list)
 	{
 		sub_lst = NULL;
-		searched_str = search_for_key(db_quote_list->content->str + 1, myenv);
+		searched_str = NULL;
+		if (ft_strchr(db_quote_list->content->str, '$'))
+			searched_str = search_for_key(db_quote_list->content->str + 1, myenv);
 		if (searched_str)
 		{
 			split = ft_split(searched_str, ' ');

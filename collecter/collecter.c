@@ -54,6 +54,8 @@ void	affiche(t_list *head)
 	}
 }
 
+
+
 int	main(int ac, char **av, char **env)
 {
 	t_list	*head;

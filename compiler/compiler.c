@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 16:16:30 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 01:19:00 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ t_list	*ighnore_space(t_list *head)
 t_list	*compiler(t_list *head)
 {
 	t_list	*new_lst;
-
 	new_lst = ighnore_space(head);
 	if (!new_lst)
 		return (NULL);
