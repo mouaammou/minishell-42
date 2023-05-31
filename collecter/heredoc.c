@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 23:06:42 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 21:36:20 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 void	manage_heredoc(t_list **head, int *fd)
 {
-	char	*tmp;
+	char	*delemiter;
 	char	*line;
 	char	*buffer;
 
 	buffer = NULL;
-	tmp = ft_strjoin((*head)->next->content->str, ft_strdup("\n"));
+	delemiter = ft_strjoin((*head)->next->content->str, ft_strdup("\n"));
 	while (1)
 	{
 		ft_putstr_fd("heredoc> ", 1);
 		line = get_next_line(0);
-		if (!line || !str_cmp(line, tmp))
+		if (!line || !str_cmp(line, delemiter))
 		{
 			ft_putstr_fd("\n", 1);
 			break ;
@@ -32,7 +32,7 @@ void	manage_heredoc(t_list **head, int *fd)
 		buffer = ft_strjoin(buffer, line);
 		free(line);
 	}
-	free(tmp);
+	free(delemiter);
 	if (buffer)
 		write(*fd, buffer, ft_strlen(buffer));
 }

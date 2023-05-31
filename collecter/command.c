@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 21:02:22 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/05/31 22:25:19 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ int	is_redirect(int token)
 	return (0);
 }
 
-
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
 	int	mytoken;
@@ -42,7 +41,13 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 				command_expansion(&((*tmp_list)->commands), head, myenv, 0);
 		else if (is_redirect((*head)->content->token))
 		{
-			if ((*head)->next && ((*head) = (*head)->next))
+			if (mytoken == HERE_DOC && (*head)->next)
+			{
+				handle_heredoc(head);
+				add_back(&((*tmp_list)->redirects), new_node((*head)->content));
+				(*head) = (*head)->next;
+			}
+			else if ((*head)->next && ((*head) = (*head)->next))
 				command_expansion(&((*tmp_list)->redirects), head, myenv, 1);
 		}
 		if (*head)
