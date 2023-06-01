@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 18:17:52 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:22:01 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ void	free_linked_list(t_list *head);
 /* start collecter functions */
 int		str_cmp(const char *s1, const char *s2);
 int		count_pipes(t_list *head);
-void	handle_heredoc(t_list **head);
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv);
 t_voidlst	*bash_collecter(t_list *head, t_voidlst *myenv);
 t_list *esc_sp_after_spechar(t_list *head);

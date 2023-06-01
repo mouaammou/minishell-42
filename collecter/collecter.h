@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 19:12:59 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/01 16:23:15 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ void		expand_qts_mark(t_voidlst **origin, t_list **head);
 // t_voidlst	*expander(t_list *head, t_voidlst *myenv);
 
 //heredoc.c
-void		manage_heredoc(t_list **head, int *fd);
-void		handle_heredoc(t_list **head);
+void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv);
+void	handle_heredoc(t_list **head, t_voidlst *myenv);
 
 //token_db_quotes.c
 t_list		*token_dbquotes(t_list *tokenizer);
