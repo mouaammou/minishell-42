@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/01 16:37:38 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/01 22:00:35 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,46 @@ char	*delete_last_char(char* str) {
         str[len-1] = '\0';
     }
 	return (str);
+}
+
+
+char*	delete_char(char* str, char c) {
+    char* p = ft_strchr(str, c);
+
+    if (p != NULL) {
+        ft_memmove(p, p + 1, ft_strlen(p));
+    }
+    return str;
+}
+
+char	*join_multi_var(char *str, t_voidlst *myenv)
+{
+	char		*searched_str;
+	t_list		*db_quote_list;
+	char		*join;
+	
+	db_quote_list = NULL;
+	give_tokens(&db_quote_list, str, 0);
+	
+	join = NULL;
+	while (db_quote_list)
+	{		
+		// searched_str = NULL;
+		// if (ft_strchr(db_quote_list->content->str, '$'))
+		// 	searched_str = search_for_key(db_quote_list->content->str + 1, myenv);
+		// if (searched_str)
+		// 	db_quote_list->content->str = searched_str;
+		// else if (ft_strchr(db_quote_list->content->str, '$')
+		// 	&& !manage_others(db_quote_list->content->str))
+		// 	db_quote_list->content->str = NULL;
+		// if (db_quote_list->content->str)
+		// 	join = ft_strjoin(join, db_quote_list->content->str);
+		// printf("new string :[%s]\n", ft_strtrim(db_quote_list->content->str, ft_strdup("'")));
+		printf("str: [%s] -- token: %d\n", db_quote_list->content->str, db_quote_list->content->token);
+		db_quote_list = db_quote_list->next;
+	}
+	printf("join : %s\n", join);
+	return (join);
 }
 
 void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
@@ -42,8 +82,9 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 		}
 		if (ft_strchr(line, '$') && (tmpstr = delete_last_char(ft_strdup(line))))
 		{
-			line = search_for_key(tmpstr + 1, myenv);
-			line = ft_strjoin(line, ft_strdup("\n"));
+			line = join_multi_var(tmpstr, myenv);
+			if (line)
+				line = ft_strjoin(line, ft_strdup("\n"));
 			free(tmpstr);
 		}
 		buffer = ft_strjoin(buffer, line);
@@ -52,6 +93,7 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 	if (buffer)
 		write(*fd, buffer, ft_strlen(buffer));
 	free(buffer);
+	exit (0);
 }
 
 void	handle_heredoc(t_list **head, t_voidlst *myenv)

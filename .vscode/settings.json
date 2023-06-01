@@ -5,6 +5,7 @@
 		"readline.h": "c",
 		"list_header.h": "c",
 		"history.h": "c",
-		"linked_lst.h": "c"
+		"linked_lst.h": "c",
+		"get_next_line.h": "c"
 	}
 }
