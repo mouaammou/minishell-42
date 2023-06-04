@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/01 22:00:35 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 01:51:25 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 	if (buffer)
 		write(*fd, buffer, ft_strlen(buffer));
 	free(buffer);
-	exit (0);
+	// exit (0);
 }
 
 void	handle_heredoc(t_list **head, t_voidlst *myenv)

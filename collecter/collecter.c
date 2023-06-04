@@ -89,6 +89,7 @@ int	main(int ac, char **av, char **env)
 	newhead = esc_sp_after_spechar(head);
 	// newhead = token_dbquotes(newhead);
 	newhead = concatenate_strings(newhead);
+	// newhead = token_dbquotes(newhead);
 	// affiche(newhead);
 	// exit (0);
 	// //test the collecter of all tokens

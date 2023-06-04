@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:26:02 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/01 21:18:20 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:01:17 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ t_list	*token_dbquotes(t_list *tokenizer)
 	new_list = NULL;
 	while (tokenizer)
 	{
-		if (tokenizer->content->token == QUOTE || tokenizer->content->token == DLR)
+		if (ft_strchr(tokenizer->content->str, '\"'))
 		{
-			if (tokenizer->content->token == QUOTE)
-				give_tokens(&new_list, tokenizer->content->str, 1);
-			else
+			// if (tokenizer->content->token == QUOTE)
+			// 	give_tokens(&new_list, tokenizer->content->str, 1);
+			// else
 				give_tokens(&new_list, tokenizer->content->str, 0);
 		}
 		else

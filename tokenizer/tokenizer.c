@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 01:19:32 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:45:19 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	tokens_part_2(t_list **tokenizer, char *str, int *i, int flag)
 {
 	int	mytoken;
 
-	mytoken = QUOTE;
+	mytoken = WORD;
 	if (str[*i] == '\'')
 	{
 		if (!flag)

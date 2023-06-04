@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/01 18:27:24 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/03 23:27:53 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@
 // 	char		**args;
 // 	t_voidlst	*redirects;
 // }t_cmds;
+
 
 void	expand_multi_dollars(t_list *head, t_voidlst *myenv, t_voidlst **origin);
 int		is_word(int token);
