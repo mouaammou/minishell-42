@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 17:03:47 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 18:16:13 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	expande(t_list *head, t_voidlst *myenv, t_voidlst **origin)
 		if (sub_lst)
 			add_multi_nodes(origin, sub_lst);
 	}
-	else
+	else if (mytoken->token == QUOTE)
 		add_back(origin, new_node(mytoken));
 }
 

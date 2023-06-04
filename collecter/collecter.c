@@ -84,8 +84,8 @@ int	main(int ac, char **av, char **env)
 	trimed_str = ft_strtrim(str, " ");
 	if (!give_tokens(&head, trimed_str, 0))
 		return (myfree_func(head, trimed_str, str), 11);
-	if (!compiler(head))
-		return (myfree_func(head, trimed_str, str), 12);
+	// if (!compiler(head))
+	// 	return (myfree_func(head, trimed_str, str), 12);
 	newhead = esc_sp_after_spechar(head);
 	// newhead = token_dbquotes(newhead);
 	newhead = concatenate_strings(newhead);
