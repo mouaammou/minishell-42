@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:36:37 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 21:48:45 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 			// }
 			// else 
 			if ((*head)->next && ((*head) = (*head)->next))
-				command_expansion(&((*tmp_list)->redirects), head, myenv, 1);
+				command_expansion(&((*tmp_list)->redirects), head, myenv, 0);
 		}
 		if (*head)
 			(*head) = (*head)->next;
