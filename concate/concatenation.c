@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:45:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/29 21:13:06 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:34:23 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ t_list	*concatenate_strings(t_list *tokenizer)
 				token = DLR;
 			else
 				token = WORD;
-			ft_lstadd_back(&newlist, ft_lstnew(new_token(join, token)));
+			ft_lstadd_back(&newlist, ft_lstnew(new_token(join, tokenizer->content->token)));
 		}
 		else if (tokenizer)
 			ft_lstadd_back(&newlist, ft_lstnew(new_token(tokenizer->content->str, tokenizer->content->token)));

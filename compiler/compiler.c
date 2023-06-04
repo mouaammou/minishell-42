@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 01:19:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:10:54 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	is_word(int token)
 {
-	if ((token == QUOTE || token == S_QUOTE || token == DLR
+	if ((token == QUOTE || token == S_QUOTE
 		|| token == WORD || token == QST_MARK))
 		return (1);
 	return (0);

@@ -6,23 +6,21 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 04:52:18 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:03:47 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 
 
-char	*string_replace(char *phrase, const char *oldstring, const char *newstring)
+char	*string_replace(char *phrase, char *oldstring, char *newstring)
 {
     int		oldlen;
 	int		newlen;
 	int		phraselen;
-	int		i;
 	int		index;
 	char	*new_phrase;
 	int		total_len;
-	int		j;
 
 	if (!oldstring || !newstring)
 		return (phrase);
@@ -30,19 +28,16 @@ char	*string_replace(char *phrase, const char *oldstring, const char *newstring)
 	newlen = ft_strlen(newstring);
 	phraselen = ft_strlen(phrase);
 	total_len = (phraselen + newlen - oldlen);
-	new_phrase = malloc(sizeof (char) * total_len + 1);
+	new_phrase = malloc(sizeof (char) * (total_len + 1));
 	if (!new_phrase)
 		return (NULL);
-	ft_memcpy(new_phrase, phrase, total_len);
-	index = index_of_char(phrase, oldstring[0]);
-	i = 0;
-	while (i < newlen)
-		new_phrase[index++] = newstring[i++];
-	new_phrase[index] = '\0';
-	j = index_of_char(phrase, oldstring[oldlen - 1]) + 1;
-	while (j < total_len)
-		new_phrase[index++] = phrase[j++];
-	return (new_phrase[j] = '\0', new_phrase);
+    index = index_of_char(phrase, oldstring[0]);
+    ft_memcpy(new_phrase, phrase, index);
+    ft_memcpy(new_phrase + index, newstring, newlen);
+    ft_memcpy(new_phrase + index + newlen, phrase + index + oldlen, phraselen - index - oldlen);
+    new_phrase[total_len] = '\0';
+    return (free(phrase), new_phrase);
+
 }
 
 int	string_index(char *str, char c, int i)
@@ -61,12 +56,8 @@ char	*var_string(char *str, int i, int start)
 	int	j;
 
 	j = 0;
-	i++;
-	while (str[i] && (ft_isalnum(str[i]) ||  str[i] == '_'))
-	{
-		i++;
+	while (str[++i] && (ft_isalnum(str[i]) ||  str[i] == '_'))
 		j++;
-	}
 	return (ft_substr(str, start, j + 1));
 }
 
@@ -75,46 +66,56 @@ char	*replace_all(char *old_str, t_voidlst *myenv)
 	int			index;
 	char		*string_key;
 	char		*string_value;
-	char		*new_str;
 
 	
 	index = string_index(old_str, '$', 0);
-	new_str = NULL;
-	while (old_str && old_str[index] && index != -1)
+	while (index != -1)
 	{
 		string_key = NULL;
+		string_value = NULL;
 		string_key = var_string(old_str, index, index);
-		if (string_key)
+		string_value = search_for_key(string_key + 1, myenv);
+		if (!string_value)
 		{
-			string_value = search_for_key(string_key + 1, myenv);
-			if (string_value)
-				old_str = string_replace(old_str , string_key, string_value);
+			string_value = ft_strdup("");
+			index--;
 		}
-		index += 1;
+		old_str = string_replace(old_str , string_key, string_value);
+		index++;
 		index = string_index(old_str, '$', index);
 	}
 	return (old_str);
 }
 
+char	*search_and_replace(t_token **mytoken, t_voidlst *myenv)
+{
+	int			index;
+	char		*string_key;
+	char		*string_value;
+	
+	string_value = NULL;
+	if ((*mytoken)->token == QUOTE)
+		(*mytoken)->str = replace_all((*mytoken)->str, myenv);
+	else
+	{
+		index = index_of_char((*mytoken)->str, '$');
+		string_key = token_var((*mytoken)->str, &index, index);
+		string_value = search_for_key(string_key + 1, myenv);
+		(*mytoken)->str = string_replace((*mytoken)->str, string_key, string_value);	
+	}
+
+	return (string_value);
+}
+
 void	expande(t_list *head, t_voidlst *myenv, t_voidlst **origin)
 {
 	t_token		*mytoken;
-	int			index;
-	char		*string_key;
 	char		*string_value;
 	char		**split;
 	t_voidlst	*sub_lst;
 	
 	mytoken = (head)->content;
-	if (mytoken->token == QUOTE)
-		mytoken->str = replace_all(mytoken->str, myenv);
-	else
-	{
-		index = index_of_char(mytoken->str, '$');
-		string_key = token_var(mytoken->str, &index, index);
-		string_value = search_for_key(string_key + 1, myenv);
-		mytoken->str = string_replace(mytoken->str, string_key, string_value);	
-	}
+	string_value = search_and_replace(&mytoken, myenv);
 	if (string_value && mytoken->token == DLR)
 	{
 		split = ft_split(mytoken->str, ' ');

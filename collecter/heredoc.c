@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 01:51:25 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:15:33 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ char*	delete_char(char* str, char c) {
 
 char	*join_multi_var(char *str, t_voidlst *myenv)
 {
-	char		*searched_str;
+	// char		*searched_str;
 	t_list		*db_quote_list;
 	char		*join;
-	
+	myenv = NULL;
 	db_quote_list = NULL;
 	give_tokens(&db_quote_list, str, 0);
 	
