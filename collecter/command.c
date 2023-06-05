@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 21:48:45 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 01:52:09 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 	while ((*head) && (*head)->content->token != PIPE)
 	{
 		mytoken = (*head)->content->token;
-		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR
+		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR || mytoken == DB_DLR
 			|| mytoken == S_QUOTE || mytoken == ESP || mytoken == QST_MARK)
-				command_expansion(&((*tmp_list)->commands), head, myenv, 0);
+				command_expansion(&((*tmp_list)->commands), head, myenv);
 		else if (is_redirect((*head)->content->token))
 		{
 			// if (mytoken == HERE_DOC && (*head)->next)
@@ -49,7 +49,7 @@ void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 			// }
 			// else 
 			if ((*head)->next && ((*head) = (*head)->next))
-				command_expansion(&((*tmp_list)->redirects), head, myenv, 0);
+				command_expansion(&((*tmp_list)->redirects), head, myenv);
 		}
 		if (*head)
 			(*head) = (*head)->next;

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 17:50:13 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/26 22:14:48 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 01:36:03 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ typedef enum tokens
 	HERE_DOC = 8,
 	ESP = 9,
 	DLR = 10,
-	QST_MARK = 11
+	DB_DLR = 11,
+	QST_MARK = 12
 }	t_etoken;
 
 typedef struct token

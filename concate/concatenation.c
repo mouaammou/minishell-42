@@ -6,11 +6,29 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:45:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 21:07:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 02:40:47 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
+
+char	*func1(t_list *tokenizer)
+{
+	char	*join;
+	int		flag;
+	
+	join = NULL;
+	flag = 0;
+	while (tokenizer && is_word(tokenizer->content->token)
+		&& tokenizer->next && is_word (tokenizer->next->content->token))
+	{
+		join = ft_strjoin(join, tokenizer->content->str);
+		tokenizer = tokenizer->next;
+		flag = 1;
+	}
+	if (is_word (tokenizer->content->token) && flag)
+		join = ft_strjoin(join, tokenizer->content->str);
+}
 
 t_list	*concatenate_strings(t_list *tokenizer)
 {
@@ -18,7 +36,7 @@ t_list	*concatenate_strings(t_list *tokenizer)
 	int		flag;
 	t_list	*newlist;
 	t_list	*tmp_list;
-	// int		token;
+	int		token;
 	
 	newlist = NULL;
 	tmp_list = tokenizer;
@@ -26,7 +44,8 @@ t_list	*concatenate_strings(t_list *tokenizer)
 	{
 		join = NULL;
 		flag = 0;
-		while (tokenizer && is_word(tokenizer->content->token) && tokenizer->next && is_word (tokenizer->next->content->token))
+		while (tokenizer && is_word(tokenizer->content->token)
+			&& tokenizer->next && is_word (tokenizer->next->content->token))
 		{
 			join = ft_strjoin(join, tokenizer->content->str);
 			tokenizer = tokenizer->next;
@@ -36,11 +55,11 @@ t_list	*concatenate_strings(t_list *tokenizer)
 			join = ft_strjoin(join, tokenizer->content->str);
 		if (join)
 		{
-			// if (ft_strchr(join, '$'))
-			// 	token = DLR;
-			// else
-			// 	token = WORD;
-			ft_lstadd_back(&newlist, ft_lstnew(new_token(join, tokenizer->content->token)));
+			if (ft_strchr(join, '$'))
+				token = DLR;
+			else
+				token = tokenizer->content->token;
+			ft_lstadd_back(&newlist, ft_lstnew(new_token(join, token)));
 		}
 		else if (tokenizer)
 			ft_lstadd_back(&newlist, ft_lstnew(new_token(tokenizer->content->str, tokenizer->content->token)));

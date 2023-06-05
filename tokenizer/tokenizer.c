@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:45:19 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 01:36:16 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	tokens_part_1(t_list **tokenizer, char *str, int *i, int flag)
 	else if (str[*i] == '$' && str[*i + 1] == '$')
 	{
 		if (!flag)
-			mytoken = DLR;
+			mytoken = DB_DLR;
 		if (!token_db_dollar(tokenizer, i, mytoken))
 			return (0);
 	}
