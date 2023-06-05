@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 01:52:09 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 21:06:12 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,35 @@ int	is_redirect(int token)
 
 void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
 {
-	int	mytoken;
+	int		mytoken;
+	char	*join_str;
 
 	*tmp_list = node_collecter((t_cmds){NULL, NULL});
 	while ((*head) && (*head)->content->token != PIPE)
 	{
+		join_str = NULL;
 		mytoken = (*head)->content->token;
 		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR || mytoken == DB_DLR
 			|| mytoken == S_QUOTE || mytoken == ESP || mytoken == QST_MARK)
+			{
 				command_expansion(&((*tmp_list)->commands), head, myenv);
-		else if (is_redirect((*head)->content->token))
+				(*head) = (*head)->next;
+			}
+		else if (is_redirect(mytoken))
 		{
-			// if (mytoken == HERE_DOC && (*head)->next)
-			// {
-			// 	handle_heredoc(head, myenv);
-			// 	add_back(&((*tmp_list)->redirects), new_node((*head)->content));
-			// 	(*head) = (*head)->next;
-			// }
-			// else 
-			if ((*head)->next && ((*head) = (*head)->next))
-				command_expansion(&((*tmp_list)->redirects), head, myenv);
-		}
-		if (*head)
 			(*head) = (*head)->next;
+			while ((*head) && (*head)->content->token != ESP && !is_redirect((*head)->content->token))
+			{
+				join_str = ft_strjoin(join_str, replace_all((*head)->content->str, myenv));
+				(*head) = (*head)->next;
+			}
+			if (ft_strchr(join_str, ' '))
+			{
+				printf("❌❌ %s: %s❌\n", join_str, "ambiguous redirect");
+				exit (0);
+			}
+			add_back(&((*tmp_list)->redirects), new_node(new_token(join_str, mytoken)));
+		}
 	}
 }
 

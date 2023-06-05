@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 01:59:04 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 21:05:41 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,13 @@ void	expande(t_list *head, t_voidlst *myenv, t_voidlst **origin)
 
 void	command_expansion(t_voidlst **origin, t_list **head, t_voidlst *myenv)
 {
-	t_voidlst	*sublst;
 	t_token		*mytoken;
-	char		*others;
-
-	sublst = NULL;
+	
 	mytoken = (*head)->content;
 	if (ft_strchr(mytoken->str, '$') && !manage_others(mytoken->str))
 		expande(*head, myenv, origin);
 	else
-	{
-		others = manage_others(mytoken->str);
-		if (others)
-			mytoken->str = others;
 		add_back(origin, new_node(mytoken));
-	}
 }
 
 char	*manage_others(char *str)

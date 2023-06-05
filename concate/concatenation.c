@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 15:45:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 02:40:47 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 16:29:38 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*func1(t_list *tokenizer)
 	}
 	if (is_word (tokenizer->content->token) && flag)
 		join = ft_strjoin(join, tokenizer->content->str);
+	return (join);
 }
 
 t_list	*concatenate_strings(t_list *tokenizer)
@@ -44,15 +45,7 @@ t_list	*concatenate_strings(t_list *tokenizer)
 	{
 		join = NULL;
 		flag = 0;
-		while (tokenizer && is_word(tokenizer->content->token)
-			&& tokenizer->next && is_word (tokenizer->next->content->token))
-		{
-			join = ft_strjoin(join, tokenizer->content->str);
-			tokenizer = tokenizer->next;
-			flag = 1;
-		}
-		if (is_word (tokenizer->content->token) && flag)
-			join = ft_strjoin(join, tokenizer->content->str);
+		join = func1(tokenizer);
 		if (join)
 		{
 			if (ft_strchr(join, '$'))

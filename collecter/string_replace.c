@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 22:31:45 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 22:33:40 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 19:08:44 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ char	*replace_all(char *old_str, t_voidlst *myenv)
 	int			index;
 	char		*string_key;
 	char		*string_value;
-
+	char		*others;
+	
+	if ((others = manage_others(old_str)))
+		return (others);
 	index = string_index(old_str, '$', 0);
 	while (index != -1)
 	{

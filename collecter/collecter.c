@@ -88,10 +88,9 @@ int	main(int ac, char **av, char **env)
 		return (myfree_func(head, trimed_str, str), 12);
 	newhead = esc_sp_after_spechar(head);
 	// newhead = token_dbquotes(newhead);
-	newhead = concatenate_strings(newhead);
-	affiche(newhead);
-	exit (0);
-	// //test the collecter of all tokens
+	// newhead = concatenate_strings(newhead);
+	// affiche(newhead);
+	// exit (0);
 	t_voidlst *mylista = bash_collecter(newhead, take_env(env));
 	display_collecter(mylista);
 	// test the collecter of all tokens

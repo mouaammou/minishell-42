@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 22:34:29 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 21:06:25 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv);
 //expander.c
 char		*manage_others(char *str);
 void		command_expansion(t_voidlst **origin, t_list **head, t_voidlst *myenv);
-void		expand_qts_mark(t_voidlst **origin, t_list **head);
 // t_voidlst	*expander(t_list *head, t_voidlst *myenv);
 
 //heredoc.c
