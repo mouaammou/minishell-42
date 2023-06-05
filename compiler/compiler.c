@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 21:08:10 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 21:57:33 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,8 @@ t_list	*compiler(t_list *head)
 {
 	t_list	*new_lst;
 	new_lst = ighnore_space(head);
-	if (!new_lst)
-		return (NULL);
+	// if (!new_lst)
+	// 	return (NULL);
 	if (!check_syntax(new_lst))
 		return (free_linked_list(new_lst), NULL);
 	return (free_linked_list(new_lst), head);

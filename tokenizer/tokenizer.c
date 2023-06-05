@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 01:36:16 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:04:45 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ int	give_tokens(t_list **tokenizer, char *str, int flag)
 	int		i;
 
 	i = 0;
-	while (str[i])
+	while (str && str[i])
 	{
 		if (!tokens_part_1(tokenizer,str, &i, flag))
 			return (0);

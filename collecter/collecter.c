@@ -12,6 +12,12 @@
 
 #include "../parsing.h"
 
+#define RED  "\033[1;31m"
+#define GREEN  "\033[1;32m"
+#define YELLOW  "\033[1;33m"
+#define BLUE  "\033[1;34m"
+#define RESET "\033[0m"
+
 void	display_collecter(t_voidlst *h_list)
 {
 	int i = 1;
@@ -58,41 +64,38 @@ void	affiche(t_list *head)
 
 int	main(int ac, char **av, char **env)
 {
-	t_list	*head;
-	char	*str;
-	char	*trimed_str;
-	t_list	*newhead;
+	t_list		*head;
+	char		*str;
+	char		*trimed_str;
+	t_list		*newhead;
+	t_voidlst	*expander_list;
 
-
-	// while ((str = readline("minishell>>: ")) != NULL)
-	// {
-	// 	if (str[0] != 0)
-	// 	{
-	// 		printf("%s\n", str);
-	// 	}
-	// 	add_history(str);
-	// }
-	// exit (0);
-	// atexit(leaks);
-	head = NULL;
 	(void)ac;
 	(void)av;
-	str = readline("minishell>>: ");
-	add_history(str);
-	if (!str)
-		return (0);
-	trimed_str = ft_strtrim(str, " ");
-	if (!give_tokens(&head, trimed_str, 0))
-		return (myfree_func(head, trimed_str, str), 11);
-	if (!compiler(head))
-		return (myfree_func(head, trimed_str, str), 12);
-	newhead = esc_sp_after_spechar(head);
+	while (1)
+	{
+		head = NULL;
+		str = readline("\033[1;35mminishell>>: \033[0m");
+		add_history(str);
+		trimed_str = ft_strtrim(str, " ");
+		if (!give_tokens(&head, trimed_str, 0))
+		{
+			myfree_func(head, trimed_str, str);
+			continue;
+		}
+		if (!compiler(head))
+		{
+			myfree_func(head, trimed_str, str);
+			continue;
+		}
+		newhead = esc_sp_after_spechar(head);
+		expander_list = bash_collecter(newhead, take_env(env));
+		display_collecter(expander_list);
+	}
 	// newhead = token_dbquotes(newhead);
 	// newhead = concatenate_strings(newhead);
 	// affiche(newhead);
 	// exit (0);
-	t_voidlst *mylista = bash_collecter(newhead, take_env(env));
-	display_collecter(mylista);
 	// test the collecter of all tokens
 	return (0);
 }
