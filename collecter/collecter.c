@@ -66,9 +66,8 @@ char	*concate_strings(t_voidlst **cmds)
 	char		*join;
 
 	join = NULL;
-	while (cmds && (*cmds) && is_word(mytoken1->token))
+	while ((*cmds) && (mytoken1 = (*cmds)->content) && is_word(mytoken1->token))
 	{
-		mytoken1 = (*cmds)->content;
 		join = ft_strjoin(join, mytoken1->str);
 		(*cmds) = (*cmds)->next;
 	}
@@ -80,7 +79,8 @@ t_voidlst	*bash_concate(t_voidlst	*expander)
 	t_cmds		*tmp;
 	t_voidlst	*cmds;
 	t_token		*mytoken;
-	// char		*concate_str;
+	char		*concate_str;
+
 
 	while (expander)
 	{
@@ -90,9 +90,10 @@ t_voidlst	*bash_concate(t_voidlst	*expander)
 		while (cmds)
 		{
 			mytoken = cmds->content;
-			// concate_str = concate_strings(&cmds);
-			// printf("concate string: %s\n", concate_str);
-			cmds = cmds->next;
+			concate_str = concate_strings(&cmds);
+			printf("concate string: %s\n", concate_str);
+			if (cmds)
+				cmds = cmds->next;
 		}
 
 		expander = expander->next;
@@ -107,7 +108,7 @@ int	main(int ac, char **av, char **env)
 	char		*str;
 	char		*trimed_str;
 	t_list		*newhead;
-	t_voidlst	*expander_list;
+	t_list	*expander_list;
 
 	g_dollars.two_dollars = "**";
 	g_dollars.one_dollar = "+";
@@ -134,10 +135,11 @@ int	main(int ac, char **av, char **env)
 		newhead = esc_sp_after_spechar(head);
 		expander_list = bash_collecter(newhead, take_env(env));
 
+		affiche(expander_list);
 		/* CONCATENATION */
-		expander_list = bash_concate(expander_list);
+		// expander_list = bash_concate(expander_list);
 		/* CONCATENATION */
-		display_collecter(expander_list);
+		// display_collecter(expander_list);
 	}
 	return (0);
 }

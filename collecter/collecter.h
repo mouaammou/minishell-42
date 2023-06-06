@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 02:19:58 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:17:21 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,19 @@ int		string_index(char *str, char c, int i);
 char	*string_replace(char *phrase, char *oldstring, char *newstring);
 
 //command.c
-void		add_multi_nodes(t_voidlst **origin, t_voidlst *newlist);
-int			handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv);
+void		add_multi_nodes(t_list **origin, t_voidlst *newlist);
+int			handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv);
 t_cmds		*node_collecter(t_cmds args);
-t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv);
+t_list		*bash_collecter(t_list *tokenizer, t_voidlst *myenv);
 
 //expander.c
 char		*manage_others(char *str);
-void		command_expansion(t_voidlst **origin, t_list **head, t_voidlst *myenv);
+void		command_expansion(t_list **origin, t_list **head, t_voidlst *myenv);
 // t_voidlst	*expander(t_list *head, t_voidlst *myenv);
 
 //heredoc.c
 void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv);
-void	handle_heredoc(t_list **head, t_voidlst *myenv);
+int		handle_heredoc(t_list **head, t_voidlst *myenv);
 
 //token_db_quotes.c
 t_list		*token_dbquotes(t_list *tokenizer);

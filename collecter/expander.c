@@ -6,13 +6,13 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 00:43:51 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:27:35 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 
-void	expande(t_list *head, t_voidlst *myenv, t_voidlst **origin)
+void	expande(t_list *head, t_voidlst *myenv, t_list **origin)
 {
 	t_token		*mytoken;
 	char		*string_value;
@@ -29,10 +29,10 @@ void	expande(t_list *head, t_voidlst *myenv, t_voidlst **origin)
 			add_multi_nodes(origin, sub_lst);
 	}
 	else if (mytoken->token == QUOTE || (mytoken->token == DLR && ft_strlen(mytoken->str) == 1))
-		add_back(origin, new_node(mytoken));
+		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str, mytoken->token)));
 }
 
-void	command_expansion(t_voidlst **origin, t_list **head, t_voidlst *myenv)
+void	command_expansion(t_list **origin, t_list **head, t_voidlst *myenv)
 {
 	t_token		*mytoken;
 	
@@ -40,6 +40,6 @@ void	command_expansion(t_voidlst **origin, t_list **head, t_voidlst *myenv)
 	if ((mytoken->token == DLR || mytoken->token == QUOTE))
 		expande(*head, myenv, origin);
 	else
-		add_back(origin, new_node(mytoken));
+		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str, mytoken->token)));
 }
 

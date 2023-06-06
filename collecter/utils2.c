@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 22:54:33 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:55:00 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,13 @@ t_list	*esc_sp_after_spechar(t_list *head)
 			if (head->prev && (token == WORD || token == QUOTE
 					|| token == S_QUOTE || token == DLR))
 			{
-				ft_lstadd_back(&newlist, ft_lstnew(head->content));
+				ft_lstadd_back(&newlist, ft_lstnew(new_token(head->content->str, head->content->token)));
 			}
 			head = head->next;
 			continue ;
 		}
-		ft_lstadd_back(&newlist, ft_lstnew(head->content));
+		ft_lstadd_back(&newlist, ft_lstnew(new_token(head->content->str, head->content->token)));
 		head = head->next;
 	}
-	return (newlist);
+	return (free_linked_list(old_head), newlist);
 }

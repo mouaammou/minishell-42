@@ -6,17 +6,17 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 02:59:45 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:29:25 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 
-void	add_multi_nodes(t_voidlst **origin, t_voidlst *newlist)
+void	add_multi_nodes(t_list **origin, t_voidlst *newlist)
 {
 	while (newlist)
 	{
-		add_back(origin, new_node(newlist->content));
+		ft_lstadd_back(origin, ft_lstnew(newlist->content));
 		newlist = newlist->next;
 	}
 }
@@ -28,7 +28,7 @@ int	is_redirect(int token)
 	return (0);
 }
 
-int	handle_redirection(t_cmds **tmp_list, t_list **head, t_voidlst *myenv, int mytoken)
+int	handle_redirection(t_list **newlist, t_list **head, t_voidlst *myenv, int mytoken)
 {
 	char *join_str;
 
@@ -44,28 +44,33 @@ int	handle_redirection(t_cmds **tmp_list, t_list **head, t_voidlst *myenv, int m
 		printf("❌❌ %s: %s❌\n", join_str, "ambiguous redirect");
 		return (0);
 	}
-	add_back(&((*tmp_list)->redirects), new_node(new_token(join_str, mytoken)));
+	ft_lstadd_back(newlist, ft_lstnew(new_token(join_str, mytoken)));
 	return (1);
 }
 
-int	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv)
+int	handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv)
 {
 	int		mytoken;
 
-	*tmp_list = node_collecter((t_cmds){NULL, NULL});
-	while ((*head) && (*head)->content->token != PIPE)
+	while ((*head))
 	{
 		mytoken = (*head)->content->token;
-		if (mytoken == WORD || mytoken == QUOTE || mytoken == DLR || mytoken == DB_DLR
-			|| mytoken == S_QUOTE || mytoken == ESP || mytoken == QST_MARK)
+		if (is_redirect(mytoken))
+		{
+			if (mytoken == HERE_DOC)
 			{
-				command_expansion(&((*tmp_list)->commands), head, myenv);
+				// (*head) = (*head)->next;
+				handle_heredoc(head, myenv);
 				(*head) = (*head)->next;
 			}
-		else if (is_redirect(mytoken))
-		{
-			if (!handle_redirection(tmp_list, head, myenv, mytoken))
+			else 
+			if (!handle_redirection(newlist, head, myenv, mytoken))
 				return (0);
+		}
+		else
+		{
+			command_expansion(newlist, head, myenv);
+			(*head) = (*head)->next;
 		}
 	}
 	return (1);
@@ -83,22 +88,17 @@ t_cmds	*node_collecter(t_cmds args)
 	return (new_collecter);
 }
 
-t_voidlst	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
+t_list	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
 {
-	t_voidlst	*collecter;
-	t_cmds		*tmp_list;
+	t_list		*new_list;
 	t_list		*tmphead;
 
-	collecter = NULL;
-	tmp_list = NULL;
 	tmphead = tokenizer;
+	new_list = NULL;
 	while (tokenizer)
 	{
-		if (!handle_cmd(&tmp_list, &tokenizer, myenv))
+		if (!handle_cmd(&new_list, &tokenizer, myenv))
 			return (NULL);
-		add_back(&collecter, new_node(tmp_list));
-		if (tokenizer && tokenizer->content->token == PIPE)
-			tokenizer = tokenizer->next;
 	}
-	return (collecter);
+	return (free_linked_list(tmphead), new_list);
 }

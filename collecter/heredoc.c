@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 22:38:55 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:34:12 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,42 +32,11 @@ char*	delete_char(char* str, char c) {
     return str;
 }
 
-char	*join_multi_var(char *str, t_voidlst *myenv)
-{
-	// char		*searched_str;
-	t_list		*db_quote_list;
-	char		*join;
-	myenv = NULL;
-	db_quote_list = NULL;
-	give_tokens(&db_quote_list, str);
-	
-	join = NULL;
-	while (db_quote_list)
-	{		
-		// searched_str = NULL;
-		// if (ft_strchr(db_quote_list->content->str, '$'))
-		// 	searched_str = search_for_key(db_quote_list->content->str + 1, myenv);
-		// if (searched_str)
-		// 	db_quote_list->content->str = searched_str;
-		// else if (ft_strchr(db_quote_list->content->str, '$')
-		// 	&& !manage_others(db_quote_list->content->str))
-		// 	db_quote_list->content->str = NULL;
-		// if (db_quote_list->content->str)
-		// 	join = ft_strjoin(join, db_quote_list->content->str);
-		// printf("new string :[%s]\n", ft_strtrim(db_quote_list->content->str, ft_strdup("'")));
-		printf("str: [%s] -- token: %d\n", db_quote_list->content->str, db_quote_list->content->token);
-		db_quote_list = db_quote_list->next;
-	}
-	printf("join : %s\n", join);
-	return (join);
-}
-
 void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 {
 	char	*delemiter;
 	char	*line;
 	char	*buffer;
-	char	*tmpstr;
 
 	buffer = NULL;
 	delemiter = ft_strjoin((*head)->next->content->str, ft_strdup("\n"));
@@ -80,23 +49,17 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 			ft_putstr_fd("\n", 1);
 			break ;
 		}
-		if (ft_strchr(line, '$') && (tmpstr = delete_last_char(ft_strdup(line))))
-		{
-			line = join_multi_var(tmpstr, myenv);
-			if (line)
-				line = ft_strjoin(line, ft_strdup("\n"));
-			free(tmpstr);
-		}
+		if (ft_strchr(line, '$'))
+			line = replace_all(line, myenv);
 		buffer = ft_strjoin(buffer, line);
 	}
 	free(delemiter);
 	if (buffer)
 		write(*fd, buffer, ft_strlen(buffer));
 	free(buffer);
-	// exit (0);
 }
 
-void	handle_heredoc(t_list **head, t_voidlst *myenv)
+int	handle_heredoc(t_list **head, t_voidlst *myenv)
 {
 	char		*str;
 	int			fd;
@@ -107,10 +70,14 @@ void	handle_heredoc(t_list **head, t_voidlst *myenv)
 	str = ft_strjoin(ft_strdup("/tmp/file"), int_str);
 	fd = open(str, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
-		ft_error("bad file descriptor\n", 3);
+	{
+		printf("❌❌ bad file descriptor\n");
+		return (0);
+	}
 	manage_heredoc(head, &fd, myenv);
 	free((*head)->content->str);
-	(*head)->content->token = RE_IN;
-	(*head)->content->str = str;
+	ft_lstadd_back(head, ft_lstnew(new_token(str, RE_IN)));
 	close (fd);
+	// (*head) = (*head)->next;
+	return (1);
 }
