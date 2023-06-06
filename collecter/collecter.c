@@ -60,8 +60,6 @@ void	affiche(t_list *head)
 	}
 }
 
-
-
 int	main(int ac, char **av, char **env)
 {
 	t_list		*head;
@@ -69,6 +67,10 @@ int	main(int ac, char **av, char **env)
 	char		*trimed_str;
 	t_list		*newhead;
 	t_voidlst	*expander_list;
+
+	g_dollars.two_dollars = "**";
+	g_dollars.one_dollar = "+";
+	g_dollars.qts_mark = "??";
 
 	(void)ac;
 	(void)av;
@@ -78,7 +80,7 @@ int	main(int ac, char **av, char **env)
 		str = readline("\033[1;35mminishell>>: \033[0m");
 		add_history(str);
 		trimed_str = ft_strtrim(str, " ");
-		if (!give_tokens(&head, trimed_str, 0))
+		if (!give_tokens(&head, trimed_str))
 		{
 			myfree_func(head, trimed_str, str);
 			continue;
@@ -91,6 +93,7 @@ int	main(int ac, char **av, char **env)
 		newhead = esc_sp_after_spechar(head);
 		expander_list = bash_collecter(newhead, take_env(env));
 		display_collecter(expander_list);
+		// myfree_func(head, trimed_str, str);
 	}
 	// newhead = token_dbquotes(newhead);
 	// newhead = concatenate_strings(newhead);

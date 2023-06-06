@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/04 14:15:33 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:38:55 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*join_multi_var(char *str, t_voidlst *myenv)
 	char		*join;
 	myenv = NULL;
 	db_quote_list = NULL;
-	give_tokens(&db_quote_list, str, 0);
+	give_tokens(&db_quote_list, str);
 	
 	join = NULL;
 	while (db_quote_list)

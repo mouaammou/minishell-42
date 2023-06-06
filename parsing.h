@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/03 23:27:53 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 00:48:18 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,11 @@ int		check_token(t_list *node, int mytoken1, int mytoken2, int flag);
 int		syntax_error(char *str, char *token_value);
 int		check_syntax(t_list *newlist);
 void	free_nodes(t_list *head);
-int		give_tokens(t_list **tokenizer, char *str, int flag);
+int		give_tokens(t_list **tokenizer, char *str);
 t_token	*get_quotes_content(char *str, int *i, char qts);
 int		token_quotes(t_list **mylist, char *str, int *i, int token);
 int		tokeni_mychar(t_list **mylist, char *str, int *i, int value);
-int		token_spechars(t_list **mylist, char *str, int *i, int flag);
+int		token_spechars(t_list **mylist, char *str, int *i);
 char	*token_word(char *str, int *i, int start);
 char	*token_var(char *str, int *i, int start);
 int		set_token_word(int token, t_list **mylist, int *i, char *str);
@@ -68,7 +68,6 @@ void	free_linked_list(t_list *head);
 /* start collecter functions */
 int		str_cmp(const char *s1, const char *s2);
 int		count_pipes(t_list *head);
-void	handle_cmd(t_cmds **tmp_list, t_list **head, t_voidlst *myenv);
 t_voidlst	*bash_collecter(t_list *head, t_voidlst *myenv);
 t_list *esc_sp_after_spechar(t_list *head);
 void	free_all(char **tab);

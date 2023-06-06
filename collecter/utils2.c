@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/31 22:36:59 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:54:33 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,5 @@ t_list	*esc_sp_after_spechar(t_list *head)
 		ft_lstadd_back(&newlist, ft_lstnew(head->content));
 		head = head->next;
 	}
-	return (free_nodes(old_head), newlist);
+	return (newlist);
 }

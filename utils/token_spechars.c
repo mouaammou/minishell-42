@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/03 19:32:07 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:38:13 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,23 +68,16 @@ int	tokeni_mychar(t_list **mylist, char *str, int *i, int value)
 	return (0);
 }
 
-int	spechars_pase_1(t_list **mylist, char *str, int *i, int flag)
+int	spechars_pase_1(t_list **mylist, char *str, int *i)
 {
-	int	mytoken;
-
-	mytoken = QUOTE;
 	if (str[*i] == '|')
 	{
-		if (!flag)
-			mytoken = PIPE;
-		if (!tokeni_mychar(mylist, str, i, mytoken))
+		if (!tokeni_mychar(mylist, str, i, PIPE))
 			return (0);
 	}
 	else if (str[*i] == ' ')
 	{
-		if (!flag)
-			mytoken = ESP;
-		if (!tokeni_mychar(mylist, str, i, mytoken))
+		if (!tokeni_mychar(mylist, str, i, ESP))
 			return (0);
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] == '<')
@@ -96,11 +89,8 @@ int	spechars_pase_1(t_list **mylist, char *str, int *i, int flag)
 	return (1);
 }
 
-int	spechars_pase_2(t_list **mylist, char *str, int *i, int flag)
+int	spechars_pase_2(t_list **mylist, char *str, int *i)
 {
-	int	mytoken;
-
-	mytoken = QUOTE;
 	if (str[*i] == '>' && str[(*i) + 1] == '>')
 	{
 		if (!tokeni_mychar(mylist, str, i, RE_APPEND))
@@ -109,26 +99,22 @@ int	spechars_pase_2(t_list **mylist, char *str, int *i, int flag)
 	}
 	else if (str[*i] == '<' && str[(*i) + 1] != '<')
 	{
-		if (!flag)
-			mytoken = RE_IN;
-		if (!tokeni_mychar(mylist, str, i, mytoken))
+		if (!tokeni_mychar(mylist, str, i, RE_IN))
 			return (0);
 	}
 	else if (str[*i] == '>' && str[(*i) + 1] != '>')
 	{
-		if (!flag)
-			mytoken = RE_OUT;
-		if (!tokeni_mychar(mylist, str, i, mytoken))
+		if (!tokeni_mychar(mylist, str, i, RE_OUT))
 			return (0);
 	}
 	return (1);
 }
 
-int	token_spechars(t_list **mylist, char *str, int *i, int flag)
+int	token_spechars(t_list **mylist, char *str, int *i)
 {
-	if (!spechars_pase_1(mylist, str, i, flag))
+	if (!spechars_pase_1(mylist, str, i))
 		return (0);
-	else if (!spechars_pase_2(mylist, str, i, flag))
+	else if (!spechars_pase_2(mylist, str, i))
 		return (0);
 	return (1);
 }
