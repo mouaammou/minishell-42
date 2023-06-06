@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:50 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 22:38:13 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 03:27:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_token	*get_quotes_content(char *str, int *i, char qts)
 	if (str[*i] == qts)
 		(*i)++;
 	else
-		return (free(mytoken), msg_error("Err: quotes not close"));
+		return (free(mytoken), msg_error("❌❌ quotes not close"));
 	mytoken->str = ft_substr(str, start, j);
 	return (mytoken);
 }

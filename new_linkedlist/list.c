@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/20 16:17:30 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/22 18:16:39 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 03:37:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_voidlst	*last_node(t_voidlst *lst)
 	return (lst);
 }
 
-int	last_size(t_voidlst *lst)
+int	list_size(t_voidlst *lst)
 {
 	int	count;
 

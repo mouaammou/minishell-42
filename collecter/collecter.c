@@ -60,6 +60,47 @@ void	affiche(t_list *head)
 	}
 }
 
+char	*concate_strings(t_voidlst **cmds)
+{
+	t_token		*mytoken1;
+	char		*join;
+
+	join = NULL;
+	while (cmds && (*cmds) && is_word(mytoken1->token))
+	{
+		mytoken1 = (*cmds)->content;
+		join = ft_strjoin(join, mytoken1->str);
+		(*cmds) = (*cmds)->next;
+	}
+	return (join);
+}
+
+t_voidlst	*bash_concate(t_voidlst	*expander)
+{
+	t_cmds		*tmp;
+	t_voidlst	*cmds;
+	t_token		*mytoken;
+	// char		*concate_str;
+
+	while (expander)
+	{
+
+		tmp = expander->content;
+		cmds = tmp->commands;
+		while (cmds)
+		{
+			mytoken = cmds->content;
+			// concate_str = concate_strings(&cmds);
+			// printf("concate string: %s\n", concate_str);
+			cmds = cmds->next;
+		}
+
+		expander = expander->next;
+	}
+	
+	return (NULL);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_list		*head;
@@ -77,7 +118,7 @@ int	main(int ac, char **av, char **env)
 	while (1)
 	{
 		head = NULL;
-		str = readline("\033[1;35mminishell>>: \033[0m");
+		str = readline("\033[1;35mminishell>> :\033[0m");
 		add_history(str);
 		trimed_str = ft_strtrim(str, " ");
 		if (!give_tokens(&head, trimed_str))
@@ -92,13 +133,11 @@ int	main(int ac, char **av, char **env)
 		}
 		newhead = esc_sp_after_spechar(head);
 		expander_list = bash_collecter(newhead, take_env(env));
+
+		/* CONCATENATION */
+		expander_list = bash_concate(expander_list);
+		/* CONCATENATION */
 		display_collecter(expander_list);
-		// myfree_func(head, trimed_str, str);
 	}
-	// newhead = token_dbquotes(newhead);
-	// newhead = concatenate_strings(newhead);
-	// affiche(newhead);
-	// exit (0);
-	// test the collecter of all tokens
 	return (0);
 }
