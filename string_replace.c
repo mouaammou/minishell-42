@@ -1,49 +1,85 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-void replace_str(char *phrase, const char *oldstring, const char *newstring) {
-    char *temp = NULL;
-    int oldlen = strlen(oldstring);
-    int newlen = strlen(newstring);
-    int phraselen = strlen(phrase);
+// Linked list node structure
+struct Node {
+    char* data;
+    struct Node* next;
+};
 
-    // Replace all occurrences of oldstring with newstring
-    while ((temp = strstr(phrase, oldstring)) != NULL) {
-        int prefixlen = temp - phrase;
-        int suffixlen = phraselen - (prefixlen + oldlen);
-        char result[1000]; // Assuming the maximum length of the new phrase is 1000
-
-        strncpy(result, phrase, prefixlen); // Copy the prefix
-        result[prefixlen] = '\0';
-
-        strcat(result, newstring); // Append the newstring
-        strcat(result, temp + oldlen); // Append the suffix
-
-        strcpy(phrase, result); // Copy the modified phrase back
-
-        phraselen = strlen(phrase); // Update the length of the modified phrase
+// Function to convert linked list content to char**
+char** convertLinkedListToCharDoublePointer(struct Node* head, int* count) {
+    // Count the number of nodes in the linked list
+    struct Node* current = head;
+    *count = 0;
+    while (current != NULL) {
+        (*count)++;
+        current = current->next;
     }
+
+    // Allocate memory for char** array
+    char** charArray = (char**)malloc(*count * sizeof(char*));
+
+    // Iterate through each node and convert string to char*
+    current = head;
+    int i = 0;
+    while (current != NULL) {
+        // Allocate memory for the char* and copy the string
+        charArray[i] = (char*)malloc((strlen(current->data) + 1) * sizeof(char));
+        strcpy(charArray[i], current->data);
+
+        current = current->next;
+        i++;
+    }
+
+    return charArray;
 }
 
-char	*get_string_inside_quote(char* str) {
-    char* start = strchr(str, '"');
-    if (start == NULL) return NULL;  // no quotes found
-    char* end = strchr(start+1, '"');
-    if (end == NULL) return NULL;  // mismatched quotes
-    size_t len = end - start - 1;
-    char* result = malloc(len+1);
-    if (result == NULL) return NULL;  // memory allocation error
-    strncpy(result, start+1, len);
-    result[len] = '\0';
-    return result;
+// Function to free memory allocated for char** array
+void freeCharDoublePointer(char** charArray, int count) {
+    for (int i = 0; i < count; i++) {
+        free(charArray[i]);
+    }
+    free(charArray);
 }
 
+// Main function for testing
 int main() {
+    // Example linked list
+    struct Node* head = NULL;
+    struct Node* second = NULL;
+    struct Node* third = NULL;
 
-    char* str = "asdfadsf";
-	char* result = get_string_inside_quote(str);
-	printf("%s\n", result);  // prints "fox jumps"
-	free(result);  // remember to free the allocated memory
+    head = (struct Node*)malloc(sizeof(struct Node));
+    second = (struct Node*)malloc(sizeof(struct Node));
+    third = (struct Node*)malloc(sizeof(struct Node));
+
+    head->data = "Hello";
+    head->next = second;
+
+    second->data = "World";
+    second->next = third;
+
+    third->data = "!";
+    third->next = NULL;
+
+    // Convert linked list content to char**
+    int count;
+    char** charArray = convertLinkedListToCharDoublePointer(head, &count);
+
+    // Print the converted char** array
+    for (int i = 0; i < count; i++) {
+        printf("%s\n", charArray[i]);
+    }
+
+    // Free memory allocated for char** array
+    freeCharDoublePointer(charArray, count);
+
+    // Free memory allocated for linked list
+    free(head);
+    free(second);
+    free(third);
 
     return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 03:02:05 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 03:55:33 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 # define  COLLECTER_H
 
 # include "../parsing.h"
+
+/******** END TYPEDEF STRUCT */
+typedef struct mylist
+{
+	char		**args;
+	t_voidlst	*redirects;
+}t_command;
 
 typedef struct cmd
 {

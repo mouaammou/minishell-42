@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 02:56:12 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 03:55:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,6 @@
 # define PREV 0
 # define NEXT 1
 # define BOTH 2
-
-/******** END TYPEDEF STRUCT */
-// typedef struct mylist
-// {
-// 	char		**args;
-// 	t_voidlst	*redirects;
-// }t_cmds;
-
 
 void	expand_multi_dollars(t_list *head, t_voidlst *myenv, t_voidlst **origin);
 int		is_word(int token);
