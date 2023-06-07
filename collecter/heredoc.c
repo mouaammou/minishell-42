@@ -6,30 +6,25 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 17:34:12 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 23:05:04 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
 
-char	*delete_last_char(char* str) {
-    int len;
+void	concate_in_heredoc(t_list **head, int *flag, char **delemiter)
+{
 	
-	len = ft_strlen(str);
-    if (len > 0) {
-        str[len-1] = '\0';
-    }
-	return (str);
-}
-
-
-char*	delete_char(char* str, char c) {
-    char* p = ft_strchr(str, c);
-
-    if (p != NULL) {
-        ft_memmove(p, p + 1, ft_strlen(p));
-    }
-    return str;
+	*delemiter = NULL;
+	(*head) = (*head)->next;
+	while ((*head) && (*head)->content->token != ESP && !is_redirect((*head)->content->token))
+	{
+		if ((*head)->content->token == QUOTE || (*head)->content->token == S_QUOTE)
+			*flag = 1;
+		*delemiter = ft_strjoin(*delemiter, (*head)->content->str);
+		(*head) = (*head)->next;
+	}
+	*delemiter = ft_strjoin(*delemiter, ft_strdup("\n"));
 }
 
 void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
@@ -37,9 +32,11 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 	char	*delemiter;
 	char	*line;
 	char	*buffer;
+	int		flag;
 
 	buffer = NULL;
-	delemiter = ft_strjoin((*head)->next->content->str, ft_strdup("\n"));
+	flag = 0;
+	concate_in_heredoc(head, &flag, &delemiter);
 	while (1)
 	{
 		ft_putstr_fd("heredoc> ", 1);
@@ -49,7 +46,7 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 			ft_putstr_fd("\n", 1);
 			break ;
 		}
-		if (ft_strchr(line, '$'))
+		if (ft_strchr(line, '$') && !flag)
 			line = replace_all(line, myenv);
 		buffer = ft_strjoin(buffer, line);
 	}
@@ -59,7 +56,7 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 	free(buffer);
 }
 
-int	handle_heredoc(t_list **head, t_voidlst *myenv)
+int	handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv)
 {
 	char		*str;
 	int			fd;
@@ -75,9 +72,7 @@ int	handle_heredoc(t_list **head, t_voidlst *myenv)
 		return (0);
 	}
 	manage_heredoc(head, &fd, myenv);
-	free((*head)->content->str);
-	ft_lstadd_back(head, ft_lstnew(new_token(str, RE_IN)));
+	ft_lstadd_back(newlist, ft_lstnew(new_token(str, RE_IN)));
 	close (fd);
-	// (*head) = (*head)->next;
 	return (1);
 }

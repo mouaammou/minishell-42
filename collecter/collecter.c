@@ -60,46 +60,58 @@ void	affiche(t_list *head)
 	}
 }
 
-char	*concate_strings(t_voidlst **cmds)
+char	*concate_strings(t_list **command)
 {
 	t_token		*mytoken1;
 	char		*join;
 
 	join = NULL;
-	while ((*cmds) && (mytoken1 = (*cmds)->content) && is_word(mytoken1->token))
+	while ((*command) && (mytoken1 = (*command)->content) && is_word(mytoken1->token))
 	{
 		join = ft_strjoin(join, mytoken1->str);
-		(*cmds) = (*cmds)->next;
+		(*command) = (*command)->next;
 	}
 	return (join);
 }
 
-t_voidlst	*bash_concate(t_voidlst	*expander)
+void	fill_mylist(t_list **expander, t_cmds **mynode_cmd)
 {
-	t_cmds		*tmp;
-	t_voidlst	*cmds;
 	t_token		*mytoken;
 	char		*concate_str;
 
+	*mynode_cmd = node_collecter((t_cmds){NULL, NULL});
+	while ((*expander) && (*expander)->content->token != PIPE)
+	{
+		mytoken = (*expander)->content;
+		if (is_word(mytoken->token) || mytoken->token == ESP)
+		{
+			if ((concate_str = concate_strings(expander)))
+				add_back(&((*mynode_cmd)->commands), new_node(new_token(concate_str, WORD)));
+			else
+				add_back(&((*mynode_cmd)->commands), new_node(new_token(mytoken->str, mytoken->token)));
+		}
+		else
+			add_back(&((*mynode_cmd)->redirects), new_node(new_token(mytoken->str, mytoken->token)));
+		if ((*expander))
+			(*expander) = (*expander)->next;
+	}
+}
 
+t_voidlst	*bash_concate(t_list *expander)
+{
+	t_cmds		*mynode_cmd;
+	t_voidlst	*parent_list;
+
+	mynode_cmd = NULL;
+	parent_list = NULL;
 	while (expander)
 	{
-
-		tmp = expander->content;
-		cmds = tmp->commands;
-		while (cmds)
-		{
-			mytoken = cmds->content;
-			concate_str = concate_strings(&cmds);
-			printf("concate string: %s\n", concate_str);
-			if (cmds)
-				cmds = cmds->next;
-		}
-
-		expander = expander->next;
+		fill_mylist(&expander, &mynode_cmd);
+		add_back(&parent_list, new_node(mynode_cmd));
+		if (expander)
+			expander = expander->next;
 	}
-	
-	return (NULL);
+	return (free_linked_list(expander), parent_list);
 }
 
 int	main(int ac, char **av, char **env)
@@ -107,19 +119,15 @@ int	main(int ac, char **av, char **env)
 	t_list		*head;
 	char		*str;
 	char		*trimed_str;
-	t_list		*newhead;
-	t_list	*expander_list;
-
-	g_dollars.two_dollars = "**";
-	g_dollars.one_dollar = "+";
-	g_dollars.qts_mark = "??";
+	t_list		*expander_list;
+	t_voidlst	*commands;
 
 	(void)ac;
 	(void)av;
 	while (1)
 	{
 		head = NULL;
-		str = readline("\033[1;35mminishell>> :\033[0m");
+		str = readline("\033[6;32mminishell>> :\033[0m");
 		add_history(str);
 		trimed_str = ft_strtrim(str, " ");
 		if (!give_tokens(&head, trimed_str))
@@ -132,14 +140,14 @@ int	main(int ac, char **av, char **env)
 			myfree_func(head, trimed_str, str);
 			continue;
 		}
-		newhead = esc_sp_after_spechar(head);
-		expander_list = bash_collecter(newhead, take_env(env));
+		head = esc_sp_after_spechar(head);
+		expander_list = bash_expander(head, take_env(env));
 
-		affiche(expander_list);
+		// affiche(expander_list);
 		/* CONCATENATION */
-		// expander_list = bash_concate(expander_list);
+		commands = bash_concate(expander_list);
 		/* CONCATENATION */
-		// display_collecter(expander_list);
+		display_collecter(commands);
 	}
 	return (0);
 }

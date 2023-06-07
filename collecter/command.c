@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 17:29:25 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 03:02:05 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	handle_redirection(t_list **newlist, t_list **head, t_voidlst *myenv, int my
 		printf("❌❌ %s: %s❌\n", join_str, "ambiguous redirect");
 		return (0);
 	}
-	ft_lstadd_back(newlist, ft_lstnew(new_token(join_str, mytoken)));
+	if (join_str)
+		ft_lstadd_back(newlist, ft_lstnew(new_token(join_str, mytoken)));
 	return (1);
 }
 
@@ -58,14 +59,12 @@ int	handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv)
 		if (is_redirect(mytoken))
 		{
 			if (mytoken == HERE_DOC)
-			{
-				// (*head) = (*head)->next;
-				handle_heredoc(head, myenv);
-				(*head) = (*head)->next;
-			}
+				handle_heredoc(newlist ,head, myenv);
 			else 
-			if (!handle_redirection(newlist, head, myenv, mytoken))
-				return (0);
+			{
+				if (!handle_redirection(newlist, head, myenv, mytoken))
+					return (0);	
+			}
 		}
 		else
 		{
@@ -88,7 +87,7 @@ t_cmds	*node_collecter(t_cmds args)
 	return (new_collecter);
 }
 
-t_list	*bash_collecter(t_list *tokenizer, t_voidlst *myenv)
+t_list	*bash_expander(t_list *tokenizer, t_voidlst *myenv)
 {
 	t_list		*new_list;
 	t_list		*tmphead;

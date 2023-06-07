@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 22:31:45 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 02:17:35 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/06 23:11:47 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,35 +31,12 @@ char	*search_and_replace(t_token **mytoken, t_voidlst *myenv)
 	return (string_value);
 }
 
-char	*replace_others_values(char *old_str)
-{
-	int		flag;
-
-	flag = 1;
-	while (flag)
-	{
-		flag = 0;
-		if (ft_strnstr(old_str, "$$", ft_strlen(old_str)))
-		{
-			old_str = string_replace(old_str, "$$", g_dollars.two_dollars);
-			flag = 1;
-		}
-		if (ft_strnstr(old_str, "$?", ft_strlen(old_str)))
-		{
-			old_str = string_replace(old_str, "$?", g_dollars.qts_mark);
-			flag = 1;
-		}
-	}
-	return (old_str);
-}
-
 char	*replace_all(char *old_str, t_voidlst *myenv)
 {
 	int			index;
 	char		*string_key;
 	char		*string_value;
 	
-	// old_str = replace_others_values(old_str);
 	index = string_index(old_str, '$', 0);
 	while (index != -1)
 	{

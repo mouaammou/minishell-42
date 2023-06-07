@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 17:17:21 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 03:02:05 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,6 @@ typedef struct s_env
 	char	*value;
 }t_env;
 
-typedef struct vars
-{
-	char	*two_dollars;
-	char	*one_dollar;
-	char	*qts_mark;
-}t_vars;
-
-t_vars g_dollars;
-
-
 //string_replace.c
 char	*search_and_replace(t_token **mytoken, t_voidlst *myenv);
 char	*replace_all(char *old_str, t_voidlst *myenv);
@@ -48,7 +38,8 @@ char	*string_replace(char *phrase, char *oldstring, char *newstring);
 void		add_multi_nodes(t_list **origin, t_voidlst *newlist);
 int			handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv);
 t_cmds		*node_collecter(t_cmds args);
-t_list		*bash_collecter(t_list *tokenizer, t_voidlst *myenv);
+t_list		*bash_expander(t_list *tokenizer, t_voidlst *myenv);
+int			is_redirect(int token);
 
 //expander.c
 char		*manage_others(char *str);
@@ -57,7 +48,7 @@ void		command_expansion(t_list **origin, t_list **head, t_voidlst *myenv);
 
 //heredoc.c
 void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv);
-int		handle_heredoc(t_list **head, t_voidlst *myenv);
+int		handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv);
 
 //token_db_quotes.c
 t_list		*token_dbquotes(t_list *tokenizer);
