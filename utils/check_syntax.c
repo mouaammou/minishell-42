@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:45:51 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 15:40:34 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 17:50:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,19 @@ int	check_syntax(t_list *newlist)
 		token_str = newlist->content->str;
 		if (token_var == PIPE
 			&& !check_token(newlist, WORD, WORD, BOTH))
-			return (syntax_error("Syntax Error near: ", token_str));
+			return (syntax_error("❌❌ Syntax Error near: ", token_str));
 		if (token_var == RE_OUT
 			&& !check_token(newlist, WHATEVER, WORD, NEXT))
-			return (syntax_error("Syntax Error near: ", token_str));
+			return (syntax_error("❌❌ Syntax Error near: ", token_str));
 		if (token_var == RE_IN
 			&& !check_token(newlist, WHATEVER, WORD, NEXT))
-			return (syntax_error("Syntax Error near: ", token_str));
+			return (syntax_error("❌❌ Syntax Error near: ", token_str));
 		if (token_var == HERE_DOC
 			&& !check_token(newlist, WHATEVER, WORD, NEXT))
-			return (syntax_error("Syntax Error near: ", token_str));
+			return (syntax_error("❌❌ Syntax Error near: ", token_str));
 		if (token_var == RE_APPEND
 			&& !check_token(newlist, WHATEVER, WORD, NEXT))
-			return (syntax_error("Syntax Error near: ", token_str));
+			return (syntax_error("❌❌ Syntax Error near: ", token_str));
 		newlist = newlist->next;
 	}
 	return (1);

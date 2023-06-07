@@ -18,7 +18,37 @@
 #define BLUE  "\033[1;34m"
 #define RESET "\033[0m"
 
-void	display_collecter(t_voidlst *h_list)
+
+
+void	display(t_voidlst *h_list)
+{
+	int i = 1;
+	while (h_list)
+	{
+		t_cmds *tmp = h_list->content;
+		t_voidlst	*cmds = tmp->commands;
+		t_voidlst	*redirs = tmp->redirects;
+		printf("command: %d\n", i);
+		while (cmds)
+		{
+			t_token *token1 = cmds->content;
+			printf("\t[%s]  token: %d\n", token1->str, token1->token);
+			cmds = cmds->next;
+		}
+		printf("\nredirects\n");
+		while (redirs)
+		{
+			t_token *mytoken1 = redirs->content;
+			printf("\t[%s]  token: [%d]\n", mytoken1->str, mytoken1->token);
+			redirs = redirs->next;
+		}
+		printf("\n");
+		i++;
+		h_list = h_list->next;
+	}
+}
+
+void	display_args(t_voidlst *h_list)
 {
 	int i = 1;
 	while (h_list)
@@ -29,17 +59,16 @@ void	display_collecter(t_voidlst *h_list)
 		printf("command: %d\n", i);
 		while (*cmds)
 		{
-			printf("\t[%s]\n", *cmds);
+			printf("\t{%s}\n", *cmds);
 			cmds++;
 		}
 		printf("\nredirects\n");
-		printf(" **********--> %p\n", redirs);
-		// while (redirs)
-		// {
-		// 	t_token *mytoken1 = redirs->content;
-		// 	printf("\t[%s]  token: [%d]\n", mytoken1->str, mytoken1->token);
-		// 	redirs = redirs->next;
-		// }
+		while (redirs)
+		{
+			t_token *mytoken1 = redirs->content;
+			printf("\t[%s]  token: [%d]\n", mytoken1->str, mytoken1->token);
+			redirs = redirs->next;
+		}
 		printf("\n");
 		i++;
 		h_list = h_list->next;
@@ -71,6 +100,8 @@ char	*concate_strings(t_list **command)
 		join = ft_strjoin(join, mytoken1->str);
 		(*command) = (*command)->next;
 	}
+	if (is_redirect(mytoken1->token))
+		(*command) = (*command)->prev;
 	return (join);
 }
 
@@ -108,7 +139,7 @@ t_voidlst	*bash_concate(t_list *expander)
 	{
 		fill_mylist(&expander, &mynode_cmd);
 		add_back(&parent_list, new_node(mynode_cmd));
-		if (expander)
+		if (expander && expander->content->token == PIPE)
 			expander = expander->next;
 	}
 	return (free_linked_list(expander), parent_list);
@@ -160,7 +191,6 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 			mycommand->redirects = redirs;
 		else
 			mycommand->redirects = NULL;
-		// printf(" **** %p\n", redirs);
 		add_back(&new_list, new_node(mycommand));
 		h_list = h_list->next;
 	}
@@ -197,7 +227,9 @@ int	main(int ac, char **av, char **env)
 		expander_list = bash_expander(head, take_env(env));
 		commands = bash_concate(expander_list);
 		commands = parse_to_args(commands);
-		display_collecter(commands);
+		display_args(commands);
+		// display(commands);
+		// affiche(expander_list);
 	}
 	return (0);
 }
