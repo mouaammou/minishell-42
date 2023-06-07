@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 03:02:05 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 21:13:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ int	is_redirect(int token)
 
 int	handle_redirection(t_list **newlist, t_list **head, t_voidlst *myenv, int mytoken)
 {
-	char *join_str;
+	char 	*join_str;
 
 	join_str = NULL;
 	(*head) = (*head)->next;
-	while ((*head) && (*head)->content->token != ESP && !is_redirect((*head)->content->token))
+	while ((*head) && (*head)->content->token != ESP
+		&& (*head)->content->token != PIPE
+		&& !is_redirect((*head)->content->token))
 	{
 		join_str = ft_strjoin(join_str, replace_all((*head)->content->str, myenv));
 		(*head) = (*head)->next;
@@ -59,7 +61,10 @@ int	handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv)
 		if (is_redirect(mytoken))
 		{
 			if (mytoken == HERE_DOC)
-				handle_heredoc(newlist ,head, myenv);
+			{
+				if (!handle_heredoc(newlist ,head, myenv))
+					return (0);
+			}
 			else 
 			{
 				if (!handle_redirection(newlist, head, myenv, mytoken))

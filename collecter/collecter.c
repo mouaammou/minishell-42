@@ -18,8 +18,6 @@
 #define BLUE  "\033[1;34m"
 #define RESET "\033[0m"
 
-
-
 void	display(t_voidlst *h_list)
 {
 	int i = 1;
@@ -55,7 +53,7 @@ void	display_args(t_voidlst *h_list)
 	{
 		t_command *tmp = h_list->content;
 		char		**cmds = tmp->args;
-		t_voidlst	*redirs = tmp->redirects;
+		t_voidlst	*redirs = tmp->redirections;
 		printf("command: %d\n", i);
 		while (*cmds)
 		{
@@ -105,12 +103,14 @@ char	*concate_strings(t_list **command)
 	return (join);
 }
 
-void	fill_mylist(t_list **expander, t_cmds **mynode_cmd)
+int	fill_mylist(t_list **expander, t_cmds **mynode_cmd)
 {
 	t_token		*mytoken;
 	char		*concate_str;
 
 	*mynode_cmd = node_collecter((t_cmds){NULL, NULL});
+	if (!*mynode_cmd)
+		return (0);
 	while ((*expander) && (*expander)->content->token != PIPE)
 	{
 		mytoken = (*expander)->content;
@@ -126,23 +126,27 @@ void	fill_mylist(t_list **expander, t_cmds **mynode_cmd)
 		if ((*expander))
 			(*expander) = (*expander)->next;
 	}
+	return (1);
 }
 
 t_voidlst	*bash_concate(t_list *expander)
 {
 	t_cmds		*mynode_cmd;
 	t_voidlst	*parent_list;
+	t_list		*tmp;
 
 	mynode_cmd = NULL;
 	parent_list = NULL;
+	tmp = expander;
 	while (expander)
 	{
-		fill_mylist(&expander, &mynode_cmd);
+		if (!fill_mylist(&expander, &mynode_cmd))
+			return (NULL);
 		add_back(&parent_list, new_node(mynode_cmd));
 		if (expander && expander->content->token == PIPE)
 			expander = expander->next;
 	}
-	return (free_linked_list(expander), parent_list);
+	return (free_linked_list(tmp), parent_list);
 }
 
 t_command	*allocate_my_command(t_voidlst	*cmds)
@@ -163,12 +167,51 @@ t_command	*allocate_my_command(t_voidlst	*cmds)
 	while (cmds)
 	{
 		mytoken = cmds->content;
-		if (mytoken)
+		if (mytoken && mytoken->token != ESP)
 			mycommand->args[i++] = ft_strdup(mytoken->str);
 		cmds = cmds->next;
 	}
 	mycommand->args[i] = NULL;
 	return (mycommand);
+}
+
+void	free_voidlst(t_voidlst	*list)
+{
+	t_voidlst	*tmp;
+	t_token		*mytoken;
+
+	while (list)
+	{
+		mytoken = list->content;
+		tmp = list->next;
+		free(mytoken->str);
+		free(mytoken);
+		free(list);
+		list = tmp;
+	}
+}
+
+void	free_big_list(t_voidlst	*biglist)
+{
+	t_cmds		*tmp;
+	t_voidlst	*cmds;
+	t_voidlst	*redirs;
+	t_voidlst	*temp_list;
+
+	while (biglist)
+	{
+		tmp = biglist->content;
+		cmds = tmp->commands;
+		redirs = tmp->redirects;
+		temp_list = biglist->next;
+
+		free_voidlst(cmds);
+		free_voidlst(redirs);
+		free(tmp);
+		free(biglist);
+
+		biglist = temp_list;
+	}
 }
 
 t_voidlst	*parse_to_args(t_voidlst *h_list)
@@ -178,8 +221,11 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 	t_voidlst	*redirs;
 	t_command	*mycommand;
 	t_voidlst	*new_list;
+	t_token		*mytoken;
+	t_voidlst	*temp_list;
 
 	new_list = NULL;
+	temp_list = h_list;
 	while (h_list)
 	{
 		tmp = h_list->content;
@@ -187,14 +233,19 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 		redirs = tmp->redirects;
 		if (!(mycommand = allocate_my_command(cmds)))
 			return (NULL);
-		if (redirs)
-			mycommand->redirects = redirs;
-		else
-			mycommand->redirects = NULL;
+		mycommand->redirections = NULL;
+		if (!redirs)
+			mycommand->redirections = NULL;
+		while (redirs)
+		{
+			mytoken = redirs->content;
+			add_back(&mycommand->redirections, new_node(new_token(mytoken->str, mytoken->token)));
+			redirs = redirs->next;
+		}
 		add_back(&new_list, new_node(mycommand));
 		h_list = h_list->next;
 	}
-	return (new_list);
+	return (free_big_list(temp_list), new_list);
 }
 
 int	main(int ac, char **av, char **env)

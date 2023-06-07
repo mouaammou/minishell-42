@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/05 22:37:08 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:53:07 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ int	tokens_part_1(t_list **tokenizer, char *str, int *i)
 {
 	if (ft_isalnum(str[*i]) || !myspechars(str[*i]))
 	{
-		if (!set_token_word(WORD, tokenizer, i, str))
+		if (!set_token_word(tokenizer, i, str))
 			return (0);
 	}
 	else if (str[*i] == '$' && str[*i + 1] != '$' && str[*i + 1] != '?')
 	{
-		if (!set_token_var(DLR, tokenizer, i, str))
+		if (!set_token_var(tokenizer, i, str))
 			return (0);
 	}
 	else if (str[*i] == '$' && str[*i + 1] == '$')

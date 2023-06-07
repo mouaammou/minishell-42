@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 16:55:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 19:05:26 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,8 @@ t_list	*esc_sp_after_spechar(t_list *head)
 	{
 		if (head->content->token == ESP)
 		{
-			token = head->prev->content->token;
-			if (head->prev && (token == WORD || token == QUOTE
-					|| token == S_QUOTE || token == DLR))
+			if (head->prev && (token = head->prev->content->token)
+				&& (is_word(token)))
 			{
 				ft_lstadd_back(&newlist, ft_lstnew(new_token(head->content->str, head->content->token)));
 			}

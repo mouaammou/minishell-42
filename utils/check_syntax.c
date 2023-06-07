@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 16:45:51 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 17:50:07 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:45:43 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ int	check_token(t_list *node, int mytoken1, int mytoken2, int flag)
 	return (1);
 }
 
+int	check_pipe(t_list *node)
+{
+	int	next;
+	int	prev;
+
+	if (node->next)
+		next = node->next->content->token;
+	else
+		next = WHATEVER;
+	if (node->prev)
+		prev = node->prev->content->token;
+	else
+		prev = WHATEVER;
+	if (prev == WHATEVER || next == WHATEVER)
+		return (0);
+	return (1);
+}
+
 int	syntax_error(char *str, char *token_value)
 {
 	printf("%s'%s'\n", str, token_value);
@@ -53,7 +71,7 @@ int	check_syntax(t_list *newlist)
 		token_var = newlist->content->token;
 		token_str = newlist->content->str;
 		if (token_var == PIPE
-			&& !check_token(newlist, WORD, WORD, BOTH))
+			&& !check_pipe(newlist))
 			return (syntax_error("❌❌ Syntax Error near: ", token_str));
 		if (token_var == RE_OUT
 			&& !check_token(newlist, WHATEVER, WORD, NEXT))

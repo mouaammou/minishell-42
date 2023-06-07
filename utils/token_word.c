@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 17:03:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/28 22:02:22 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:52:57 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	*token_var(char *str, int *i, int start)
 	return (ft_substr(str, start, j + 1));
 }
 
-int	set_token_word(int token, t_list **mylist, int *i, char *str)
+int	set_token_word(t_list **mylist, int *i, char *str)
 {
 	int		start;
 	t_token	*mytoken;
@@ -49,13 +49,13 @@ int	set_token_word(int token, t_list **mylist, int *i, char *str)
 	if (!mytoken)
 		return (0);
 	mytoken->str = token_word(str, i, start);
-	mytoken->token = token;
+	mytoken->token = WORD;
 	if (mytoken->str)
 		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)), 1);
 	return (0);
 }
 
-int	set_token_var(int token, t_list **mylist, int *i, char *str)
+int	set_token_var(t_list **mylist, int *i, char *str)
 {
 	int		start;
 	t_token	*mytoken;
@@ -65,7 +65,7 @@ int	set_token_var(int token, t_list **mylist, int *i, char *str)
 	if (!mytoken)
 		return (0);
 	mytoken->str = token_var(str, i, start);
-	mytoken->token = token;
+	mytoken->token = DLR;
 	if (mytoken->str)
 		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)), 1);
 	return (0);

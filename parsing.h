@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 03:55:07 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:53:24 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ int		tokeni_mychar(t_list **mylist, char *str, int *i, int value);
 int		token_spechars(t_list **mylist, char *str, int *i);
 char	*token_word(char *str, int *i, int start);
 char	*token_var(char *str, int *i, int start);
-int		set_token_word(int token, t_list **mylist, int *i, char *str);
-int		set_token_var(int token, t_list **mylist, int *i, char *str);
+int		set_token_word(t_list **mylist, int *i, char *str);
+int		set_token_var(t_list **mylist, int *i, char *str);
 void	*msg_error(char *str);
 int		myfree_func(t_list *head, char *trimed_str, char *str);
 void	free_linked_list(t_list *head);
