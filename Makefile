@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/06/07 00:42:31 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/06/07 22:47:50 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,7 @@ CC = cc
 # BFILES  = ft_lstnew ft_lstadd_front ft_lstsize ft_lstlast \
 # 	   ft_lstadd_back ft_lstdelone ft_lstclear ft_lstiter ft_lstmap
 
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+# FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 SRCS = 	$(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) \
 		$(addprefix new_linkedlist/, list.c) \

@@ -95,7 +95,7 @@ char	*concate_strings(t_list **command)
 	join = NULL;
 	while ((*command) && (mytoken1 = (*command)->content) && is_word(mytoken1->token))
 	{
-		join = ft_strjoin(join, mytoken1->str);
+		join = ft_strjoin(join, ft_strdup(mytoken1->str));
 		(*command) = (*command)->next;
 	}
 	if (is_redirect(mytoken1->token))
@@ -117,7 +117,10 @@ int	fill_mylist(t_list **expander, t_cmds **mynode_cmd)
 		if (is_word(mytoken->token) || mytoken->token == ESP)
 		{
 			if ((concate_str = concate_strings(expander)))
+			{
 				add_back(&((*mynode_cmd)->commands), new_node(new_token(concate_str, WORD)));
+				free(concate_str);
+			}
 			else
 				add_back(&((*mynode_cmd)->commands), new_node(new_token(mytoken->str, mytoken->token)));
 		}
@@ -248,6 +251,23 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 	return (free_big_list(temp_list), new_list);
 }
 
+void	free_myenv(t_voidlst *list)
+{
+	t_voidlst	*tmp;
+	t_env		*myenv;
+
+	while (list)
+	{
+		myenv = list->content;
+		tmp = list->next;
+		free(myenv->key);
+		free(myenv->value);
+		free(myenv);
+		free(list);
+		list = tmp;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_list		*head;
@@ -255,9 +275,11 @@ int	main(int ac, char **av, char **env)
 	char		*trimed_str;
 	t_list		*expander_list;
 	t_voidlst	*commands;
+	t_voidlst	*myenv;
 
 	(void)ac;
 	(void)av;
+	atexit (leaks);
 	while (1)
 	{
 		head = NULL;
@@ -274,13 +296,17 @@ int	main(int ac, char **av, char **env)
 			myfree_func(head, trimed_str, str);
 			continue;
 		}
+		free(str);
+		free(trimed_str);
 		head = esc_sp_after_spechar(head);
-		expander_list = bash_expander(head, take_env(env));
+		myenv = take_env(env);
+		expander_list = bash_expander(head, myenv);
+		// free_linked_list(expander_list);
+		free_myenv(myenv);
 		commands = bash_concate(expander_list);
+		free_big_list(commands);
 		commands = parse_to_args(commands);
 		display_args(commands);
-		// display(commands);
-		// affiche(expander_list);
 	}
 	return (0);
 }

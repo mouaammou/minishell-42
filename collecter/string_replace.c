@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 22:31:45 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 23:11:47 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 22:53:18 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char	*string_replace(char *phrase, char *oldstring, char *newstring)
     ft_memcpy(new_phrase + index, newstring, newlen);
     ft_memcpy(new_phrase + index + newlen, phrase + index + oldlen, phraselen - index - oldlen);
     new_phrase[total_len] = '\0';
-    return (new_phrase);
+    return (free(phrase), new_phrase);
 }
 
 

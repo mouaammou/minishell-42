@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:20:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/05/30 13:27:29 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 22:35:11 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,10 @@ t_env	*split_key_value(char *env)
 	char	**split;
 	t_env	*key_value;
 
-	split = ft_split(env, '=');
 	key_value = malloc (sizeof (t_env));
 	if (!key_value)
-	{
-		perror("");
-		exit (EXIT_FAILURE);
-	}
+		return (NULL);
+	split = ft_split(env, '=');
 	key_value->key = ft_strdup(split[0]);
 	key_value->value = ft_substr(env, ft_strlen(split[0]) + 1, ft_strlen(env));
 	free_all(split);

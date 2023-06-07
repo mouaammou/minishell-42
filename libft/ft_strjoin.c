@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 23:05:56 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/01 18:54:24 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/07 22:51:04 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		j++;
 	}
 	join[i + j] = '\0';
-	return (/*free((char *)s1), free((char *)s2),*/ join);
+	return (free((char *)s1), free((char *)s2), join);
 }
