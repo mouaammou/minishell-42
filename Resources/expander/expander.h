@@ -6,14 +6,12 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:32:02 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 04:15:50 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COLLECTER_H
-# define  COLLECTER_H
-
-// # include "../parsing.h"
+#ifndef EXPANDER_H
+# define  EXPANDER_H
 
 /******** END TYPEDEF STRUCT */
 typedef struct mylist
@@ -35,11 +33,13 @@ typedef struct s_env
 }t_env;
 
 //string_replace.c
-char	*search_and_replace(t_token **mytoken, t_voidlst *myenv);
-char	*replace_all(char *old_str, t_voidlst *myenv);
-char	*var_string(char *str, int i, int start);
-int		string_index(char *str, char c, int i);
-char	*string_replace(char *phrase, char *oldstring, char *newstring);
+char		*search_and_replace(t_token **mytoken, t_voidlst *myenv);
+char		*replace_all(char *old_str, t_voidlst *myenv);
+char		*var_string(char *str, int i, int start);
+int			string_index(char *str, char c, int i);
+char		*string_replace(char *phrase, char *oldstring, char *newstring);
+int			ft_str_search_index(const char *haystack,
+				const char *needle, size_t len);
 
 //command.c
 void		add_multi_nodes(t_list **origin, t_voidlst *newlist);
@@ -54,8 +54,8 @@ void		command_expansion(t_list **origin, t_list **head, t_voidlst *myenv);
 // t_voidlst	*expander(t_list *head, t_voidlst *myenv);
 
 //heredoc.c
-void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv);
-int		handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv);
+void		manage_heredoc(t_list **head, int *fd, t_voidlst *myenv);
+int			handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv);
 
 //token_db_quotes.c
 t_list		*token_dbquotes(t_list *tokenizer);

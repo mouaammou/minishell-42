@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   compiler.h                                         :+:      :+:    :+:   */
+/*   list.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/07 23:23:01 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:06:57 by mouaammo         ###   ########.fr       */
+/*   Created: 2023/06/08 02:08:26 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/06/08 02:08:38 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMPILER_H
-# define  COMPILER_H
+#ifndef LIST_H
+# define  LIST_H
 
-int		is_word(int token);
-int		is_spechar(int token);
-t_list	*ighnore_space(t_list *head);
-t_list	*compiler(t_list *head);
+typedef struct list
+{
+	void			*content;
+	struct list		*next;
+	struct list		*prev;
+}	t_voidlst;
+
+void		add_back(t_voidlst **lst, t_voidlst *new);
+void		add_front(t_voidlst **lst, t_voidlst *new);
+t_voidlst	*new_node(void *content);
+t_voidlst	*last_node(t_voidlst *lst);
+int			list_size(t_voidlst *lst);
 
 #endif

@@ -1,5 +1,3 @@
-#########################
-#### variables
 CC = cc
 RM = rm -f
 AR = ar -crs

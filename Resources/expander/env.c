@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:20:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 23:20:57 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:18:41 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,3 @@ char	*search_for_key(char *str, t_voidlst *myenv)
 	}
 	return (NULL);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 15:45:21 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 23:26:44 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:06:38 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	is_word(int token)
 {
 	if ((token == DLR || token == S_QUOTE || token == WORD
-		|| token == QUOTE || token == DB_DLR || token == QST_MARK))
+			|| token == QUOTE || token == DB_DLR || token == QST_MARK))
 		return (1);
 	return (0);
 }
@@ -23,7 +23,7 @@ int	is_word(int token)
 int	is_spechar(int token)
 {
 	if ((token == PIPE || token == RE_APPEND || token == RE_IN
-	|| token == RE_OUT || token == HERE_DOC))
+			|| token == RE_OUT || token == HERE_DOC))
 		return (1);
 	return (0);
 }

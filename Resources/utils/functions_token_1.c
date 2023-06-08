@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 00:25:53 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:25:56 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:12:49 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	token_quotes(t_list **mylist, char *str, int *i, int token)
 		return (0);
 	mytoken->token = token;
 	if (mytoken->str)
-		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)) , 1);
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)), 1);
 	return (0);
 }
 
@@ -64,7 +64,7 @@ int	tokeni_mychar(t_list **mylist, char *str, int *i, int value)
 	mytoken->token = value;
 	(*i)++;
 	if (mytoken->str)
-		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)) , 1);
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)), 1);
 	return (0);
 }
 
@@ -109,5 +109,3 @@ int	spechars_pase_2(t_list **mylist, char *str, int *i)
 	}
 	return (1);
 }
-
-

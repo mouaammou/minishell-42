@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:47:57 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:21:32 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,16 @@ void	add_multi_nodes(t_list **origin, t_voidlst *newlist)
 
 int	is_redirect(int token)
 {
-	if (token == RE_APPEND || token == RE_IN || token == RE_OUT || token == HERE_DOC)
+	if (token == RE_APPEND || token == RE_IN
+		|| token == RE_OUT || token == HERE_DOC)
 		return (1);
 	return (0);
 }
 
-int	handle_redirection(t_list **newlist, t_list **head, t_voidlst *myenv, int mytoken)
+int	handle_redirection(t_list **newlist,
+	t_list **head, t_voidlst *myenv, int mytoken)
 {
-	char 	*join_str;
+	char	*join_str;
 
 	join_str = NULL;
 	(*head) = (*head)->next;
@@ -38,7 +40,8 @@ int	handle_redirection(t_list **newlist, t_list **head, t_voidlst *myenv, int my
 		&& (*head)->content->token != PIPE
 		&& !is_redirect((*head)->content->token))
 	{
-		join_str = ft_strjoin(join_str, ft_strdup(replace_all((*head)->content->str, myenv)));
+		join_str = ft_strjoin(join_str,
+				ft_strdup(replace_all((*head)->content->str, myenv)));
 		(*head) = (*head)->next;
 	}
 	if (ft_strchr(join_str, ' '))
@@ -62,13 +65,13 @@ int	handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv)
 		{
 			if (mytoken == HERE_DOC)
 			{
-				if (!handle_heredoc(newlist ,head, myenv))
+				if (!handle_heredoc(newlist, head, myenv))
 					return (0);
 			}
-			else 
+			else
 			{
 				if (!handle_redirection(newlist, head, myenv, mytoken))
-					return (0);	
+					return (0);
 			}
 		}
 		else
@@ -90,19 +93,4 @@ t_cmds	*node_collecter(t_cmds args)
 	new_collecter->commands = args.commands;
 	new_collecter->redirects = args.redirects;
 	return (new_collecter);
-}
-
-t_list	*bash_expander(t_list *tokenizer, t_voidlst *myenv)
-{
-	t_list		*new_list;
-	t_list		*tmphead;
-
-	tmphead = tokenizer;
-	new_list = NULL;
-	while (tokenizer)
-	{
-		if (!handle_cmd(&new_list, &tokenizer, myenv))
-			return (NULL);
-	}
-	return (free_linked_list(tmphead), new_list);
 }

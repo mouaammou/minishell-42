@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:31:37 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 04:39:40 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "readline/get_next_line.h"
-# include "new_linkedlist/list_header.h"
-# include "expander/expander.h"
+# include "new_linkedlist/list.h"
 # include "compiler/compiler.h"
 # include "tokenizer/tokenizer.h"
 # include "utils/utils.h"
+# include "expander/expander.h"
+# include "concate/concate.h"
+# include "parse_list/parser.h"
 
 # define PREV 0
 # define NEXT 1

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 23:21:04 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:33:58 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_token	*new_token(char *str, int token)
 	mytoken = malloc(sizeof (t_token));
 	if (!mytoken)
 		return (NULL);
-	mytoken->str =  ft_strdup(str);
+	mytoken->str = ft_strdup(str);
 	mytoken->token = token;
 	return (mytoken);
 }
@@ -76,30 +76,4 @@ int	str_cmp(const char *s1, const char *s2)
 		s2++;
 	}
 	return (*s1 - *s2);
-}
-
-t_list	*esc_sp_after_spechar(t_list *head)
-{
-	t_list	*newlist;
-	int		token;
-	t_list	*old_head;
-
-	old_head  = head;
-	newlist = NULL;
-	while (head)
-	{
-		if (head->content->token == ESP)
-		{
-			if (head->prev && (token = head->prev->content->token)
-				&& (is_word(token)))
-			{
-				ft_lstadd_back(&newlist, ft_lstnew(new_token(head->content->str, head->content->token)));
-			}
-			head = head->next;
-			continue ;
-		}
-		ft_lstadd_back(&newlist, ft_lstnew(new_token(head->content->str, head->content->token)));
-		head = head->next;
-	}
-	return (free_linked_list(old_head), newlist);
 }

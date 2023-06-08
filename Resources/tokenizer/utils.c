@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:31:05 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/07 23:32:31 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:11:46 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	token_db_dollar(t_list **mylist, int *i, int token)
 	mytoken->str = ft_strdup("$$");
 	mytoken->token = token;
 	if (mytoken->str)
-		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)) , 1);
+		return (ft_lstadd_back(mylist, ft_lstnew(mytoken)), 1);
 	return (0);
 }
 
@@ -44,7 +44,8 @@ int	token_qts_mark(t_list **mylist, int *i, int token)
 
 int	myspechars(char c)
 {
-	if (c == '|' || c == '<' || c == '>' || c == ' ' || c == '$' || c == '\"' || c == '\'')
+	if (c == '|' || c == '<' || c == '>' || c == ' '
+		|| c == '$' || c == '\"' || c == '\'')
 		return (1);
 	return (0);
 }
@@ -86,7 +87,7 @@ int	tokens_part_2(t_list **tokenizer, char *str, int *i)
 		if (!token_quotes(tokenizer, str, i, QUOTE))
 			return (0);
 	}
-	else if (str[*i] != '$'  && myspechars(str[*i]))
+	else if (str[*i] != '$' && myspechars(str[*i]))
 	{
 		if (!token_spechars(tokenizer, str, i))
 			return (0);

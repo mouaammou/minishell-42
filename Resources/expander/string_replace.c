@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 22:31:45 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:46:04 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:32:43 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*search_and_replace(t_token **mytoken, t_voidlst *myenv)
 	int			index;
 	char		*string_key;
 	char		*string_value;
-	
+
 	string_value = NULL;
 	if ((*mytoken)->token == QUOTE)
 		(*mytoken)->str = replace_all((*mytoken)->str, myenv);
@@ -26,7 +26,8 @@ char	*search_and_replace(t_token **mytoken, t_voidlst *myenv)
 		index = index_of_char((*mytoken)->str, '$');
 		string_key = token_var((*mytoken)->str, &index, index);
 		string_value = search_for_key(string_key + 1, myenv);
-		(*mytoken)->str = string_replace((*mytoken)->str, string_key, string_value);	
+		(*mytoken)->str = string_replace((*mytoken)->str,
+				string_key, string_value);
 	}
 	return (string_value);
 }
@@ -36,7 +37,7 @@ char	*replace_all(char *old_str, t_voidlst *myenv)
 	int			index;
 	char		*string_key;
 	char		*string_value;
-	
+
 	index = string_index(old_str, '$', 0);
 	while (index != -1)
 	{
@@ -52,7 +53,7 @@ char	*replace_all(char *old_str, t_voidlst *myenv)
 			string_value = ft_strdup("");
 			index--;
 		}
-		old_str = string_replace(old_str , string_key, string_value);
+		old_str = string_replace(old_str, string_key, string_value);
 		index++;
 		index = string_index(old_str, '$', index);
 	}
@@ -64,7 +65,7 @@ char	*var_string(char *str, int i, int start)
 	int	j;
 
 	j = 0;
-	while (str[++i] && (ft_isalnum(str[i]) ||  str[i] == '_'))
+	while (str[++i] && (ft_isalnum(str[i]) || str[i] == '_'))
 		j++;
 	return (ft_substr(str, start, j + 1));
 }
@@ -102,31 +103,3 @@ int	ft_str_search_index(const char *haystack, const char *needle, size_t len)
 	}
 	return (-1);
 }
-
-char	*string_replace(char *phrase, char *oldstring, char *newstring)
-{
-    int		oldlen;
-	int		newlen;
-	int		phraselen;
-	int		index;
-	char	*new_phrase;
-	int		total_len;
-
-	if (!oldstring || !newstring)
-		return (phrase);
-	oldlen = ft_strlen(oldstring);
-	newlen = ft_strlen(newstring);
-	phraselen = ft_strlen(phrase);
-	total_len = (phraselen + newlen - oldlen);
-	new_phrase = malloc(sizeof (char) * (total_len + 1));
-	if (!new_phrase)
-		return (NULL);
-	index = ft_str_search_index(phrase, oldstring, ft_strlen(phrase));
-    ft_memcpy(new_phrase, phrase, index);
-    ft_memcpy(new_phrase + index, newstring, newlen);
-    ft_memcpy(new_phrase + index + newlen, phrase + index + oldlen, phraselen - index - oldlen);
-    new_phrase[total_len] = '\0';
-    return (new_phrase);
-}
-
-

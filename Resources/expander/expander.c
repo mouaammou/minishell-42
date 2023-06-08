@@ -6,11 +6,26 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 16:27:35 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 04:00:58 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
+
+t_list	*bash_expander(t_list *tokenizer, t_voidlst *myenv)
+{
+	t_list		*new_list;
+	t_list		*tmphead;
+
+	tmphead = tokenizer;
+	new_list = NULL;
+	while (tokenizer)
+	{
+		if (!handle_cmd(&new_list, &tokenizer, myenv))
+			return (NULL);
+	}
+	return (free_linked_list(tmphead), new_list);
+}
 
 void	expande(t_list *head, t_voidlst *myenv, t_list **origin)
 {
@@ -28,18 +43,20 @@ void	expande(t_list *head, t_voidlst *myenv, t_list **origin)
 		if (sub_lst)
 			add_multi_nodes(origin, sub_lst);
 	}
-	else if (mytoken->token == QUOTE || (mytoken->token == DLR && ft_strlen(mytoken->str) == 1))
-		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str, mytoken->token)));
+	else if (mytoken->token == QUOTE || (mytoken->token == DLR
+			&& ft_strlen(mytoken->str) == 1))
+		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str,
+					mytoken->token)));
 }
 
 void	command_expansion(t_list **origin, t_list **head, t_voidlst *myenv)
 {
-	t_token		*mytoken;
-	
+	t_token	*mytoken;
+
 	mytoken = (*head)->content;
 	if ((mytoken->token == DLR || mytoken->token == QUOTE))
 		expande(*head, myenv, origin);
 	else
-		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str, mytoken->token)));
+		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str,
+					mytoken->token)));
 }
-

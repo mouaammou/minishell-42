@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 23:05:56 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:01:26 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:37:34 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,9 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	join = (char *) malloc (sizeof(char) * total + 1);
 	if (!join)
 		return (NULL);
-	i = 0;
-	while (s1[i])
-	{
+	i = -1;
+	while (s1[++i])
 		join[i] = s1[i];
-		i++;
-	}
 	j = 0;
 	while (s2[j])
 	{

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:49:49 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 02:24:19 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 void	concate_in_heredoc(t_list **head, int *flag, char **delemiter)
 {
-	
 	*delemiter = NULL;
 	(*head) = (*head)->next;
-	while ((*head) && (*head)->content->token != ESP && !is_redirect((*head)->content->token))
+	while ((*head) && (*head)->content->token != ESP
+		&& !is_redirect((*head)->content->token))
 	{
-		if ((*head)->content->token == QUOTE || (*head)->content->token == S_QUOTE)
+		if ((*head)->content->token == QUOTE
+			|| (*head)->content->token == S_QUOTE)
 			*flag = 1;
 		*delemiter = ft_strjoin(*delemiter, ft_strdup((*head)->content->str));
 		(*head) = (*head)->next;
@@ -61,7 +62,7 @@ int	handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv)
 	char		*str;
 	int			fd;
 	char		*int_str;
-	static		int	i;
+	static int	i;
 
 	int_str = ft_itoa(i++);
 	str = ft_strjoin(ft_strdup("/tmp/file"), int_str);

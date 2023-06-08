@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   list_header.h                                      :+:      :+:    :+:   */
+/*   concate.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/20 16:17:16 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/06 03:38:27 by mouaammo         ###   ########.fr       */
+/*   Created: 2023/06/08 02:47:08 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/06/08 04:16:51 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIST_H
-# define LIST_H
+#ifndef CONCATE_H
+# define CONCATE_H
 
-typedef struct list
-{
-	void			*content;
-	struct list		*next;
-	struct list		*prev;
-}	t_voidlst;
-
-void		add_back(t_voidlst **lst, t_voidlst *new);
-void		add_front(t_voidlst **lst, t_voidlst *new);
-t_voidlst	*new_node(void *content);
-t_voidlst	*last_node(t_voidlst *lst);
-int			list_size(t_voidlst *lst);
+char		*concate_strings(t_list **command);
+int			concate_all(t_token *mytoken, t_list **expander,
+				t_cmds **mynode_cmd);
+int			fill_mylist(t_list **expander, t_cmds **mynode_cmd);
+t_voidlst	*bash_concate(t_list *expander);
 
 #endif
