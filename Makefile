@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/06/07 22:47:50 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/06/08 00:58:24 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,24 +24,21 @@ CC = cc
 # BFILES  = ft_lstnew ft_lstadd_front ft_lstsize ft_lstlast \
 # 	   ft_lstadd_back ft_lstdelone ft_lstclear ft_lstiter ft_lstmap
 
-# FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
-SRCS = 	$(addprefix linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+SRCS = 	$(addprefix Resources/linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 		ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c) \
-		$(addprefix new_linkedlist/, list.c) \
-		$(addprefix tokenizer/, tokenizer.c) \
-		$(addprefix compiler/, compiler.c) \
-		$(addprefix utils/, token_spechars.c token_word.c utils.c check_syntax.c) \
-		$(addprefix collecter/, collecter.c command.c expander.c heredoc.c token_db_quotes.c utils1.c utils2.c string_replace.c) \
-		$(addprefix concate/, concatenation.c) \
+		$(addprefix Resources/new_linkedlist/, list.c) \
+		$(addprefix Resources/tokenizer/, tokenizer.c utils.c) \
+		$(addprefix Resources/compiler/, compiler.c) \
+		$(addprefix Resources/utils/, functions_token_1.c functions_token_2.c utils.c check_syntax.c) \
+		$(addprefix Resources/expander/, command.c expander.c heredoc.c utils.c string_replace.c env.c) \
+		$(addprefix Resources/readline/, get_next_line.c get_next_line_utils.c) \
+		main.c
 		
-
-READ_LINE = $(addprefix readline/, get_next_line.c get_next_line_utils.c)
-
-READ_LINE_OBJ = $(READ_LINE:.c=.o)
 OBJS = $(SRCS:.c=.o)
 
-HEADER1 = parsing.h
-HEADER2 = linked_lst/linked_lst.h
+HEADER1 = Resources/parsing.h
+HEADER2 = Resources/linked_lst/linked_lst.h
 
 RED = \033[1;31m
 GREEN = \033[1;32m
@@ -51,9 +48,9 @@ RESET = \033[0m
 
 all: $(NAME)
 
-$(NAME) : $(OBJS) $(READ_LINE) $(HEADER1) $(HEADER2)
-	@$(MAKE) -C libft
-	@$(CC) -lreadline $(OBJS) $(READ_LINE) $(FLAGS) libft/libft.a -o $(NAME)
+$(NAME) : $(OBJS) $(HEADER1) $(HEADER2)
+	@$(MAKE) -C Resources/libft
+	@$(CC) -lreadline $(OBJS) $(FLAGS) Resources/libft/libft.a -o $(NAME)
 	@echo "====> $(NAME) is compiled"
 %.o: %.c $(HEADER1) $(HEADER2)
 	@$(CC) $(FLAGS) -c $< -o $@
@@ -61,7 +58,7 @@ $(NAME) : $(OBJS) $(READ_LINE) $(HEADER1) $(HEADER2)
 clean:
 	@$(RM) $(OBJS)
 fclean: clean
-	@$(MAKE) -C libft fclean
+	@$(MAKE) -C Resources/libft fclean
 	@$(RM) $(NAME)
 re: fclean all
 
