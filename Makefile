@@ -6,7 +6,7 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/06/08 04:43:11 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/06/08 20:34:45 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS = 	$(addprefix Resources/linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lsts
 		$(addprefix Resources/new_linkedlist/, list.c) \
 		$(addprefix Resources/tokenizer/, tokenizer.c utils.c) \
 		$(addprefix Resources/compiler/, compiler.c) \
-		$(addprefix Resources/utils/, functions_token_1.c functions_token_2.c free_functions.c utils.c check_syntax.c) \
+		$(addprefix Resources/utils/, functions_token_1.c functions_token_2.c free_functions.c utils.c check_syntax.c display.c) \
 		$(addprefix Resources/expander/, command.c expander.c heredoc.c utils1.c utils2.c string_replace.c env.c) \
 		$(addprefix Resources/readline/, get_next_line.c get_next_line_utils.c) \
 		$(addprefix Resources/concate/, concate.c) \

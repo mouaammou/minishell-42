@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 00:24:03 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 04:25:48 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/08 20:34:21 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,10 @@ void		free_nodes(t_list *head);
 void		free_myenv(t_voidlst *list);
 void		free_big_list(t_voidlst	*biglist);
 void		free_voidlst(t_voidlst	*list);
+
+void		display(t_voidlst *h_list);
+void		display_args(t_voidlst *h_list);
+void		affiche(t_list *head);
+void		affiche_voidlst(t_voidlst *head);
 
 #endif
