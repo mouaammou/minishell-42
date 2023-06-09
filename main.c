@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 23:18:12 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/09 17:40:15 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/09 23:20:28 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	main(int ac, char **av, char **env)
 
 	(void)ac;
 	(void)av;
+	g_exit_status = 42;
 	myenv = take_env(env);
 	while (1)
 	{

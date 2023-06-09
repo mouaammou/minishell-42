@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 04:15:50 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/09 23:34:04 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,9 @@ t_voidlst	*new_sublist(char **split, int token);
 int			index_of_char(char *str, char c);
 int			str_cmp(const char *s1, const char *s2);
 t_list		*esc_sp_after_spechar(t_list *head);
+
+//exit_status
+char		*exit_status_value(char **string_key, int *index);
+char		*get_string_value(char *old_str, int *index,
+				char **string_key, t_voidlst *myenv);
 #endif

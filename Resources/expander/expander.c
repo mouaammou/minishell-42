@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:18:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 04:00:58 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/09 23:20:42 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@ void	command_expansion(t_list **origin, t_list **head, t_voidlst *myenv)
 	mytoken = (*head)->content;
 	if ((mytoken->token == DLR || mytoken->token == QUOTE))
 		expande(*head, myenv, origin);
+	else if (mytoken->token == QST_MARK)
+		ft_lstadd_back(origin, ft_lstnew(new_token(ft_itoa(g_exit_status),
+					mytoken->token)));
 	else
 		ft_lstadd_back(origin, ft_lstnew(new_token(mytoken->str,
 					mytoken->token)));
