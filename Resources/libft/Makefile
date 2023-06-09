@@ -29,7 +29,6 @@ $(NAME): $(OBJ)
 	@echo "$(NAME) is created"
 
 %.o: %.c libft.h
-	@echo "---" $< " : compiled"
 	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
