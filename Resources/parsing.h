@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/09 23:20:35 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/10 00:53:39 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "linked_lst/linked_lst.h"
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "readline/get_next_line.h"
+# include "gnl/get_next_line.h"
 # include "new_linkedlist/list.h"
 # include "compiler/compiler.h"
 # include "tokenizer/tokenizer.h"
