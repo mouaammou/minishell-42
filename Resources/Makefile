@@ -6,11 +6,11 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/07 16:12:03 by mouaammo          #+#    #+#              #
-#    Updated: 2023/06/10 01:41:37 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/06/10 01:49:19 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = minishell
+NAME = ../minishell
 RM = rm -f
 CC = cc
 
