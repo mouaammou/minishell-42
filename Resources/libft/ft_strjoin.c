@@ -5,14 +5,32 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 23:05:56 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:37:34 by mouaammo         ###   ########.fr       */
+/*   Created: 2022/11/03 22:39:56 by drtaili           #+#    #+#             */
+/*   Updated: 2023/06/10 17:28:20 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
 char	*ft_strjoin(char const *s1, char const *s2)
+{
+	size_t	len1;
+	size_t	len2;
+	char	*s;
+
+	if (!s1 || !s2)
+		return (NULL);
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
+	s = malloc(sizeof(char) * (len1 + len2 + 1));
+	if (!s)
+		return (NULL);
+	ft_strlcpy(s, s1, len1 + len2 + 1);
+	ft_strlcat(s, s2, len1 + len2 + 1);
+	return (s);
+}
+
+char	*ft_strjoin_1(char const *s1, char const *s2)
 {
 	size_t		total;
 	char		*join;

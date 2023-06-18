@@ -6,19 +6,12 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 02:08:26 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:08:38 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/11 20:08:13 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIST_H
 # define  LIST_H
-
-typedef struct list
-{
-	void			*content;
-	struct list		*next;
-	struct list		*prev;
-}	t_voidlst;
 
 void		add_back(t_voidlst **lst, t_voidlst *new);
 void		add_front(t_voidlst **lst, t_voidlst *new);

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 16:59:46 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 00:48:09 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/12 23:57:42 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	*msg_error(char *str)
 {
-	printf("ERR: %s\n", str);
+	ft_putstr_fd(str, 2);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 04:27:25 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 04:41:41 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/16 23:03:58 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 			return (0);
 		h_list = h_list->next;
 	}
+	signal(SIGINT, SIG_IGN);
 	return (free_big_list(temp_list), new_list);
 }

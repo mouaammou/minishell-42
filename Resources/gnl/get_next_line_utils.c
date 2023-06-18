@@ -6,21 +6,11 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 13:47:03 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/10 00:54:46 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/11 20:50:17 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-size_t	ft_strlen(const char *str)
-{
-	size_t	i;
-
-	i = 0;
-	while (*str++)
-		i++;
-	return (i);
-}
 
 char	*ft_strdup(const char *s1)
 {

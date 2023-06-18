@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/02 13:46:08 by mouaammo          #+#    #+#             */
-/*   Updated: 2022/11/06 12:10:09 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/13 18:39:39 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include "../linked_lst/linked_lst.h"
 
 #ifndef BUFFER_SIZE
 # define  BUFFER_SIZE 5

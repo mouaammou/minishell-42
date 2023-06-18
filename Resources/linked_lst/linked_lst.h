@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 17:50:13 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 03:58:57 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/15 09:48:33 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,52 @@ typedef enum tokens
 	DB_DLR = 11,
 	QST_MARK = 12
 }	t_etoken;
+
+typedef struct list
+{
+	void			*content;
+	struct list		*next;
+	struct list		*prev;
+}	t_voidlst;
+
+typedef struct mylist
+{
+	char		**args;
+	t_voidlst	*redirections;
+}t_command;
+
+typedef struct cmd
+{
+	t_voidlst	*commands;
+	t_voidlst	*redirects;
+}t_cmds;
+
+typedef struct s_env
+{
+	char	*key;
+	char	*value;
+}t_env;
+
+typedef struct s_list_env
+{
+	t_env				data;
+	struct s_list_env	*next;
+}t_list_env;
+
+typedef struct s_exit
+{
+	int		exit_status;	
+	pid_t	pid[1024];
+	pid_t	pid_p;
+	int		len;
+	int		killed;
+	int		size;
+	int		exit;
+	int		heredoc;
+	int		gnl;
+}t_exit;
+
+t_exit	g_global_exit;
 
 typedef struct token
 {

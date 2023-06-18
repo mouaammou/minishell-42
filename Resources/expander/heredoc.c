@@ -6,11 +6,12 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:16:04 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:24:19 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/18 00:16:25 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../parsing.h"
+#include "../../minishell.h"
 
 void	concate_in_heredoc(t_list **head, int *flag, char **delemiter)
 {
@@ -22,13 +23,13 @@ void	concate_in_heredoc(t_list **head, int *flag, char **delemiter)
 		if ((*head)->content->token == QUOTE
 			|| (*head)->content->token == S_QUOTE)
 			*flag = 1;
-		*delemiter = ft_strjoin(*delemiter, ft_strdup((*head)->content->str));
+		*delemiter = ft_strjoin_1(*delemiter, ft_strdup((*head)->content->str));
 		(*head) = (*head)->next;
 	}
-	*delemiter = ft_strjoin(*delemiter, ft_strdup("\n"));
+	*delemiter = ft_strjoin_1(*delemiter, ft_strdup("\n"));
 }
 
-void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
+void	manage_heredoc(t_list **head, int *fd, t_list_env *myenv)
 {
 	char	*delemiter;
 	char	*line;
@@ -38,26 +39,26 @@ void	manage_heredoc(t_list **head, int *fd, t_voidlst *myenv)
 	buffer = NULL;
 	flag = 0;
 	concate_in_heredoc(head, &flag, &delemiter);
-	while (1)
+	while (!g_global_exit.heredoc)
 	{
-		ft_putstr_fd("heredoc> ", 1);
-		line = get_next_line(0);
+		line = readline("heredoc> ");
+		if (line)
+			line = ft_strjoin_1(line, ft_strdup("\n"));
 		if (!line || !str_cmp(line, delemiter))
 		{
-			ft_putstr_fd("\n", 1);
+			free(delemiter);
+			if (buffer)
+				write(*fd, buffer, ft_strlen(buffer));
+			free(buffer);
 			break ;
 		}
 		if (ft_strchr(line, '$') && !flag)
 			line = replace_all(line, myenv);
-		buffer = ft_strjoin(buffer, line);
+		buffer = ft_strjoin_1(buffer, line);
 	}
-	free(delemiter);
-	if (buffer)
-		write(*fd, buffer, ft_strlen(buffer));
-	free(buffer);
 }
 
-int	handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv)
+int	handle_heredoc(t_list **newlist, t_list **head, t_list_env *myenv)
 {
 	char		*str;
 	int			fd;
@@ -65,15 +66,15 @@ int	handle_heredoc(t_list **newlist, t_list **head, t_voidlst *myenv)
 	static int	i;
 
 	int_str = ft_itoa(i++);
-	str = ft_strjoin(ft_strdup("/tmp/file"), int_str);
+	str = ft_strjoin_1(ft_strdup("/tmp/file"), int_str);
 	fd = open(str, O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
 	{
-		printf("❌❌ bad file descriptor\n");
+		ft_printf(2, "minishell: bad file descriptor\n");
 		return (0);
 	}
 	manage_heredoc(head, &fd, myenv);
-	ft_lstadd_back(newlist, ft_lstnew(new_token(str, RE_IN)));
 	close (fd);
+	ft_lstadd_back(newlist, ft_lstnew(new_token(str, HERE_DOC)));
 	return (1);
 }

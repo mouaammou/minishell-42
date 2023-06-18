@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:23:39 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:21:32 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/18 00:47:42 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	is_redirect(int token)
 }
 
 int	handle_redirection(t_list **newlist,
-	t_list **head, t_voidlst *myenv, int mytoken)
+	t_list **head, t_list_env *myenv, int mytoken)
 {
 	char	*join_str;
 
@@ -40,21 +40,22 @@ int	handle_redirection(t_list **newlist,
 		&& (*head)->content->token != PIPE
 		&& !is_redirect((*head)->content->token))
 	{
-		join_str = ft_strjoin(join_str,
+		join_str = ft_strjoin_1(join_str,
 				ft_strdup(replace_all((*head)->content->str, myenv)));
 		(*head) = (*head)->next;
 	}
+	join_str = ft_strtrim(join_str, " ");
 	if (ft_strchr(join_str, ' '))
 	{
-		printf("❌❌ %s: %s❌\n", join_str, "ambiguous redirect");
-		return (0);
+		ft_printf(2, "minishell: %s : ambiguous redirect\n", join_str);
+		return (g_global_exit.exit_status = 1, 0);
 	}
 	if (join_str)
 		ft_lstadd_back(newlist, ft_lstnew(new_token(join_str, mytoken)));
 	return (1);
 }
 
-int	handle_cmd(t_list **newlist, t_list **head, t_voidlst *myenv)
+int	handle_cmd(t_list **newlist, t_list **head, t_list_env *myenv)
 {
 	int		mytoken;
 

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 00:26:14 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 02:13:13 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/13 00:09:14 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,18 @@ char	*token_var(char *str, int *i, int start)
 
 	j = 0;
 	(*i)++;
-	while (str[(*i)] && (ft_isalnum(str[(*i)]) || str[(*i)] == '_'))
+	if (ft_isdigit(str[*i]))
 	{
-		(*i)++;
 		j++;
+		(*i)++;
+	}
+	else
+	{
+		while (str[(*i)] && (ft_isalnum(str[(*i)]) || str[(*i)] == '_'))
+		{
+			(*i)++;
+			j++;
+		}
 	}
 	return (ft_substr(str, start, j + 1));
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/16 10:17:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2022/10/27 12:09:03 by mouaammo         ###   ########.fr       */
+/*   Created: 2022/10/29 21:41:17 by drtaili           #+#    #+#             */
+/*   Updated: 2022/11/13 00:23:27 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,23 +14,17 @@
 
 int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
+	unsigned char	*ss1;
+	unsigned char	*ss2;
 	size_t			i;
-	unsigned char	*str1;
-	unsigned char	*str2;
 
+	ss1 = (unsigned char *)s1;
+	ss2 = (unsigned char *)s2;
 	i = 0;
-	str1 = (unsigned char *)s1;
-	str2 = (unsigned char *)s2;
-	if ((ft_strlen(s1) == 0) && (ft_strlen(s2) == 0))
-		return (0);
-	while (i < n)
+	while (i < n && (ss1[i] || ss2[i]))
 	{
-		if (str1[i] > str2[i])
-			return (1);
-		else if (str1[i] < str2[i])
-			return (-1);
-		if (str1[i] == '\0' || str2[i] == '\0')
-			break ;
+		if (ss1[i] != ss2[i])
+			return (ss1[i] - ss2[i]);
 		i++;
 	}
 	return (0);

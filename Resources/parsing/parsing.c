@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/09 17:39:05 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/09 17:40:27 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:59:50 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ void	free_and_reset(t_voidlst *mycommands)
 		my_args = mycommands->content;
 		free_all(my_args->args);
 		free_voidlst(my_args->redirections);
-		free(mycommands);
 		mycommands = tmp_next;
+		free(mycommands);
 	}
 }
 
-t_voidlst	*tokenizer_and_grammar(char	*str, t_list *head, t_voidlst *myenv)
+t_voidlst	*tokenizer_and_grammar(char	*str, t_list *head, t_list_env *myenv)
 {
 	char		*trimed_str;
 	t_list		*expander_list;

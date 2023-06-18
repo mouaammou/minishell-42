@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 00:24:03 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/08 20:34:21 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/13 00:01:52 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int			check_token(t_list *node, int mytoken1, int mytoken2, int flag);
 int			check_pipe(t_list *node);
-int			syntax_error(char *str, char *token_value);
+int			syntax_error(char *token_value);
 int			check_syntax(t_list *newlist);
 
 t_token		*get_quotes_content(char *str, int *i, char qts);
@@ -35,7 +35,7 @@ int			myfree_func(t_list *head, char *trimed_str, char *str);
 void		free_linked_list(t_list *head);
 void		free_nodes(t_list *head);
 
-void		free_myenv(t_voidlst *list);
+void		free_myenv(t_list_env *list);
 void		free_big_list(t_voidlst	*biglist);
 void		free_voidlst(t_voidlst	*list);
 
