@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/07 02:32:29 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/14 20:16:24 by drtaili          ###   ########.fr       */
+/*   Created: 2023/06/22 00:11:16 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/06/25 00:06:19 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,28 @@
 
 int	ft_cd_get_back_again(t_list_env **env)
 {
-	if (chdir(get_value_of_key(env, "OLDPWD")) == -1)
+	char	cwd[1024];
+
+	if (look_for_key("OLDPWD", env))
 	{
-		perror("minishell");
+		ft_printf(2, "minishell: cd: OLDPWD not set\n");
+		return (1);
+	}
+	else if (chdir(get_value_of_key(env, "OLDPWD")) == -1)
+	{
+		perror("minishell: cd");
 	}
 	else
 	{
-		set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
-		set_value_of_key(env, "PWD", get_value_of_key(env, "OLDPWD"));
+		if (look_for_key("PWD", env))
+			build_new_oldpwd_pwd(env);
+		else if (!look_for_key("PWD", env) && look_for_key("OLDPWD", env))
+			build_new_oldpwd_pwd(env);
+		else
+		{
+			set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
+			set_value_of_key(env, "PWD", getcwd(cwd, sizeof(cwd)));
+		}
 		return (0);
 	}
 	return (1);
@@ -29,14 +43,26 @@ int	ft_cd_get_back_again(t_list_env **env)
 
 int	ft_cd_to_home(t_list_env **env)
 {
-	if (chdir(get_value_of_key(env, "HOME")) == -1)
+	if (look_for_key("HOME", env))
 	{
-		perror("minishell");
+		ft_printf(2, "minishell: cd: HOME not set\n");
+		return (1);
+	}
+	else if (chdir(get_value_of_key(env, "HOME")) == -1)
+	{
+		perror("minishell: cd");
 	}
 	else
 	{
-		set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
-		set_value_of_key(env, "PWD", get_value_of_key(env, "HOME"));
+		if (look_for_key("PWD", env))
+			build_new_oldpwd_pwd(env);
+		else if (!look_for_key("PWD", env) && look_for_key("OLDPWD", env))
+			build_new_oldpwd_pwd(env);
+		else
+		{
+			set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
+			set_value_of_key(env, "PWD", get_value_of_key(env, "HOME"));
+		}
 		return (0);
 	}
 	return (1);
@@ -47,44 +73,46 @@ int	cd_to_relative_path(t_list_env **env, char **cmd)
 	char	*new_path;
 	char	cwd[1024];
 
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-		perror("minishell");
-	new_path = ft_strjoin("/", cmd[1]);
-	new_path = ft_strjoin(cwd, new_path);
+	getcwd(cwd, sizeof(cwd));
+	new_path = ft_strjoin_1(ft_strdup("/"), ft_strdup(cmd[1]));
+	new_path = ft_strjoin_1(ft_strdup(cwd), new_path);
 	if (chdir(new_path) == -1)
-		perror("minishell");
+		perror("minishell: cd");
 	else
 	{
-		set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
-		set_value_of_key(env, "PWD", new_path);
+		if (look_for_key("PWD", env))
+			build_new_oldpwd_pwd(env);
+		else if (!look_for_key("PWD", env) && look_for_key("OLDPWD", env))
+			build_new_oldpwd_pwd(env);
+		else
+		{
+			puts("2");
+			set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
+			set_value_of_key(env, "PWD", new_path);
+		}
+		free(new_path);
 		return (0);
 	}
+	free(new_path);
 	return (1);
 }
 
 int	cd_to_absolute_path(t_list_env **env, char **cmd)
 {
 	if (chdir(cmd[1]) == -1)
-		perror("minishell");
+		perror("minishell: cd");
 	else
 	{
-		set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
-		set_value_of_key(env, "PWD", cmd[1]);
+		if (look_for_key("PWD", env))
+			build_new_oldpwd_pwd(env);
+		else if (!look_for_key("PWD", env) && look_for_key("OLDPWD", env))
+			build_new_oldpwd_pwd(env);
+		else
+		{
+			set_value_of_key(env, "OLDPWD", get_value_of_key(env, "PWD"));
+			set_value_of_key(env, "PWD", cmd[1]);
+		}
 		return (0);
-	}
-	return (1);
-}
-
-int	look_for_key(char *str, t_list_env **env)
-{
-	t_list_env	*ev;
-
-	ev = *env;
-	while (ev)
-	{
-		if (ft_strcmp(str, ev->data.key) == 0)
-			return (0);
-		ev = ev->next;
 	}
 	return (1);
 }
@@ -92,20 +120,9 @@ int	look_for_key(char *str, t_list_env **env)
 int	ft_cd(t_list_env **env, char **cmd)
 {
 	char	cwd[1024];
+
 	if (!cmd[1])
-	{
-		if (look_for_key("HOME", env))
-		{
-			printf("minishell: cd: HOME not set\n");
-			return (1);	
-		}
-		else if (!look_for_key("HOME", env) && !ft_strcmp(get_value_of_key(env, "HOME"), "\0"))
-		{
-			return (0);
-		}
-		else if (chdir(get_value_of_key(env, "HOME")) == -1)
-			perror("minishell");
-	}
+		return (cd_only(env));
 	else if (!ft_strcmp(cmd[1], "-") || !ft_strcmp(cmd[1], "~"))
 	{
 		if (!ft_strcmp(cmd[1], "~"))
@@ -116,7 +133,9 @@ int	ft_cd(t_list_env **env, char **cmd)
 	{
 		if (getcwd(cwd, sizeof(cwd)) == NULL)
 		{
-			printf("minishell: cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+			ft_printf(2, "minishell: cd: error retrieving current directory:"\
+			"getcwd: cannot access parent directories:"\
+			"No such file or directory\n");
 			return (ft_cd_to_home(env));
 		}
 		else if (cmd[1][0] == '/')
@@ -126,4 +145,3 @@ int	ft_cd(t_list_env **env, char **cmd)
 	}
 	return (0);
 }
-// cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory

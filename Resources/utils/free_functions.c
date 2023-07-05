@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 04:23:46 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/11 20:45:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/21 03:20:48 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,17 @@ void	free_voidlst(t_voidlst	*list)
 		free(mytoken);
 		free(list);
 		list = tmp;
+	}
+}
+
+void	free_sublinked_list(t_voidlst *sub_lst)
+{
+	t_voidlst	*tmp;
+
+	while (sub_lst)
+	{
+		tmp = sub_lst->next;
+		free(sub_lst);
+		sub_lst = tmp;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:21:07 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/17 19:02:54 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/21 03:18:54 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	free_all(char **tab)
 {
-	unsigned int	i;
+	int	i;
 
 	i = 0;
 	while (tab[i])
@@ -34,20 +34,24 @@ t_token	*new_token(char *str, int token)
 	return (mytoken);
 }
 
-t_voidlst	*new_sublist(char **split)
+t_voidlst	*new_sublist(char **split, char *str)
 {
 	t_voidlst	*head;
 	int			i;
 
 	i = 0;
 	head = NULL;
+	if (ft_isspace(str[0]))
+		add_back(&head, new_node(new_token(" ", ESP)));
 	while (split && split[i])
 	{
-		add_back(&head, new_node(new_token(ft_strdup(split[i]), WORD)));
+		add_back(&head, new_node(new_token(split[i], WORD)));
 		if (split[i + 1])
-			add_back(&head, new_node(new_token(ft_strdup(" "), ESP)));
+			add_back(&head, new_node(new_token(" ", ESP)));
 		i++;
 	}
+	if (ft_isspace(str[ft_strlen(str) - 1]))
+		add_back(&head, new_node(new_token(" ", ESP)));
 	free_all(split);
 	return (head);
 }

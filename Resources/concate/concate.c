@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 02:40:37 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/16 17:19:46 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/21 01:18:37 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,23 @@ int	concate_all(t_token *mytoken, t_list **expander, t_cmds **mynode_cmd)
 	return (0);
 }
 
-int	fill_mylist(t_list **expander, t_cmds **mynode_cmd)
+t_cmds	*fill_mylist(t_list **expander)
 {
+	t_cmds		*mynode_cmd;
 	t_token		*mytoken;
 
-	*mynode_cmd = node_collecter((t_cmds){NULL, NULL});
-	if (!*mynode_cmd)
-		return (0);
+	mynode_cmd = node_collecter((t_cmds){NULL, NULL});
 	while ((*expander) && (*expander)->content->token != PIPE)
 	{
 		mytoken = (*expander)->content;
-		if (!concate_all(mytoken, expander, mynode_cmd))
-			add_back(&((*mynode_cmd)->redirects),
+		if (!concate_all(mytoken, expander, &mynode_cmd)
+			&& (*expander)->content->token != PIPE)
+			add_back(&(mynode_cmd->redirects),
 				new_node(new_token(mytoken->str, mytoken->token)));
 		if ((*expander) && (*expander)->content->token != PIPE)
 			(*expander) = (*expander)->next;
 	}
-	return (1);
+	return (mynode_cmd);
 }
 
 t_voidlst	*bash_concate(t_list *expander)
@@ -73,16 +73,16 @@ t_voidlst	*bash_concate(t_list *expander)
 	t_voidlst	*parent_list;
 	t_list		*tmp;
 
-	mynode_cmd = NULL;
 	parent_list = NULL;
 	tmp = expander;
 	while (expander)
 	{
-		if (!fill_mylist(&expander, &mynode_cmd))
+		mynode_cmd = fill_mylist(&expander);
+		if (!mynode_cmd)
 			return (NULL);
 		add_back(&parent_list, new_node(mynode_cmd));
 		if (expander && expander->content->token == PIPE)
 			expander = expander->next;
 	}
-	return (free_linked_list(tmp), parent_list);
+	return (parent_list);
 }

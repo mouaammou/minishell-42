@@ -5,17 +5,15 @@
 #                                                     +:+ +:+         +:+      #
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/05/21 20:30:29 by drtaili           #+#    #+#              #
-#    Updated: 2023/06/18 00:38:14 by mouaammo         ###   ########.fr        #
+#    Created: 2023/06/22 00:14:07 by mouaammo          #+#    #+#              #
+#    Updated: 2023/07/05 14:08:55 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.DEFAULT_GOAL := all
 
-# Source files
-SRC =	main.c \
-		$(addprefix execution/,cd.c tools.c execute.c env_functions.c pwd.c exit.c \
-		echo.c env.c unset.c is_builtin.c export.c \
+SRC =	main.c main_tools.c free_tools.c \
+		$(addprefix execution/,cd.c tools.c cd_tools.c execute.c env_functions.c exit_status.c env_functions_tools.c pwd.c exit.c \
+		echo.c env.c unset.c is_builtin.c export.c execute_tools.c pipe_cases.c \
 		tools_env.c tools_env_.c check_arg_export.c export_tools.c valid_args_export.c \
 		export_all_cases.c pipe.c redirections.c) \
 		$(addprefix Resources/linked_lst/, ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
@@ -26,11 +24,10 @@ SRC =	main.c \
 		$(addprefix Resources/utils/, display.c free_functions.c functions_token_1.c functions_token_2.c utils.c check_syntax.c) \
 		$(addprefix Resources/expander/, command.c expander.c heredoc.c utils1.c string_replace.c utils2.c exit_status_and_dbdollar.c env.c ) \
 		$(addprefix Resources/concate/, concate.c ) \
-		$(addprefix Resources/parsing/, parse_to_double_char.c parsing.c ) \
-		$(addprefix Resources/gnl/, get_next_line.c get_next_line_utils.c)
+		$(addprefix Resources/parsing/, parse_to_double_char.c parsing.c )
 
 HEADERS = $(addprefix Resources/, parsing.h utils/utils.h tokenizer/tokenizer.h \
-			gnl/get_next_line.h concate/concate.h \
+			concate/concate.h \
 			new_linkedlist/list.h linked_lst/linked_lst.h libft/libft.h \
 			expander/expander.h compiler/compiler.h parsing/parser.h) \
 			ft_printf/ft_printf.h minishell.h
@@ -86,13 +83,13 @@ $(LIBFT):
 	@echo "\033[1m\033[32m FT_PRINTF COMPILED \033[0m"
 
 # Build the target executable
-$(NAME): $(LIBFT) $(PRINTF) $(OBJS) $(HEADERS) $(FILES)
+$(NAME): $(LIBFT) $(OBJS) $(HEADERS) $(FILES) $(PRINTF)
 	@$(CC) $(FLAGS) $(RLFLAGS) $(LFLAGSS) $(OBJS) -o $(NAME) $(LIBFT) $(PRINTF)
 	@echo "\033[1m\033[32m MINISHELL CREATED \033[0m"
 # Build object files
 %.o: %.c  $(HEADERS) $(FILES)
 	@$(CC) $(FLAGS) $(IFLAGS) -c $< -o $@
-	@echo $@
+	@echo $<
 # Clean the object files and dependencies
 clean:
 	@$(RM) $(OBJS)

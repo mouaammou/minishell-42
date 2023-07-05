@@ -1,28 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer.c                                        :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/07 15:58:55 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/19 07:43:49 by mouaammo         ###   ########.fr       */
+/*   Created: 2023/06/19 07:44:00 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/06/19 07:44:14 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parsing.h"
+#include "libft.h"
 
-int	give_tokens(t_list **tokenizer, char *str)
+int	ft_isspace(char c)
 {
-	int		i;
-
-	i = 0;
-	while (str && str[i])
-	{
-		if (!tokens_part_1(tokenizer, str, &i))
-			return (0);
-		else if (!tokens_part_2(tokenizer, str, &i))
-			return (0);
-	}
-	return (1);
+	if (c == ' ' || c == '\t' || c == '\n'
+		|| c == '\v' || c == '\f' || c == '\r')
+		return (c);
+	return (0);
 }

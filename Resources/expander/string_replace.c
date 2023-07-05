@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 22:31:45 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/18 00:17:03 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:49:12 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	*search_and_replace(t_token **mytoken, t_list_env *myenv)
 		string_value = search_for_key(string_key + 1, myenv);
 		(*mytoken)->str = string_replace((*mytoken)->str,
 				string_key, string_value);
+		free(string_key);
 	}
 	return (string_value);
 }
@@ -50,6 +51,8 @@ char	*replace_all(char *old_str, t_list_env *myenv)
 			index--;
 		}
 		old_str = string_replace(old_str, string_key, string_value);
+		free(string_key);
+		free(string_value);
 		if (index < 0)
 			break ;
 		if (!old_str[index])

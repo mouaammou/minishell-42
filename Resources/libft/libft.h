@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/14 00:39:52 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/10 23:03:17 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/21 02:36:05 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+int		ft_isspace(char c);
+char	**ft_split_1(char const *s);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 int		ft_isalnum(int c);
@@ -50,6 +52,6 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
-char	*ft_strjoin_1(char const *s1, char const *s2);
+char	*ft_strjoin_1(char *s1, char *s2);
 
 #endif

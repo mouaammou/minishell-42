@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 15:58:19 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/14 21:20:00 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:20:44 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@
 # include "linked_lst/linked_lst.h" // here all the structs used in this project
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "gnl/get_next_line.h"
 # include "new_linkedlist/list.h"
 # include "compiler/compiler.h"
 # include "tokenizer/tokenizer.h"

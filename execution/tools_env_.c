@@ -6,7 +6,7 @@
 /*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 07:23:28 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/15 18:55:35 by drtaili          ###   ########.fr       */
+/*   Updated: 2023/06/20 22:24:41 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,32 @@
 
 void	free_node(t_list_env *node)
 {
+	free(node->data.key);
+	free(node->data.value);
 	free(node);
 }
 
 void	free_env(t_list_env *env)
 {
 	t_list_env	*tmp;
-	int			i;
+	t_list_env	*tmp_free;
 	int			len;
 
 	tmp = env;
 	len = env_size(env);
-	i = 0;
 	if (env == NULL)
 		return ;
-	while (i < len)
+	while (tmp)
 	{
-		free_node(tmp);
+		tmp_free = tmp;
 		tmp = tmp->next;
-		i++;
+		free_node(tmp_free);
 	}
 }
 
 void	print_env(t_list_env **envr)
 {
-	t_list_env *env;
+	t_list_env	*env;
 
 	env = *envr;
 	while (env != NULL)
@@ -50,7 +51,7 @@ void	print_env(t_list_env **envr)
 
 void	print_env_export(t_list_env **envr)
 {
-	t_list_env *env;
+	t_list_env	*env;
 
 	env = *envr;
 	while (env != NULL)

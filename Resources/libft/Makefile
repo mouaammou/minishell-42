@@ -6,12 +6,11 @@
 #    By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/16 23:14:00 by drtaili           #+#    #+#              #
-#    Updated: 2023/06/11 01:42:32 by mouaammo         ###   ########.fr        #
+#    Updated: 2023/06/19 07:49:15 by mouaammo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRC    =\
-ft_atoi.c\
+SRC = ft_atoi.c\
 ft_bzero.c\
 ft_calloc.c\
 ft_isalnum.c\
@@ -44,7 +43,9 @@ ft_strrchr.c\
 ft_strtrim.c\
 ft_substr.c\
 ft_tolower.c\
-ft_toupper.c
+ft_toupper.c \
+ft_split1.c \
+ft_isspace.c
 
 
 OBJS = $(SRC:.c=.o)

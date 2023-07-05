@@ -6,7 +6,7 @@
 /*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 04:45:35 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/17 23:50:56 by drtaili          ###   ########.fr       */
+/*   Updated: 2023/06/22 22:27:50 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_unset(t_list_env **env, char *key)
 	{
 		if (ft_strcmp(curr->data.key, key) == 0)
 		{
-			if (prev == NULL) // first node
+			if (prev == NULL)
 			{
 				*env = curr->next;
 			}
@@ -38,7 +38,6 @@ void	ft_unset(t_list_env **env, char *key)
 		prev = curr;
 		curr = curr->next;
 	}
-	// key not found, do nothing
 	g_global_exit.exit_status = 1;
 }
 
@@ -56,38 +55,86 @@ int	wrongkey(char *cmd)
 	return (0);
 }
 
-int	main_unset(t_list_env **new_env, t_list_env **export_list, char **cmd)
+int	handle_err(char *cmd)
 {
-	int	len;
-	int	i;
 	int	err;
 
 	err = 0;
-	len = size_cmd(cmd);
+	if (wrongkey(cmd))
+	{
+		ft_printf(2, "minishell : unset: `%s': not a valid identifier\n", cmd);
+		return (1);
+	}
+	else if (cmd[0] == '-')
+	{
+		ft_printf(2, "minishell : unset: invalid option\n");
+		return (2);
+	}
+	else if (cmd[0] == '!')
+	{
+		ft_printf(2, "minishell : unset: event not found\n");
+		return (2);
+	}
+	else
+	{
+		ft_printf(2, "minishell : unset: `%s': not a valid identifier\n", cmd);
+		return (1);
+	}
+	return (-1);
+}
+
+int	unset_some(t_list_env **env, t_list_env **export_list, char **cmd, int len)
+{
+	int	i;
+	int	err;
+	int	chk;
+
 	i = 1;
+	err = 0;
+	chk = 0;
 	while (i < len)
 	{
-		if (wrongkey(cmd[i]))
-			ft_printf(2, "minishell : unset: `%s': not a valid identifier\n", cmd[i]);
-		else if (check_key_value_isvalid_export(cmd[i]))
+		if (check_key_value_isvalid_export(cmd[i]))
 		{
-			ft_unset(new_env, cmd[i]);
+			ft_unset(env, cmd[i]);
 			ft_unset(export_list, cmd[i]);
 		}
 		else
 		{
-			if (cmd[i][0] == '-')
-				ft_printf(2, "minishell : unset: invalid option\n");
-			else if (cmd[i][0] == '!')
-				ft_printf(2, "minishell : unset: event not found\n");
-			else	
-				ft_printf(2, "minishell : unset: `%s': not a valid identifier\n", cmd[i]);
-			if (cmd[i][0] != '!')
-				err = 1;
+			err = handle_err(cmd[i]);
+			chk = 1;
 		}
 		i++;
 	}
-	if (err == 1)
-		return (1);
+	if (chk == 1)
+		return (err);
 	return (0);
+}
+
+int	main_unset(t_list_env **new_env, t_list_env **export_list, char **cmd)
+{
+	int	len;
+	int	i;
+	int	k;
+	int	chk;
+
+	chk = 0;
+	len = size_cmd(cmd);
+	i = 1;
+	if (!cmd[1])
+		return (0);
+	else if (check_export_args(cmd) > 0)
+		return (unset_some(new_env, export_list, cmd, len));
+	else if ((check_export_args(cmd) == 0))
+	{
+		if (len == 2)
+			return (handle_err(cmd[i]));
+		k = 1;
+		while (k < len)
+		{
+			handle_err(cmd[i]);
+			k++;
+		}
+	}
+	return (1);
 }

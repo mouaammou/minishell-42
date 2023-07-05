@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_functions.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/07 04:48:36 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/15 19:10:00 by drtaili          ###   ########.fr       */
+/*   Created: 2023/06/22 00:12:11 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/07/04 11:12:46 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,38 +19,68 @@ t_list_env	*fill_node_with_data(char **my_env)
 	node = malloc(sizeof(t_list_env));
 	if (!node)
 		return (NULL);
-	node->data.key = my_env[0];
-	node->data.value = my_env[1];
-	node->next = NULL;
-	return (node);
-}
-
-t_list_env	*build_node(char *key, char *value)
-{
-	t_list_env	*node;
-
-	node = malloc(sizeof(t_list_env));
-	if (!node)
-		return (NULL);
-	node->data.key = key;
-	node->data.value = value;
+	node->data.key = ft_strdup(my_env[0]);
+	node->data.value = ft_strdup(my_env[1]);
 	node->next = NULL;
 	return (node);
 }
 
 void	update_shelvl(t_list_env *new_env)
 {
-	int	nb;
+	int		nb;
+	char	*get_value;
+	char	*counter;
 
 	nb = 0;
-	if (get_value_of_key(&new_env, "SHLVL") != NULL)
+	get_value = get_value_of_key(&new_env, "SHLVL");
+	if (get_value != NULL)
 	{
-		nb = ft_atoi(get_value_of_key(&new_env, "SHLVL"));
+		nb = ft_atoi(get_value);
 		nb++;
-		set_value_of_key(&new_env, "SHLVL", ft_itoa(nb));
+		counter = ft_itoa(nb);
+		set_value_of_key(&new_env, "SHLVL", counter);
+		free(counter);
 	}
 	else
-		add_back_to_list(&new_env, build_node("SHLVL", ft_itoa(1)));	
+		add_back_to_list(&new_env, build_node(ft_strdup("SHLVL"),
+				ft_strdup("1")));
+}
+
+t_list_env	*env_removed(t_list_env *new_env)
+{
+	t_list_env	*node;
+	t_list_env	*node1;
+	t_list_env	*node2;
+	t_list_env	*node3;
+	char		cwd[1024];
+
+	node = build_node(ft_strdup("PATH"),
+			ft_strdup("/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
+	node1 = build_node(ft_strdup("PWD"),
+			ft_strdup(getcwd(cwd, sizeof(cwd))));
+	node2 = build_node(ft_strdup("SHLVL"),
+			ft_strdup("0"));
+	node3 = build_node(ft_strdup("_"),
+			ft_strdup("/usr/bin/env"));
+	node->next = node1;
+	node1->next = node2;
+	node2->next = node3;
+	node3->next = NULL;
+	new_env = node;
+	update_shelvl(new_env);
+	return (new_env);
+}
+
+void	env_removed_bash(t_list_env *new_env, t_list_env *node,
+	t_list_env *curr_env, int j)
+{
+	if (j == 3)
+	{
+		node = build_node(ft_strdup("PATH"),
+				ft_strdup("/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."));
+		curr_env->next = node;
+	}
+	update_shelvl(new_env);
 }
 
 t_list_env	*get_env(char **env)
@@ -60,66 +90,24 @@ t_list_env	*get_env(char **env)
 	t_list_env	*node;
 	char		**my_env;
 	int			i;
-	int 		j = 0;
 
 	i = 0;
 	new_env = NULL;
 	curr_env = NULL;
-	while (env[i] != NULL)
+	while (env && env[i] != NULL)
 	{
-		my_env = ft_split(env[i], '=');
+		my_env = split_keyvalue(env[i]);
 		node = fill_node_with_data(my_env);
+		free_args(my_env);
 		if (curr_env)
 			curr_env->next = node;
 		else
 			new_env = node;
 		curr_env = node;
 		i++;
-		j++;
 	}
-	if (j == 3)
-	{
-		node = build_node("PATH", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.");
-		curr_env->next = node;
-	}
-	update_shelvl(new_env);
+	if (i == 0)
+		return (env_removed(new_env));
+	env_removed_bash(new_env, node, curr_env, i);
 	return (new_env);
-}
-
-t_list_env	*ft_lstlast_node(t_list_env *lst)
-{
-	t_list_env	*tmp;
-
-	if (!lst)
-		return (NULL);
-	tmp = lst;
-	while (tmp->next != NULL)
-		tmp = tmp->next;
-	return (tmp);
-}
-
-t_list_env	*ft_lstnew_node(t_env content)
-{
-	t_list_env	*node;
-
-	node = malloc(sizeof(t_list_env));
-	if (!node)
-		return (NULL);
-	node->data.key = content.key;
-	node->data.value = content.value;
-	node->next = NULL;
-	return (node);
-}
-
-void	add_back_to_list(t_list_env **lst, t_list_env *new)
-{
-	t_list_env	*last;
-
-	if (!lst)
-		return ;
-	last = ft_lstlast_node(*lst);
-	if (last == NULL)
-		*lst = new;
-	else
-		last->next = new;
 }

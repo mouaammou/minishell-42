@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:25:24 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/17 19:03:37 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:39:44 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void		ft_error(char *error, int error_val);
 
 //utils2.c
 t_token		*new_token(char *str, int token);
-t_voidlst	*new_sublist(char **split);
+t_voidlst	*new_sublist(char **split, char *str);
 int			index_of_char(char *str, char c);
 int			str_cmp(const char *s1, const char *s2);
 t_list		*esc_sp_after_spechar(t_list *head);

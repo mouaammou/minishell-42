@@ -6,7 +6,7 @@
 /*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/08 01:58:27 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/15 17:32:43 by drtaili          ###   ########.fr       */
+/*   Updated: 2023/06/20 00:02:35 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,31 +36,11 @@ void	echo_printer(int i, char **cmd)
 	while (cmd[i] != NULL)
 	{
 		printf("%s", cmd[i]);
-		if (cmd[i + 1] !=NULL)
+		if (cmd[i + 1] != NULL)
 			printf(" ");
 		i++;
 	}
 }
-
-// int	ft_echo(char **cmd)
-// {
-// 	int	i;
-
-// 	if (!cmd[1])
-// 		ft_printf("\n");
-// 	else if (!ft_strcmp(cmd[1], "-n") || check_n(cmd[1]))
-// 	{
-// 		i = 2;
-// 		echo_printer(i, cmd);
-// 	}
-// 	else
-// 	{
-// 		i = 1;
-// 		echo_printer(i, cmd);
-// 		ft_printf("\n");
-// 	}
-// 	return (0);
-// }
 
 int	skip_n(char **cmd)
 {
@@ -87,6 +67,8 @@ int	ft_echo(char **cmd)
 		printf("\n");
 	else if (!ft_strcmp(cmd[1], "-n") || check_n(cmd[1]))
 	{
+		if (!cmd[2])
+			return (0);
 		i = skip_n(cmd);
 		echo_printer(i, cmd);
 	}

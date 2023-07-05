@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools_env.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/13 07:23:31 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/11 15:44:39 by drtaili          ###   ########.fr       */
+/*   Created: 2023/06/22 00:12:46 by mouaammo          #+#    #+#             */
+/*   Updated: 2023/06/22 00:12:48 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char	*get_value_of_key(t_list_env **envr, char *key)
 {
-	t_list_env *env;
-	char	*value;
+	t_list_env	*env;
+	char		*value;
 
 	env = *envr;
 	value = NULL;
@@ -30,7 +30,7 @@ char	*get_value_of_key(t_list_env **envr, char *key)
 
 t_list_env	*get_node_by_key(t_list_env **envr, char *key)
 {
-	t_list_env *env;
+	t_list_env	*env;
 
 	env = *envr;
 	while (env != NULL)
@@ -44,13 +44,18 @@ t_list_env	*get_node_by_key(t_list_env **envr, char *key)
 
 void	set_value_of_key(t_list_env **envr, char *key, char *value)
 {
-	t_list_env *env;
+	t_list_env	*env;
+	char		*tmp;
 
 	env = *envr;
 	while (env != NULL)
 	{
 		if (ft_strcmp(env->data.key, key) == 0)
-			env->data.value = value;
+		{
+			tmp = env->data.value;
+			env->data.value = ft_strdup(value);
+			free(tmp);
+		}
 		env = env->next;
 	}
 }

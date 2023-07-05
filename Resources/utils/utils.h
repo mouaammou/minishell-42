@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 00:24:03 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/13 00:01:52 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/21 03:21:39 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,6 @@ void		display(t_voidlst *h_list);
 void		display_args(t_voidlst *h_list);
 void		affiche(t_list *head);
 void		affiche_voidlst(t_voidlst *head);
+void		free_sublinked_list(t_voidlst *sub_lst);
 
 #endif

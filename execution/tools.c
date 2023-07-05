@@ -6,7 +6,7 @@
 /*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/07 02:45:14 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/11 14:41:25 by drtaili          ###   ########.fr       */
+/*   Updated: 2023/06/21 23:00:47 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,8 @@ int	ft_strcmp(char *s1, char *s2)
 	int	i;
 
 	i = 0;
-	// printf("s1=%s,s2=%s\n",s1,s2);
 	if (!s1 || !s2)
-		return -1;
-	// printf("s1=%s,s2=%s\n",s1,s2);
+		return (-1);
 	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
 	{	
 		i++;

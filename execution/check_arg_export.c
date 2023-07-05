@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_arg_export.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: drtaili <drtaili@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 07:43:05 by drtaili           #+#    #+#             */
-/*   Updated: 2023/06/11 02:04:22 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/23 02:03:17 by drtaili          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,20 +89,18 @@ int	check_plus_existance(char *cmd)
 	return (0);
 }
 
-int	check_key_value_isvalid_export(char *cmd)
+int	check_p_e_existance(char *cmd)
 {
 	int	i;
 
 	i = 0;
-	if (check_equal_existance(cmd))
+	while (cmd[i] != '\0')
 	{
-		if (!check_key_export_with_equ(cmd))
+		if (cmd[i] == '+' && cmd[i + 1] == '=')
+			return (1);
+		else if (cmd[i] == '=')
 			return (0);
+		i++;
 	}
-	else
-	{
-		if (!key_check_without_equ(cmd))
-			return (0);
-	}
-	return (1);
+	return (0);
 }

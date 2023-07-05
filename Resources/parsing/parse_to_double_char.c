@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 04:27:25 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/16 23:03:58 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/07/04 14:29:01 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 {
 	t_cmds		*tmp;
 	t_voidlst	*new_list;
-	t_voidlst	*temp_list;
+	t_voidlst	*new_list_1;
 
 	new_list = NULL;
-	temp_list = h_list;
+	new_list_1 = h_list;
 	while (h_list)
 	{
 		tmp = h_list->content;
@@ -74,5 +74,5 @@ t_voidlst	*parse_to_args(t_voidlst *h_list)
 		h_list = h_list->next;
 	}
 	signal(SIGINT, SIG_IGN);
-	return (free_big_list(temp_list), new_list);
+	return (free_big_list(new_list_1), new_list);
 }

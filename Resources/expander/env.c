@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/26 17:20:20 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/15 20:58:08 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/06/21 02:26:02 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*search_for_key(char *str, t_list_env *myenv)
 	{
 		keyval_env = myenv->data;
 		if (str_cmp(str, keyval_env.key) == 0)
-			return (keyval_env.value);
+			return (ft_strdup(keyval_env.value));
 		myenv = myenv->next;
 	}
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: mouaammo <mouaammo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/08 00:26:14 by mouaammo          #+#    #+#             */
-/*   Updated: 2023/06/13 00:09:14 by mouaammo         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:40:11 by mouaammo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*token_word(char *str, int *i, int start)
 	int	j;
 
 	j = 0;
-	while (str[(*i)] && (ft_isalnum(str[(*i)]) || !myspechars(str[*i])))
+	while (str[(*i)] && (!myspechars(str[*i])))
 	{
 		(*i)++;
 		j++;

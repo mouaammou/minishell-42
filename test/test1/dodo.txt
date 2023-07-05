@@ -1,0 +1,13 @@
+/* ************ AFTER AID ADHA **********/
+1------------------------
+	minishell>> cd ..
+	2
+	minishell>> echo $PWD
+	/Users/mouaammo/..
+-------------------------
+
+2------------------------
+minishell>> echo $PWD
+
+	1 (16 bytes) ROOT LEAK: 0x7fcd4bf04250 [16]  length: 4  "$PWD"
+-------------------------
